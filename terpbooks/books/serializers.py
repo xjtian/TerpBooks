@@ -1,8 +1,8 @@
 from __future__ import absolute_import
 
-from .models import Textbook, Author, Semester, Professor
-
 from rest_framework import serializers
+
+from .models import Textbook, Author, Semester, Professor
 
 
 class TextbookSerializer(serializers.ModelSerializer):
