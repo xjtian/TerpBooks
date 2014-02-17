@@ -50,6 +50,8 @@ class TransactionRequest(models.Model):
     """
     Transaction request for a textbook.
     """
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='request_messages')
+
     price = models.DecimalField(max_digits=10, decimal_places=2)
     text = models.TextField(blank=True)
 
