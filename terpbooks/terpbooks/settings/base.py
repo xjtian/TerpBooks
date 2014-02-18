@@ -13,6 +13,8 @@ STATICFILES_DIRS = (
     PROJECT_DIR.child('assets'),
 )
 
+STATIC_URL = '/static/'
+
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
@@ -27,6 +29,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'rest_framework',
     'south',
+    'books',
+    'messages',
+    'transactions',
 )
 
 MIDDLEWARE_CLASSES = (
