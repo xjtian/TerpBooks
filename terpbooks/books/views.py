@@ -6,21 +6,21 @@ from .models import Textbook, Author, Semester, Professor
 from .serializers import TextbookSerializer, AuthorSerializer, SemesterSerializer, ProfessorSerializer
 
 
-class TextbookViewset(viewsets.ModelViewSet):
+class TextbookViewSet(viewsets.ModelViewSet):
     queryset = Textbook.objects.all()
     serializer_class = TextbookSerializer
 
 
-class AuthorViewset(viewsets.ModelViewSet):
+class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
 
-class SemesterViewset(viewsets.ModelViewSet):
+class SemesterViewSet(viewsets.ModelViewSet):
     queryset = Semester.objects.all()
     serializer_class = SemesterSerializer
 
 
-class ProfessorViewset(viewsets.ModelViewSet):
+class ProfessorViewSet(viewsets.ModelViewSet):
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
