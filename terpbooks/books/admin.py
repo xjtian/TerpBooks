@@ -9,20 +9,20 @@ class AuthorInline(admin.TabularInline):
     model = Author
 
 
-class SemesterInline(admin.TabularInline):
-    model = Semester
+class SemesterAdmin(admin.ModelAdmin):
+    pass
 
 
-class ProfessorInline(admin.TabularInline):
-    model = Professor
+class ProfessorAdmin(admin.ModelAdmin):
+    pass
 
 
 class TextbookAdmin(admin.ModelAdmin):
     inlines = [
         AuthorInline,
-        SemesterInline,
-        ProfessorInline,
     ]
 
 
 admin.site.register(Textbook, TextbookAdmin)
+admin.site.register(Semester, SemesterAdmin)
+admin.site.register(Professor, ProfessorAdmin)
