@@ -1,3 +1,5 @@
+#!/bin/bash
+
 sudo apt-get update
 sudo apt-get install -y apache2 python-dev git vim curl dos2unix make libapache2-mod-wsgi
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -q -y mysql-server
@@ -28,6 +30,6 @@ cd /vagrant
 #sudo cp httpd.conf /etc/apache2/httpd.conf
 
 mysql -u root -e"create database terpbooks;"
-#mysql -u root terpbooks < init_data.sql
+mysql -u root terpbooks < init_data.sql
 
 sudo service apache2 restart
