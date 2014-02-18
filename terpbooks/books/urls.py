@@ -6,9 +6,9 @@ from .views import TextbookViewSet, AuthorViewSet, SemesterViewSet, ProfessorVie
 
 
 router = routers.SimpleRouter()
-router.register(r'books', TextbookViewSet)
-router.register(r'authors', AuthorViewSet)
-router.register(r'semesters', SemesterViewSet)
-router.register(r'professors', ProfessorViewSet)
+router.register(r'books', TextbookViewSet, base_name='books')
+router.register(r'authors', AuthorViewSet, base_name='authors')
+router.register(r'semesters', SemesterViewSet, base_name='semesters')
+router.register(r'professors', ProfessorViewSet, base_name='professors')
 
 urlpatterns = router.urls
