@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.conf import settings
 
 from django.contrib import admin
 
@@ -14,3 +15,9 @@ urlpatterns = patterns('',
     url(r'^transactions/', include('transactions.urls')),
     url(r'^messages/', include('messages.urls')),
 )
+
+if settings.USE_CAS:
+    urlpatterns += patterns('',
+        url(r'^accounts/login$', 'cas.views.login', name='login'),
+        url(r'^accounts/logout$', 'cas.views.logout', name='logout'),
+    )

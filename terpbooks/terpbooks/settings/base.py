@@ -61,3 +61,10 @@ TIME_ZONE = 'EST'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+# CAS config
+USE_CAS = False
+
+CAS_SERVER_URL = 'https://login.umd.edu/cas/'
+CAS_VERSION = '2'
+CAS_LOGOUT_COMPLETELY = True
