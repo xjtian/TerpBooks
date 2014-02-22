@@ -127,7 +127,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$QzBE4ArPtzjc$TdS3h4Ky1gjXxPywXlK46we4sJJXsA5MPEEYfe5NepI=','2014-02-18 16:50:55',1,'admin','','','',1,1,'2014-02-18 16:50:55');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$VCp75iTSMqH4$keFC1wMCOpxa399+KI+nPIIyrUTrNIrAT1TspG4PEHY=','2014-02-22 19:57:10',1,'admin','','','',1,1,'2014-02-22 19:57:10');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -202,7 +202,6 @@ CREATE TABLE `books_author` (
   `last_name` varchar(30) NOT NULL,
   `book_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `first_name` (`first_name`,`last_name`),
   KEY `books_author_36c249d7` (`book_id`),
   CONSTRAINT `book_id_refs_id_eaea90d6` FOREIGN KEY (`book_id`) REFERENCES `books_textbook` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -515,8 +514,8 @@ CREATE TABLE `transactions_transactionrequest` (
   PRIMARY KEY (`id`),
   KEY `transactions_transactionrequest_0c98d849` (`created_by_id`),
   KEY `transactions_transactionrequest_bd1a2e3a` (`thread_id`),
-  CONSTRAINT `created_by_id_refs_id_5489323b` FOREIGN KEY (`created_by_id`) REFERENCES `auth_user` (`id`),
-  CONSTRAINT `thread_id_refs_id_d88a8a39` FOREIGN KEY (`thread_id`) REFERENCES `transactions_transactionrequestthread` (`id`)
+  CONSTRAINT `thread_id_refs_id_d88a8a39` FOREIGN KEY (`thread_id`) REFERENCES `transactions_transactionrequestthread` (`id`),
+  CONSTRAINT `created_by_id_refs_id_5489323b` FOREIGN KEY (`created_by_id`) REFERENCES `auth_user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -544,8 +543,8 @@ CREATE TABLE `transactions_transactionrequestthread` (
   PRIMARY KEY (`id`),
   KEY `transactions_transactionrequestthread_0a681a64` (`sender_id`),
   KEY `transactions_transactionrequestthread_cc7968a2` (`listing_id`),
-  CONSTRAINT `listing_id_refs_id_09a7f81e` FOREIGN KEY (`listing_id`) REFERENCES `transactions_listing` (`id`),
-  CONSTRAINT `sender_id_refs_id_aa82fd1b` FOREIGN KEY (`sender_id`) REFERENCES `auth_user` (`id`)
+  CONSTRAINT `sender_id_refs_id_aa82fd1b` FOREIGN KEY (`sender_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `listing_id_refs_id_09a7f81e` FOREIGN KEY (`listing_id`) REFERENCES `transactions_listing` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -567,4 +566,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-02-18 16:51:23
+-- Dump completed on 2014-02-22 19:57:35

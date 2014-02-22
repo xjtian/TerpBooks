@@ -68,8 +68,5 @@ class Author(models.Model):
 
     book = models.ForeignKey(Textbook, related_name='authors')
 
-    class Meta:
-        unique_together = (('first_name', 'last_name'),)
-
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)
