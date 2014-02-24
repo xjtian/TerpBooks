@@ -1,9 +1,9 @@
 from __future__ import absolute_import
 
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 
 from .models import Listing, TransactionRequest, TransactionRequestThread
-from .serializers import ListingSerializer, RequestSerializer, RequestThreadSerializer
+from .serializers import ListingSerializer, RequestSerializer, RequestThreadSerializer, ListingNestedSerializer
 
 
 class ListingViewSet(viewsets.ModelViewSet):
@@ -19,3 +19,8 @@ class TransactionRequestViewSet(viewsets.ModelViewSet):
 class RequestThreadViewSet(viewsets.ModelViewSet):
     queryset = TransactionRequestThread.objects.all()
     serializer_class = RequestThreadSerializer
+
+
+class ListingNestedBookView(generics.ListAPIView):
+    queryset = Listing.objects.all()
+    serializer_class = ListingNestedSerializer

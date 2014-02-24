@@ -1,8 +1,10 @@
 from __future__ import absolute_import
 
+from django.conf.urls import patterns, url
+
 from rest_framework import routers
 
-from .views import ListingViewSet, TransactionRequestViewSet, RequestThreadViewSet
+from .views import ListingViewSet, TransactionRequestViewSet, RequestThreadViewSet, ListingNestedBookView
 
 
 router = routers.SimpleRouter()
@@ -11,3 +13,7 @@ router.register(r'threads', RequestThreadViewSet, base_name='threads')
 router.register(r'requests', TransactionRequestViewSet, base_name='requests')
 
 urlpatterns = router.urls
+
+urlpatterns += patterns('',
+    url(r'listings/all$', ListingNestedBookView.as_view(), name='listings-all'),
+)

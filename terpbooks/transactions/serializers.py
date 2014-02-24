@@ -3,11 +3,22 @@ from __future__ import absolute_import
 from rest_framework import serializers
 
 from .models import Listing, TransactionRequestThread, TransactionRequest
+from books.serializers import TextbookSerializer
 
 
 class ListingSerializer(serializers.ModelSerializer):
     owner = serializers.PrimaryKeyRelatedField(required=True)
     book = serializers.PrimaryKeyRelatedField(required=True)
+
+    requests = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
+    class Meta:
+        model = Listing
+
+
+class ListingNestedSerializer(serializers.ModelSerializer):
+    owner = serializers.PrimaryKeyRelatedField(required=True)
+    book = TextbookSerializer()
 
     requests = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
