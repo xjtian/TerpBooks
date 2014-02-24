@@ -1,8 +1,12 @@
+import os
+
 import itertools
 import random
 import string
 
 from books.models import Textbook, Author, Semester, Professor
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'terpbooks.settings.local')
 
 # Set up data
 first_names = ['Bob ', 'John ', 'Jane ', 'Sally ']
