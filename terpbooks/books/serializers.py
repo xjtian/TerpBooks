@@ -29,3 +29,12 @@ class SemesterSerializer(serializers.ModelSerializer):
 class ProfessorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Professor
+
+
+class TextbookRelatedSerializer(serializers.ModelSerializer):
+    authors = serializers.RelatedField(many=True)
+    semester = serializers.RelatedField()
+    professor = serializers.RelatedField()
+
+    class Meta:
+        model = Textbook
