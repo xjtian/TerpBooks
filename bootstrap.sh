@@ -27,7 +27,7 @@ mkdir -p /home/vagrant/www/public/ /home/vagrant/www/logs
 sudo chown vagrant:vagrant /home/vagrant/www/ -R
 
 cd /vagrant
-#sudo cp httpd.conf /etc/apache2/httpd.conf
+sudo cp httpd.conf /etc/apache2/httpd.conf
 
 mysql -u root -e"create database terpbooks;"
 mysql -u root terpbooks < init_data.sql
