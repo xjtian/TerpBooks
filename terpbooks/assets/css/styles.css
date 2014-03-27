@@ -1,0 +1,70 @@
+.navbar-default {
+    background-color: #ff7373;
+}
+
+#top-nav-collapse li > a {
+    color: #006363;
+}
+
+#top-nav-collapse li > a:hover {
+    color: #fff;
+}
+
+#top-nav-collapse li.active > a {
+    background-color: #ff9640;
+    color: #fff;
+}
+
+#top-nav-collapse li.active > a:hover {
+    color: #006363;
+}
+
+.nav-logo {
+    padding-left: 15px;
+    max-height: 200%;
+}
+
+.navbar {
+    margin-bottom: 0;
+    overflow: visible;
+    z-index: 100;
+    border: none;
+    border-bottom-left-radius: 0;
+    -webkit-border-bottom-left-radius: 0;
+    -moz-border-radius-bottomleft: 0;
+    border-bottom-right-radius: 0;
+    -webkit-border-bottom-right-radius: 0;
+    -moz-border-radius-bottomright: 0;
+}
+
+.banner {
+    position: relative;
+}
+
+.banner .header-holder {
+    position: absolute;
+    left: 45px;
+    bottom: 30%;
+}
+
+.banner h1, h2 {
+    text-shadow:
+        -1px -1px 0 #000,
+        0 -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        0 1px 0 #000,
+        1px 1px 0 #000;
+}
+
+.banner h1 {
+    font-size: 60px;
+    color: #fff;
+    margin-bottom: 0;
+}
+
+.banner h2 {
+    font-size: 24px;
+    color: #fff;
+    margin-top: 0;
+}
