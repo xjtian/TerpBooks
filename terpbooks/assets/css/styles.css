@@ -68,3 +68,55 @@
     color: #fff;
     margin-top: 0;
 }
+
+.filter-container {
+    padding: 10px 0;
+    margin: 0;
+    background-color: #eaeaea;
+    text-align: center;
+}
+
+.filter-field-wrapper {
+    margin: 0 auto;
+}
+
+.filter-field-wrapper p {
+    display: inline-block;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 0;
+    vertical-align: top;
+}
+
+.listing-filter-wrapper {
+    width: 130px;
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.listing-filter-wrapper > .listing-filter {
+    max-width: 125px;
+}
+
+.listing-filter-wrapper > .listing-filter:not(:first-child) {
+    margin-top: 10px;
+}
+
+.add-filter-field {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    margin: -5px 30px 0 5px;
+    cursor: pointer;
+}
+
+.filter-field-wrapper p:nth-of-type(2) {
+    margin-left: 30px;
+}
+
+.listing-sort {
+    max-width: 165px;
+    display: inline-block;
+    margin-left: 20px;
+    vertical-align: top;
+}

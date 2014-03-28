@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TerpBooks</title>
+
+    <link rel="stylesheet" href="assets/libs/bootstrap.min.css"/>
+    <link rel="stylesheet" href="assets/css/styles.css"/>
+
+    <script src="assets/libs/jquery-2.1.0.min.js"></script>
+    <script src="assets/libs/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // TODO: on filter selection change, add/remove text input as necessary
+
+            $('.add-filter-field').on('click', function() {
+                $('.listing-filter-wrapper').append(
+                    '<select class="form-control listing-filter">' +
+                            '<option>All Books</option>' +
+                            '<option>Title</option>' +
+                            '<option>ISBN</option>' +
+                            '<option>Class Code</option>' +
+                            '<option>Semester</option>' +
+                            '<option>Professor</option>' +
+                    '</select>'
+                );
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Begin base.html -->
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" data-toggle="collapse" data-target="#top-nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    <a class="navbar-brand" href="">
+                        <img src="assets/img/logo.png" class="nav-logo"/>
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse pull-right" id="top-nav-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Buy</a></li>
+                        <li><a href="#">Sell</a></li>
+                        <li><a href="#">Log In</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="banner row">
+            <img class="col-xs-12" src="assets/img/banner.jpg" />
+            <div class="header-holder">
+                <h1>TerpBooks</h1>
+                <h2>Buy, sell, and trade textbooks for UMD classes.</h2>
+            </div>
+        </div>
+        <!-- End base.html -->
+
+        <div class="row filter-container">
+            <div class="col-xs-12">
+                <div class="filter-field-wrapper">
+                    <p>Search For:</p>
+
+                    <div class="listing-filter-wrapper">
+                        <select class="form-control listing-filter">
+                            <option>All Books</option>
+                            <option>Title</option>
+                            <option>ISBN</option>
+                            <option>Class Code</option>
+                            <option>Semester</option>
+                            <option>Professor</option>
+                        </select>
+                    </div>
+
+                    <img class="add-filter-field" src="assets/img/plus_icon.png" />
+
+                    <p>Sorted By:</p>
+                    <select class="form-control listing-sort">
+                        <option>Date Posted</option>
+                        <option>Price Low to High</option>
+                        <option>Price High to Low</option>
+                        <option>Alphabetically</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
