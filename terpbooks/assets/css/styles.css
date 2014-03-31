@@ -1,3 +1,5 @@
+/* Navbar styles */
+
 .navbar-default {
     background-color: #ff7373;
 }
@@ -37,6 +39,8 @@
     -moz-border-radius-bottomright: 0;
 }
 
+/* Banner styles */
+
 .banner {
     position: relative;
 }
@@ -45,6 +49,7 @@
     position: absolute;
     left: 45px;
     bottom: 30%;
+    z-index: 200;
 }
 
 .banner h1, h2 {
@@ -58,16 +63,18 @@
 }
 
 .banner h1 {
-    font-size: 60px;
+    font-size: 325%;
     color: #fff;
     margin-bottom: 0;
 }
 
 .banner h2 {
-    font-size: 24px;
+    font-size: 175%;
     color: #fff;
     margin-top: 0;
 }
+
+/* Styles for filter/sort stuff buy.html */
 
 .filter-container {
     padding: 10px 0;
@@ -82,7 +89,7 @@
 
 .filter-field-wrapper p {
     display: inline-block;
-    font-size: 20px;
+    font-size: 150%;
     font-weight: 700;
     margin-bottom: 0;
     vertical-align: top;
@@ -126,4 +133,50 @@
     display: inline-block;
     margin-left: 20px;
     vertical-align: top;
+}
+
+/* Styles for listing list stuff buy.html */
+
+.listing-list-container {
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.listing-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.listing-list .listing {
+    background-color: #ffd8b9;
+    padding: 20px 0 20px 30px;
+    cursor: pointer;
+    border: 2px solid #999;
+    border-top: 0;
+}
+
+.listing-list .listing.selection {
+    background-color: #ffc596;
+    border: 2px solid #0c0;
+    border-top: 0;
+}
+
+.listing h3 {
+    margin: 0 0 10px 0;
+    font-weight: 700;
+    font-size: 150%;
+}
+
+.listing h4 {
+    font-size: 110%;
+    margin: 5px 0;
+}
+
+.listing h4.listing-price {
+    color: #00cc00;
+}
+
+.listing h4.listing-date {
+    margin-bottom: 0;
+    color: #999;
 }

@@ -14,8 +14,16 @@
     <script>
         var API_URL = 'http://localhost:8080/';
 
+        function set_scroll_wrapper_height() {
+            // Window height - navbar height - banner height - filter bar height
+            var h = $(window).height() - $('.navbar').height() - $('.banner').height() - $('.filter-container').outerHeight();
+
+            $('.listing-list-container').height(h);
+        }
+
         $(document).ready(function() {
             // TODO: work on the responsive breakdown - refactor into span6's probably :(
+            // TODO: re-apply click/change handlers when new filter fields are added
 
             $('.add-filter-field').on('click', function() {
                 $('.listing-filter-wrapper').append(
@@ -70,7 +78,7 @@
 
                             filter_wrapper.find('input').remove();
                             filter_wrapper.width(300);
-                            var selector = filter_wrapper.append('<select class="form-control semester-select"></select>');
+                            filter_wrapper.append('<select class="form-control semester-select"></select>');
                             var options = [];
                             for (var i = 0; i < data.length; i++) {
                                 var sem_val = data[i].semester + ' ' + data[i].year;
@@ -83,6 +91,23 @@
                         });
                         break;
                 }
+            });
+
+            set_scroll_wrapper_height();
+
+            // On window resize, set the list container height
+            var timeoutID = null;
+            $(window).on('resize', function() {
+                if (timeoutID != null) {
+                    clearTimeout(timeoutID);
+                }
+
+                timeoutID = setTimeout(set_scroll_wrapper_height, 200);
+            });
+
+            $('.listing-list .listing').on('click', function() {
+                $('.listing-list .listing.selection').removeClass('selection');
+                $(this).addClass('selection');
             });
         });
     </script>
@@ -148,6 +173,45 @@
                         <option>Alphabetically</option>
                     </select>
                 </div>
+            </div>
+        </div>
+
+        <!-- Start code for listings -->
+        <div class="row">
+            <div class="col-xs-4 listing-list-container">
+                <ul class="listing-list">
+                    <li class="listing">
+                        <h3>Book Title 1: Book Subtitle 1</h3>
+                        <h4 class="listing-price">$100.00</h4>
+                        <h4>ABCD123, Fall 2012</h4>
+                        <h4 class="listing-date">Posted 3/1/2014</h4>
+                    </li>
+
+                    <li class="listing">
+                        <h3>Title of Book Number 2</h3>
+                        <h4 class="listing-price">$25.00</h4>
+                        <h4>No class information, Spring 2013</h4>
+                        <h4 class="listing-date">Posted 2/1/2014</h4>
+                    </li>
+
+                    <li class="listing">
+                        <h3>This is the 3rd Textbook</h3>
+                        <h4 class="listing-price">$100.00</h4>
+                        <h4>EFGH456, Winter 2011</h4>
+                        <h4 class="listing-date">Posted 1/1/2014</h4>
+                    </li>
+
+                    <li class="listing">
+                        <h3>Untitled Textbook</h3>
+                        <h4 class="listing-price">$0.00</h4>
+                        <h4>No class information</h4>
+                        <h4 class="listing-date">Posted 11/1/2014</h4>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-xs-8 listing-info">
+
             </div>
         </div>
     </div>
