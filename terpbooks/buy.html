@@ -21,81 +21,87 @@
             $('.listing-list-container').height(h);
         }
 
+        function filter_changed() {
+            var val = $(this).find('option').filter(':selected').val();
+            var filter_wrapper = $(this).parent();
+
+            switch(val) {
+                case 'all':
+                    filter_wrapper.find('input').remove();
+                    filter_wrapper.find('.semester-select').remove();
+                    filter_wrapper.css('width', '');
+                    break;
+                case 'title':
+                case 'isbn':
+                case 'class':
+                case 'prof':
+                    if (filter_wrapper.find('input').length != 0) {
+                        break;
+                    }
+
+                    filter_wrapper.find('.semester-select').remove();
+                    filter_wrapper.width(300);
+                    filter_wrapper.append('<input type="text" class="form-control filter-input" />');
+                    break;
+                case 'semester':
+                    if (filter_wrapper.find('select').length > 1) {
+                        break;
+                    }
+
+                    var semester_url = API_URL + 'books/semesters';
+
+                    $.get(semester_url, function(data) {
+                        // TODO: replace hardcoded long names with api call
+                        var name_map = {
+                            'FL': 'Fall',
+                            'SM': 'Summer',
+                            'SP': 'Spring',
+                            'WN': 'Winter'
+                        };
+
+                        filter_wrapper.find('input').remove();
+                        filter_wrapper.width(300);
+                        filter_wrapper.append('<select class="form-control semester-select"></select>');
+                        var options = [];
+                        for (var i = 0; i < data.length; i++) {
+                            var sem_val = data[i].semester + ' ' + data[i].year;
+                            var sem_str = name_map[data[i].semester] + ' ' + data[i].year;
+
+                            //options.push('<option value="' + sem_val + '">' + sem_str + '</option>');
+                            var s = filter_wrapper.find('.semester-select');
+                            s.append(new Option(sem_str, sem_val));
+                        }
+                    });
+                    break;
+            }
+        }
+
         $(document).ready(function() {
             // TODO: work on the responsive breakdown - refactor into span6's probably :(
-            // TODO: re-apply click/change handlers when new filter fields are added
 
             $('.add-filter-field').on('click', function() {
                 $('.listing-filter-wrapper').append(
-                    '<select class="form-control listing-filter">' +
+                    '<div class="listing-filter-group">' +
+                        '<select class="form-control listing-filter">' +
                             '<option value="all">All Books</option>' +
                             '<option value="title">Title</option>' +
                             '<option value="isbn">ISBN</option>' +
                             '<option value="class">Class Code</option>' +
                             '<option value="semester">Semester</option>' +
                             '<option value="prof">Professor</option>' +
-                    '</select>'
+                        '</select>' +
+                    '</div>'
                 );
+
+                var lf = $('.listing-filter');
+                lf.off('change');
+                lf.on('change', filter_changed);
             });
 
-            $('.listing-filter').on('change', function() {
-                var val = $(this).find('option').filter(':selected').val();
-                var filter_wrapper = $(this).parent();
-
-                switch(val) {
-                    case 'all':
-                        filter_wrapper.find('input').remove();
-                        filter_wrapper.find('.semester-select').remove();
-                        filter_wrapper.css('width', '');
-                        break;
-                    case 'title':
-                    case 'isbn':
-                    case 'class':
-                    case 'prof':
-                        if (filter_wrapper.find('input').length != 0) {
-                            break;
-                        }
-
-                        filter_wrapper.find('.semester-select').remove();
-                        filter_wrapper.width(300);
-                        filter_wrapper.append('<input type="text" class="form-control filter-input" />');
-                        break;
-                    case 'semester':
-                        if (filter_wrapper.find('select').length > 1) {
-                            break;
-                        }
-
-                        var semester_url = API_URL + 'books/semesters';
-
-                        $.get(semester_url, function(data) {
-                            // TODO: replace hardcoded long names with api call
-                            var name_map = {
-                                'FL': 'Fall',
-                                'SM': 'Summer',
-                                'SP': 'Spring',
-                                'WN': 'Winter'
-                            };
-
-                            filter_wrapper.find('input').remove();
-                            filter_wrapper.width(300);
-                            filter_wrapper.append('<select class="form-control semester-select"></select>');
-                            var options = [];
-                            for (var i = 0; i < data.length; i++) {
-                                var sem_val = data[i].semester + ' ' + data[i].year;
-                                var sem_str = name_map[data[i].semester] + ' ' + data[i].year;
-
-                                //options.push('<option value="' + sem_val + '">' + sem_str + '</option>');
-                                var s = filter_wrapper.find('.semester-select');
-                                s.append(new Option(sem_str, sem_val));
-                            }
-                        });
-                        break;
-                }
-            });
-
-            set_scroll_wrapper_height();
+            $('.listing-filter').on('change', filter_changed);
 
             // On window resize, set the list container height
+            set_scroll_wrapper_height();
             var timeoutID = null;
             $(window).on('resize', function() {
                 if (timeoutID != null) {
@@ -153,14 +159,16 @@
                     <p>Search For:</p>
 
                     <div class="listing-filter-wrapper">
-                        <select class="form-control listing-filter">
-                            <option value="all">All Books</option>
-                            <option value="title">Title</option>
-                            <option value="isbn">ISBN</option>
-                            <option value="class">Class Code</option>
-                            <option value="semester">Semester</option>
-                            <option value="prof">Professor</option>
-                        </select>
+                        <div class="listing-filter-group">
+                            <select class="form-control listing-filter">
+                                <option value="all">All Books</option>
+                                <option value="title">Title</option>
+                                <option value="isbn">ISBN</option>
+                                <option value="class">Class Code</option>
+                                <option value="semester">Semester</option>
+                                <option value="prof">Professor</option>
+                            </select>
+                        </div>
                     </div>
 
                     <img class="add-filter-field" src="assets/img/plus_icon.png" />

@@ -96,17 +96,27 @@
 }
 
 .listing-filter-wrapper {
-    width: 130px;
     display: inline-block;
     margin-left: 20px;
 }
 
-.listing-filter-wrapper > .listing-filter {
+.listing-filter-group {
+    width: 130px;
+    display: block;
+    text-align: left;
+    margin-top: 5px;
+}
+
+.listing-filter-wrapper > .listing-filter-group:first-child {
+    margin-top: 0;
+}
+
+.listing-filter-group > .listing-filter {
     max-width: 125px;
     display: inline-block;
 }
 
-.listing-filter-wrapper > .listing-filter:not(:first-child) {
+.listing-filter-group > .listing-filter:not(:first-child) {
     margin-top: 10px;
 }
 
