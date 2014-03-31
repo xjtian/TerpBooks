@@ -63,7 +63,8 @@
 }
 
 .banner h1,
-.banner h2 {
+.banner h2,
+.navbar-header > .xs-title {
     text-shadow:
         -1px -1px 0 #000,
         0 -1px 0 #000,
@@ -71,18 +72,26 @@
         -1px 1px 0 #000,
         0 1px 0 #000,
         1px 1px 0 #000;
+    color: #fff;
 }
 
 .banner h1 {
     font-size: 45px;
-    color: #fff;
     margin-bottom: 0;
 }
 
 .banner h2 {
     font-size: 25px;
-    color: #fff;
     margin-top: 0;
+}
+
+.xs-title {
+    margin: 0;
+    font-size: 30px;
+}
+
+.navbar-header > .xs-title:hover {
+    color: #fff;
 }
 
 /* Styles for filter/sort stuff buy.html */
