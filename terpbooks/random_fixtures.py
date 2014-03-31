@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from books.models import Textbook, Author, Semester, Professor
 from transactions.models import Listing, TransactionRequest, TransactionRequestThread
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'terpbooks.settings.local')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'terpbooks.settings.staging')
 
 # Set up data
 first_names = ['Bob ', 'John ', 'Jane ', 'Sally ']
@@ -17,7 +17,7 @@ last_names = ['Doe', 'Grant', 'Gray', 'Brown']
 author_names = map(lambda l: ''.join(l), itertools.product(first_names, last_names))
 
 years = [2011, 2012, 2013, 2014]
-semester_names = ['FL', 'WN', 'SP', 'SM']
+semester_names = ['CFL', 'DWN', 'ASP', 'BSM']
 semesters = itertools.product(semester_names, years)
 
 class_subjects = ['CMSC', 'PHYS', 'MATH', 'ENGL']

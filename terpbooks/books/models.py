@@ -5,10 +5,10 @@ class Semester(models.Model):
     """
     A semester of some school year.
     """
-    FALL = 'FL'
-    SPRING = 'SP'
-    WINTER = 'WN'
-    SUMMER = 'SM'
+    FALL = 'CFL'
+    SPRING = 'ASP'
+    WINTER = 'DWN'
+    SUMMER = 'BSM'
 
     SEMESTER_CHOICES = (
         (FALL, 'Fall'),
@@ -18,7 +18,7 @@ class Semester(models.Model):
     )
 
     year = models.IntegerField()
-    semester = models.CharField(max_length=2,
+    semester = models.CharField(max_length=3,
                                 choices=SEMESTER_CHOICES,
                                 default=FALL)
 

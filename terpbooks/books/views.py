@@ -17,8 +17,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
 
 
 class SemesterViewSet(viewsets.ModelViewSet):
-    # TODO: filter semesters chronologically
-    queryset = Semester.objects.all()
+    queryset = Semester.objects.all().order_by('-year', 'semester')
     serializer_class = SemesterSerializer
 
 
