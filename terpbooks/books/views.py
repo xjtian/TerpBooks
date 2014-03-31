@@ -17,6 +17,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
 
 
 class SemesterViewSet(viewsets.ModelViewSet):
+    # TODO: filter semesters chronologically
     queryset = Semester.objects.all()
     serializer_class = SemesterSerializer
 
@@ -24,3 +25,6 @@ class SemesterViewSet(viewsets.ModelViewSet):
 class ProfessorViewSet(viewsets.ModelViewSet):
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
+
+
+# TODO: static API view to reveal full names of semester choice field options

@@ -12,20 +12,77 @@
     <script src="assets/libs/bootstrap.min.js"></script>
 
     <script>
+        var API_URL = 'http://localhost:8080/';
+
         $(document).ready(function() {
-            // TODO: on filter selection change, add/remove text input as necessary
+            // TODO: work on the responsive breakdown - refactor into span6's probably :(
 
             $('.add-filter-field').on('click', function() {
                 $('.listing-filter-wrapper').append(
                     '<select class="form-control listing-filter">' +
-                            '<option>All Books</option>' +
-                            '<option>Title</option>' +
-                            '<option>ISBN</option>' +
-                            '<option>Class Code</option>' +
-                            '<option>Semester</option>' +
-                            '<option>Professor</option>' +
+                            '<option value="all">All Books</option>' +
+                            '<option value="title">Title</option>' +
+                            '<option value="isbn">ISBN</option>' +
+                            '<option value="class">Class Code</option>' +
+                            '<option value="semester">Semester</option>' +
+                            '<option value="prof">Professor</option>' +
                     '</select>'
                 );
+            });
+
+            $('.listing-filter').on('change', function() {
+                var val = $(this).find('option').filter(':selected').val();
+                var filter_wrapper = $(this).parent();
+
+                switch(val) {
+                    case 'all':
+                        filter_wrapper.find('input').remove();
+                        filter_wrapper.find('.semester-select').remove();
+                        filter_wrapper.css('width', '');
+                        break;
+                    case 'title':
+                    case 'isbn':
+                    case 'class':
+                    case 'prof':
+                        if (filter_wrapper.find('input').length != 0) {
+                            break;
+                        }
+
+                        filter_wrapper.find('.semester-select').remove();
+                        filter_wrapper.width(300);
+                        filter_wrapper.append('<input type="text" class="form-control filter-input" />');
+                        break;
+                    case 'semester':
+                        if (filter_wrapper.find('select').length > 1) {
+                            break;
+                        }
+
+                        var semester_url = API_URL + 'books/semesters';
+
+                        $.get(semester_url, function(data) {
+                            // TODO: replace hardcoded long names with api call
+                            var name_map = {
+                                'FL': 'Fall',
+                                'SM': 'Summer',
+                                'SP': 'Spring',
+                                'WN': 'Winter'
+                            };
+
+                            filter_wrapper.find('input').remove();
+                            filter_wrapper.width(300);
+                            var selector = filter_wrapper.append('<select class="form-control semester-select"></select>');
+                            var options = [];
+                            for (var i = 0; i < data.length; i++) {
+                                var sem_val = data[i].semester + ' ' + data[i].year;
+                                var sem_str = name_map[data[i].semester] + ' ' + data[i].year;
+
+                                //options.push('<option value="' + sem_val + '">' + sem_str + '</option>');
+                                var s = filter_wrapper.find('.semester-select');
+                                s.append(new Option(sem_str, sem_val));
+                            }
+                        });
+                        break;
+                }
             });
         });
     </script>
@@ -72,12 +129,12 @@
 
                     <div class="listing-filter-wrapper">
                         <select class="form-control listing-filter">
-                            <option>All Books</option>
-                            <option>Title</option>
-                            <option>ISBN</option>
-                            <option>Class Code</option>
-                            <option>Semester</option>
-                            <option>Professor</option>
+                            <option value="all">All Books</option>
+                            <option value="title">Title</option>
+                            <option value="isbn">ISBN</option>
+                            <option value="class">Class Code</option>
+                            <option value="semester">Semester</option>
+                            <option value="prof">Professor</option>
                         </select>
                     </div>
 
