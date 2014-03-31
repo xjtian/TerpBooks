@@ -77,8 +77,6 @@
         }
 
         $(document).ready(function() {
-            // TODO: work on the responsive breakdown - refactor into span6's probably :(
-
             $('.add-filter-field').on('click', function() {
                 $('.listing-filter-wrapper').append(
                     '<div class="listing-filter-group">' +
@@ -181,33 +179,33 @@
         <!-- End base.html -->
 
         <div class="row filter-container">
-            <div class="col-xs-12">
-                <div class="filter-field-wrapper">
-                    <p>Search For:</p>
+            <div class="col-xs-12 col-lg-6">
+                <p>Search For:</p>
 
-                    <div class="listing-filter-wrapper">
-                        <div class="listing-filter-group">
-                            <select class="form-control listing-filter">
-                                <option value="all">All Books</option>
-                                <option value="title">Title</option>
-                                <option value="isbn">ISBN</option>
-                                <option value="class">Class Code</option>
-                                <option value="semester">Semester</option>
-                                <option value="prof">Professor</option>
-                            </select>
-                        </div>
+                <div class="listing-filter-wrapper">
+                    <div class="listing-filter-group">
+                        <select class="form-control listing-filter">
+                            <option value="all">All Books</option>
+                            <option value="title">Title</option>
+                            <option value="isbn">ISBN</option>
+                            <option value="class">Class Code</option>
+                            <option value="semester">Semester</option>
+                            <option value="prof">Professor</option>
+                        </select>
                     </div>
-
-                    <img class="add-filter-field" src="assets/img/plus_icon.png" />
-
-                    <p>Sorted By:</p>
-                    <select class="form-control listing-sort">
-                        <option>Date Posted</option>
-                        <option>Price Low to High</option>
-                        <option>Price High to Low</option>
-                        <option>Alphabetically</option>
-                    </select>
                 </div>
+
+                <img class="add-filter-field" src="assets/img/plus_icon.png" />
+            </div>
+
+            <div class="col-xs-12 col-lg-6">
+                <p>Sorted By:</p>
+                <select class="form-control listing-sort">
+                    <option>Date Posted</option>
+                    <option>Price Low to High</option>
+                    <option>Price High to Low</option>
+                    <option>Alphabetically</option>
+                </select>
             </div>
         </div>
 
