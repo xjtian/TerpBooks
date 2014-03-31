@@ -114,6 +114,33 @@
             $('.listing-list .listing').on('click', function() {
                 $('.listing-list .listing.selection').removeClass('selection');
                 $(this).addClass('selection');
+
+                var listing_info = $('.listing-info');
+                listing_info.empty();
+
+                listing_info.append('<h2>Listing Information</h2>');
+                listing_info.append('<dl class="dl-horizontal"></dl>');
+
+                var dl = listing_info.find('dl');
+                dl.append(
+                        '<dt>Title:</dt>' +
+                        '<dd>Book Title Goes Here</dd>' +
+                        '<dt>Authors:</dt>' +
+                        '<dd>John Doe, Jane Doe</dd>' +
+                        '<dt>Edition:</dt>' +
+                        '<dd>3</dd>' +
+                        '<dt>ISBN:</dt>' +
+                        '<dd>123-4-56-789012-3</dd>' +
+                        '<dt>Course Code:</dt>' +
+                        '<dd>ABCD123</dd>' +
+                        '<dt>Semester:</dt>' +
+                        '<dd>Fall 1999</dd>' +
+                        '<dt>Professor:</dt>' +
+                        '<dd>Professor goes here</dd>'
+                );
+
+                listing_info.append('<p>Asking Price: <span>$100.00</span></p>');
+                listing_info.append('<button type="button" class="btn btn-success">Contact Seller</button>');
             });
         });
     </script>

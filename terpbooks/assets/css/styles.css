@@ -52,7 +52,8 @@
     z-index: 200;
 }
 
-.banner h1, h2 {
+.banner h1,
+.banner h2 {
     text-shadow:
         -1px -1px 0 #000,
         0 -1px 0 #000,
@@ -183,10 +184,23 @@
 }
 
 .listing h4.listing-price {
-    color: #00cc00;
+    color: #0c0;
 }
 
 .listing h4.listing-date {
     margin-bottom: 0;
     color: #999;
+}
+
+.listing-info > p {
+    margin-left: 30px;
+    font-size: 20px;
+}
+
+.listing-info > p > span {
+    color: #0c0;
+}
+
+.listing-info > button.btn-success {
+    margin: 20px 0 0 60px;
 }
