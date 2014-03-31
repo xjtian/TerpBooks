@@ -127,7 +127,7 @@
     width: 30px;
     height: 30px;
     display: inline-block;
-    margin: -5px 30px 0 5px;
+    margin: -5px 0 0 5px;
     cursor: pointer;
 }
 
@@ -135,10 +135,6 @@
     width: 150px;
     display: inline-block;
     margin-left: 15px;
-}
-
-.filter-container p:nth-of-type(2) {
-    margin-left: 30px;
 }
 
 .listing-sort {
