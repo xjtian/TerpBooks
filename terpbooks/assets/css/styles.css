@@ -64,13 +64,13 @@
 }
 
 .banner h1 {
-    font-size: 325%;
+    font-size: 45px;
     color: #fff;
     margin-bottom: 0;
 }
 
 .banner h2 {
-    font-size: 175%;
+    font-size: 25px;
     color: #fff;
     margin-top: 0;
 }
@@ -90,7 +90,7 @@
 
 .filter-field-wrapper p {
     display: inline-block;
-    font-size: 150%;
+    font-size: 20px;
     font-weight: 700;
     margin-bottom: 0;
     vertical-align: top;
@@ -175,11 +175,11 @@
 .listing h3 {
     margin: 0 0 10px 0;
     font-weight: 700;
-    font-size: 150%;
+    font-size: 20px;
 }
 
 .listing h4 {
-    font-size: 110%;
+    font-size: 15px;
     margin: 5px 0;
 }
 
@@ -191,6 +191,8 @@
     margin-bottom: 0;
     color: #999;
 }
+
+/* Styles for listing info stuff buy.html */
 
 .listing-info > p {
     margin-left: 30px;
