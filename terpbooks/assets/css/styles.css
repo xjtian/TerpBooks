@@ -4,6 +4,16 @@
     background-color: #ff7373;
 }
 
+#top-nav-collapse {
+    float: right;
+}
+
+@media(max-width: 767px) {
+    #top-nav-collapse {
+        float: none;
+    }
+}
+
 #top-nav-collapse li > a {
     color: #006363;
 }
