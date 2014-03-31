@@ -6,6 +6,7 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 SECRET_KEY = 'super_secret_django_key'
+CORS_ORIGIN_ALLOW_ALL = True
 USE_CAS = True
 
 if USE_CAS:

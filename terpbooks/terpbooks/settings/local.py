@@ -20,6 +20,8 @@ def get_env_variable(var_name):
 
 SECRET_KEY = get_env_variable('DJANGO_SECRET')
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 # Don't use CAS in local for now
 USE_CAS = False
 
