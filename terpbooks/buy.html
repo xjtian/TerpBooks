@@ -51,25 +51,27 @@
                     }
 
                     var semester_url = API_URL + 'books/semesters';
+                    var lookup_url = API_URL + 'books/semester-lookup';
 
                     $.get(semester_url, function(data) {
-                        // TODO: replace hardcoded long names with api call
-                        var name_map = {
-                            'FL': 'Fall',
-                            'SM': 'Summer',
-                            'SP': 'Spring',
-                            'WN': 'Winter'
-                        };
+                        // TODO: look into loading this once only on page load
+                        var name_map = {};
+                        $.ajax({
+                            url: lookup_url,
+                            async: false,
+                            success: function(data) {
+                                name_map = data;
+                            }
+                        });
 
                         filter_wrapper.find('input').remove();
                         filter_wrapper.width(300);
                         filter_wrapper.append('<select class="form-control semester-select"></select>');
-                        var options = [];
+
                         for (var i = 0; i < data.length; i++) {
                             var sem_val = data[i].semester + ' ' + data[i].year;
-                            var sem_str = name_map[data[i].semester] + ' ' + data[i].year;
+                            var sem_str = name_map.forward[data[i].semester] + ' ' + data[i].year;
 
-                            //options.push('<option value="' + sem_val + '">' + sem_str + '</option>');
                             var s = filter_wrapper.find('.semester-select');
                             s.append(new Option(sem_str, sem_val));
                         }
