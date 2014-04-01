@@ -1,12 +1,9 @@
-/**
- * Set listing list container height to fix exactly window minus nav and banner.
- */
-function set_scroll_wrapper_height() {
-    // Window height - navbar height - banner height - filter bar height
-    var h = $(window).height() - $('.navbar').height() - $('.banner').height() - $('.filter-container').outerHeight();
-
-    $('.listing-list-container').height(h);
-}
+// <editor-fold desc="event handlers">
+/*******************
+ *
+ * EVENT HANDLERS
+ *
+ ******************/
 
 var timeoutID = null;
 /**
@@ -80,63 +77,15 @@ function filter_changed() {
  * Event handler for selection of a listing from the list.
  */
 function listing_selected() {
-    // TODO: unmock this!!!
-    var listing_info = $('.listing-info');
-    var is_separate = listing_info.is(':visible');
-
-    function append_info(container) {
-        container.append('<h2>Listing Information</h2>');
-        container.append('<dl class="dl-horizontal"></dl>');
-
-        var dl = container.find('dl');
-        dl.append(
-                '<dt>Title:</dt>' +
-                        '<dd>Book Title Goes Here</dd>' +
-                        '<dt>Authors:</dt>' +
-                        '<dd>John Doe, Jane Doe</dd>' +
-                        '<dt>Edition:</dt>' +
-                        '<dd>3</dd>' +
-                        '<dt>ISBN:</dt>' +
-                        '<dd>123-4-56-789012-3</dd>' +
-                        '<dt>Course Code:</dt>' +
-                        '<dd>ABCD123</dd>' +
-                        '<dt>Semester:</dt>' +
-                        '<dd>Fall 1999</dd>' +
-                        '<dt>Professor:</dt>' +
-                        '<dd>Professor goes here</dd>'
-        );
-
-        container.append('<p>Asking Price: <span>$100.00</span></p>');
-        container.append('<button type="button" class="btn btn-success">Contact Seller</button>');
-
-    }
+    var is_separate = is_detail_separate();
+    var url = $(this).attr('detail-url');
 
     if (is_separate) {
         $('.listing-list .listing.selection').removeClass('selection');
         $(this).addClass('selection');
-
-        listing_info.empty();
-        append_info(listing_info);
-
-    } else {
-        var listing_list = $('.listing-list');
-        var cached_list = listing_list.html();
-
-        listing_list.empty();
-        listing_list.append(
-                '<button class="btn btn-default listing-back"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>'
-        );
-        append_info(listing_list);
-
-        listing_list.find('button.listing-back').on('click', function() {
-            listing_list.html(cached_list);
-
-            // Re-apply click handlers for list elements
-            $('.listing-list .listing').on('click', listing_selected);
-        });
-
-        // TODO: stuff needs to happen on window resize
     }
+
+    display_listing_detail(is_separate, $(detail_container_name(is_separate)), url);
 }
 
 /**
@@ -153,13 +102,85 @@ function add_filter_field() {
             '<option value="semester">Semester</option>' +
             '<option value="prof">Professor</option>' +
             '</select>' +
-        '</div>'
+            '</div>'
     );
 
     var lf = $('.listing-filter');
     lf.off('change');
     lf.on('change', filter_changed);
 }
+
+/*************************
+ *
+ * End Event Handlers
+ *
+ *************************/
+
+// </editor-fold>
+
+/**
+ * Set listing list container height to fix exactly window minus nav and banner.
+ */
+function set_scroll_wrapper_height() {
+    // Window height - navbar height - banner height - filter bar height
+    var h = $(window).height() - $('.navbar').height() - $('.banner').height() - $('.filter-container').outerHeight();
+
+    list_container_name().height(h);
+}
+
+
+/**
+ * Populate listings list via ajax call.
+ */
+function load_listings() {
+    $.get(LISTING_LIST_URL, function(data) {
+        $(list_container_name()).html(data);
+        $('.listing-list .listing').on('click', listing_selected);
+    });
+}
+
+
+/**
+ * Returns bool whether or not listing detail container is separate from list container.
+ */
+function is_detail_separate() {
+    return $('.listing-info').is(':visible');
+}
+
+
+/**
+ * Return the selector name of container for listing detail.
+ */
+function detail_container_name(is_separate) {
+    return is_separate ? '.listing-info' : '.listing-list';
+}
+
+
+function list_container_name() {
+    return '.listing-list-container';
+}
+
+
+function display_listing_detail(is_separate, container, url) {
+    if (! is_separate) {
+        container.empty();
+        container.append(
+            '<button class="btn btn-default listing-back"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>'
+        );
+    }
+
+    $.get(url, function(data) {
+        container.append(data);
+    });
+
+    if (! is_separate) {
+        container.find('button.listing-back').on('click', function() {
+            load_listings();
+            $('.listing-list .listing').on('click', listing_selected);
+        });
+    }
+}
+
 
 $(document).ready(function() {
     // TODO: sorting listings
@@ -169,13 +190,10 @@ $(document).ready(function() {
     $('.listing-filter').on('change', filter_changed);
     $(window).on('resize', scroll_wrapper_window_resize);
 
-    // Load the listing list
-    $.get(LISTING_LIST_URL, function(data) {
-        $('.listing-list-container').html(data);
-        $('.listing-list .listing').on('click', listing_selected);
-    });
+    load_listings();
 });
 
 $(window).load(function() {
     set_scroll_wrapper_height();
 });
+

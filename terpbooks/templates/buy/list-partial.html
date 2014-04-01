@@ -1,6 +1,6 @@
 <ul class="listing-list">
     {% for listing in listings_list %}
-        <li class="listing">
+        <li class="listing" detail-url="{% url "listings-detail-tmpl" listing.pk %}">
             <h3>{{ listing.book.title }}</h3>
             <h4 class="listing-price">${{ listing.asking_price }}</h4>
             <h4>{{ listing.book.course_code }}, {{ listing.book.semester.get_semester_display }} {{ listing.book.semester.year }}</h4>
