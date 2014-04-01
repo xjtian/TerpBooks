@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}TerpBooks | Buy{% endblock %}
+
+{% block extra_head %}
+    <script>
+        // API URL's set from Django template tags
+        var SEMESTER_URL = '{% url "semesters-list" %}';
+        var SEMESTER_LOOKUP_URL = '{% url "semester-lookup" %}';
+        var LISTING_LIST_URL = '{% url "listings-all" %}';
+    </script>
+
+    <script src="{% static "js/buy.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="row filter-container">
+        <div class="col-xs-12 col-lg-6">
+            <p>Search For:</p>
+
+            <div class="listing-filter-wrapper">
+                <div class="listing-filter-group">
+                    <select class="form-control listing-filter">
+                        <option value="all">All Books</option>
+                        <option value="title">Title</option>
+                        <option value="isbn">ISBN</option>
+                        <option value="class">Class Code</option>
+                        <option value="semester">Semester</option>
+                        <option value="prof">Professor</option>
+                    </select>
+                </div>
+            </div>
+
+            <img class="add-filter-field" src="{% static "img/plus_icon.png" %}" />
+        </div>
+
+        <div class="col-xs-12 col-lg-6">
+            <p>Sorted By:</p>
+            <select class="form-control listing-sort">
+                <option>Date Posted</option>
+                <option>Price Low to High</option>
+                <option>Price High to Low</option>
+                <option>Alphabetically</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Start code for listings -->
+    <div class="row">
+        <div class="col-sm-12 col-md-4 listing-list-container">
+        </div>
+
+        <div class="col-md-8 listing-info hidden-sm hidden-xs">
+        </div>
+    </div>
+{% endblock %}

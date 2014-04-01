@@ -54,7 +54,6 @@
                     var lookup_url = API_URL + 'books/semester-lookup';
 
                     $.get(semester_url, function(data) {
-                        // TODO: look into loading this once only on page load
                         var name_map = {};
                         $.ajax({
                             url: lookup_url,
@@ -135,8 +134,6 @@
                     // Re-apply click handlers for list elements
                     $('.listing-list .listing').on('click', listing_selected);
                 });
-
-                // TODO: stuff needs to happen on window resize
             }
         }
 

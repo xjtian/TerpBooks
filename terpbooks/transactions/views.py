@@ -1,7 +1,9 @@
 from __future__ import absolute_import
 
 from rest_framework import viewsets, generics
+
 from django.views.generic import ListView
+from django.shortcuts import render
 
 from .models import Listing, TransactionRequest, TransactionRequestThread
 from .serializers import ListingSerializer, RequestSerializer, RequestThreadSerializer, ListingNestedSerializer
@@ -35,3 +37,12 @@ class ListingListView(ListView):
 
     context_object_name = 'listings_list'
     template_name = 'buy/list-partial.html'
+
+
+def buy_index(request):
+    """
+    Buy page view.
+    """
+    return render(request, 'buy/index.html', {
+        'active': 'buy',
+    })
