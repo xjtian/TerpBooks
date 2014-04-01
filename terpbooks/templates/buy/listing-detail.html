@@ -1,0 +1,21 @@
+<h2>Listing Information</h2>
+
+<dl class="dl-horizontal">
+    <dt>Title:</dt>
+    <dd>{{ listing.book.title }}</dd>
+    <dt>Authors:</dt>
+    <dd>{{ listing.book.authors_string }}</dd>
+    <dt>Edition:</dt>
+    <dd>{{ listing.book.edition }}</dd>
+    <dt>ISBN:</dt>
+    <dd>{{ listing.book.isbn }}</dd>
+    <dt>Course Code:</dt>
+    <dd>{{ listing.book.course_code }}</dd>
+    <dt>Semester:</dt>
+    <dd>{{ listing.book.semester }}</dd>
+    <dt>Professor:</dt>
+    <dd>{{ listing.book.professor }}</dd>
+</dl>
+
+<p>Asking Price: <span>${{ listing.asking_price }}</span></p>
+<button type="button" class="btn btn-success">Contact Seller</button>

@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from rest_framework import viewsets, generics
 
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.shortcuts import render
 
 from .models import Listing, TransactionRequest, TransactionRequestThread
@@ -37,6 +37,14 @@ class ListingListView(ListView):
 
     context_object_name = 'listings_list'
     template_name = 'buy/list-partial.html'
+
+
+class ListingDetailView(DetailView):
+    model = Listing
+    queryset = Listing.objects.filter(status=Listing.AVAILABLE)
+
+    context_object_name = 'listing'
+    template_name = 'buy/listing-detail.html'
 
 
 def buy_index(request):

@@ -58,6 +58,13 @@ class Textbook(models.Model):
     def __unicode__(self):
         return u'%s' % self.title
 
+    def authors_string(self):
+        """
+        Returns Unicode string with list of authors
+        """
+        all_authors = Author.objects.filter(book=self).order_by('last_name')
+        return u', '.join([unicode(a) for a in all_authors])
+
 
 class Author(models.Model):
     """
