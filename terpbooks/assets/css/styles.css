@@ -189,6 +189,19 @@
     border-top: 0;
 }
 
+.listing-list .paginator {
+    background-color: #eee;
+    padding: 15px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.listing-list .paginator h4 {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0;
+}
+
 @media (max-width: 991px) {
     .listing-list .listing.selection {
         background-color: #ffd8b9;

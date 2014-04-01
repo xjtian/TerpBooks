@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from rest_framework import viewsets, generics
+from django.views.generic import ListView
 
 from .models import Listing, TransactionRequest, TransactionRequestThread
 from .serializers import ListingSerializer, RequestSerializer, RequestThreadSerializer, ListingNestedSerializer
@@ -24,3 +25,13 @@ class RequestThreadViewSet(viewsets.ModelViewSet):
 class ListingNestedBookView(generics.ListAPIView):
     queryset = Listing.objects.all()
     serializer_class = ListingNestedSerializer
+
+
+class ListingListView(ListView):
+    model = Listing
+    queryset = Listing.objects.filter(status=Listing.AVAILABLE).order_by('-date_created')
+
+    paginate_by = 10
+
+    context_object_name = 'listings_list'
+    template_name = 'buy/list-partial.html'

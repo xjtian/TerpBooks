@@ -4,7 +4,7 @@ from django.conf.urls import patterns, url
 
 from rest_framework import routers
 
-from .views import ListingViewSet, TransactionRequestViewSet, RequestThreadViewSet, ListingNestedBookView
+from .views import ListingViewSet, TransactionRequestViewSet, RequestThreadViewSet, ListingNestedBookView, ListingListView
 
 
 router = routers.SimpleRouter()
@@ -15,5 +15,5 @@ router.register(r'requests', TransactionRequestViewSet, base_name='requests')
 urlpatterns = router.urls
 
 urlpatterns += patterns('',
-    url(r'listings/all$', ListingNestedBookView.as_view(), name='listings-all'),
+    url(r'^listings/all$', ListingListView.as_view(), name='listings-all'),
 )

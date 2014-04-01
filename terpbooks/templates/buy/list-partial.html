@@ -1,0 +1,15 @@
+<ul class="listing-list">
+    {% for listing in listings_list %}
+        <li class="listing">
+            <h3>{{ listing.book.title }}</h3>
+            <h4 class="listing-price">${{ listing.asking_price }}</h4>
+            <h4>{{ listing.book.course_code }}, {{ listing.book.semester.get_semester_display }} {{ listing.book.semester.year }}</h4>
+            <h4 class="listing-date">Posted {{ listing.date_created | date:"n/j/Y" }}</h4>
+        </li>
+    {% endfor %}
+    {% if is_paginated %}
+        <li class="paginator">
+            <h4 paginate-data="?page={{ page_obj.next_page_number }}">Load More</h4>
+        </li>
+    {% endif %}
+</ul>
