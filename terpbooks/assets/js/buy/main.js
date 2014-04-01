@@ -1,3 +1,7 @@
+// Save stuff relevant to selections
+var selection_url = null;
+var separate_on_selection = true;
+
 // <editor-fold desc="event handlers">
 /*******************
  *
@@ -9,12 +13,29 @@ var timeoutID = null;
 /**
  * Resize listing list container height on widow resize, with 200ms lag.
  */
-function scroll_wrapper_window_resize() {
+function on_window_resize() {
     if (timeoutID != null) {
         clearTimeout(timeoutID);
     }
 
-    timeoutID = setTimeout(set_scroll_wrapper_height, 200);
+    timeoutID = setTimeout(function() {
+        set_scroll_wrapper_height();
+
+        var is_separate = is_detail_separate();
+        if ((is_separate && separate_on_selection) || (!is_separate && !separate_on_selection)) {
+            return;
+        }
+
+        // Expanding past breakpoint
+        if (is_separate && !separate_on_selection) {
+            separate_on_selection = true;
+            load_listings();
+        }
+
+        // This is the same regardless if expanded or shrank past breakpoint
+        display_listing_detail(is_separate, $(detail_container_name(is_separate)), selection_url);
+
+    }, 200);
 }
 
 /**
@@ -80,10 +101,11 @@ function listing_selected() {
     var is_separate = is_detail_separate();
     var url = $(this).attr('detail-url');
 
-    if (is_separate) {
-        $('.listing-list .listing.selection').removeClass('selection');
-        $(this).addClass('selection');
-    }
+    selection_url = url;
+    separate_on_selection = is_separate;
+
+    $('.listing-list .listing.selection').removeClass('selection');
+    $(this).addClass('selection');
 
     display_listing_detail(is_separate, $(detail_container_name(is_separate)), url);
 }
@@ -118,6 +140,7 @@ function add_filter_field() {
 
 // </editor-fold>
 
+
 /**
  * Set listing list container height to fix exactly window minus nav and banner.
  */
@@ -125,7 +148,7 @@ function set_scroll_wrapper_height() {
     // Window height - navbar height - banner height - filter bar height
     var h = $(window).height() - $('.navbar').height() - $('.banner').height() - $('.filter-container').outerHeight();
 
-    list_container_name().height(h);
+    $(list_container_name()).height(h);
 }
 
 
@@ -162,9 +185,14 @@ function list_container_name() {
 
 
 function display_listing_detail(is_separate, container, url) {
+    if (url == null) {
+        return;
+    }
+
+    container.empty();
+
     if (! is_separate) {
-        container.empty();
-        container.append(
+        container.html(
             '<button class="btn btn-default listing-back"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>'
         );
     }
@@ -173,12 +201,12 @@ function display_listing_detail(is_separate, container, url) {
         container.append(data);
     });
 
-    if (! is_separate) {
-        container.find('button.listing-back').on('click', function() {
-            load_listings();
-            $('.listing-list .listing').on('click', listing_selected);
-        });
-    }
+    container.find('button.listing-back').on('click', function() {
+        selection_url = null;
+        $(detail_container_name(true)).empty();
+        load_listings();
+        $('.listing-list .listing').on('click', listing_selected);
+    });
 }
 
 
@@ -188,7 +216,7 @@ $(document).ready(function() {
     // TODO: pagination front-end
     $('.add-filter-field').on('click', add_filter_field);
     $('.listing-filter').on('change', filter_changed);
-    $(window).on('resize', scroll_wrapper_window_resize);
+    $(window).on('resize', on_window_resize);
 
     load_listings();
 });
