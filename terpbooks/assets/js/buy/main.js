@@ -158,7 +158,20 @@ function set_scroll_wrapper_height() {
 function load_listings() {
     $.get(LISTING_LIST_URL, function(data) {
         $(list_container_name()).html(data);
-        $('.listing-list .listing').on('click', listing_selected);
+        connect_listing_click_handler();
+
+        $('li.paginator').on('click', function() {
+            var this_closure = $(this);
+            var url = this_closure.find('h4').attr('paginate-data');
+
+            $.get(url, function(data) {
+                this_closure.remove();
+                var lis = $(data).filter('ul').html();
+
+                $(list_container_name()).find('.listing-list').append(lis);
+                connect_listing_click_handler();
+            });
+        })
     });
 }
 
@@ -205,15 +218,18 @@ function display_listing_detail(is_separate, container, url) {
         selection_url = null;
         $(detail_container_name(true)).empty();
         load_listings();
-        $('.listing-list .listing').on('click', listing_selected);
+        connect_listing_click_handler();
     });
 }
 
 
+function connect_listing_click_handler() {
+    $('.listing-list .listing').on('click', listing_selected);
+}
+
 $(document).ready(function() {
     // TODO: sorting listings
     // TODO: filtering listings logic
-    // TODO: pagination front-end
     $('.add-filter-field').on('click', add_filter_field);
     $('.listing-filter').on('change', filter_changed);
     $(window).on('resize', on_window_resize);

@@ -7,9 +7,10 @@
             <h4 class="listing-date">Posted {{ listing.date_created | date:"n/j/Y" }}</h4>
         </li>
     {% endfor %}
-    {% if is_paginated %}
+
+    {% if page_obj.has_next %}
         <li class="paginator">
-            <h4 paginate-data="?page={{ page_obj.next_page_number }}">Load More</h4>
+            <h4 paginate-data="{% url "listings-all" %}?page={{ page_obj.next_page_number }}">Load More</h4>
         </li>
     {% endif %}
 </ul>
