@@ -48,48 +48,17 @@ function filter_changed() {
     switch(val) {
         case 'all':
             filter_wrapper.find('input').remove();
-            filter_wrapper.find('.semester-select').remove();
             filter_wrapper.css('width', '');
             break;
         case 'title':
         case 'isbn':
         case 'class':
-        case 'prof':
             if (filter_wrapper.find('input').length != 0) {
                 break;
             }
 
-            filter_wrapper.find('.semester-select').remove();
             filter_wrapper.width(300);
             filter_wrapper.append('<input type="text" class="form-control filter-input" />');
-            break;
-        case 'semester':
-            if (filter_wrapper.find('select').length > 1) {
-                break;
-            }
-
-            $.get(SEMESTER_URL, function(data) {
-                var name_map = {};
-                $.ajax({
-                    url: SEMESTER_LOOKUP_URL,
-                    async: false,
-                    success: function(data) {
-                        name_map = data;
-                    }
-                });
-
-                filter_wrapper.find('input').remove();
-                filter_wrapper.width(300);
-                filter_wrapper.append('<select class="form-control semester-select"></select>');
-
-                for (var i = 0; i < data.length; i++) {
-                    var sem_val = data[i].semester + ' ' + data[i].year;
-                    var sem_str = name_map.forward[data[i].semester] + ' ' + data[i].year;
-
-                    var s = filter_wrapper.find('.semester-select');
-                    s.append(new Option(sem_str, sem_val));
-                }
-            });
             break;
     }
 }
@@ -121,8 +90,6 @@ function add_filter_field() {
             '<option value="title">Title</option>' +
             '<option value="isbn">ISBN</option>' +
             '<option value="class">Class Code</option>' +
-            '<option value="semester">Semester</option>' +
-            '<option value="prof">Professor</option>' +
             '</select>' +
             '</div>'
     );
@@ -156,7 +123,30 @@ function set_scroll_wrapper_height() {
  * Populate listings list via ajax call.
  */
 function load_listings() {
-    $.get(LISTING_LIST_URL, function(data) {
+    var stack = [];
+    $('.listing-filter-group').each(function() {
+        var sel = $(this).find('select').find('option').filter(':selected');
+        var key = sel.val();
+
+        if (key == 'all') {
+            return;
+        }
+
+        var value = $(this).find('input').val();
+        var o = {};
+        o[key] = value;
+
+        stack.push($.param(o));
+    });
+
+    var querystring = '';
+    if (stack.length > 0) {
+        querystring = '?' + stack.join('&');
+    }
+
+    console.log(querystring);
+
+    $.get(LISTING_LIST_URL + querystring, function(data) {
         $(list_container_name()).html(data);
         connect_listing_click_handler();
 
@@ -236,6 +226,7 @@ $(document).ready(function() {
     $('.add-filter-field').on('click', add_filter_field);
     $('.listing-filter').on('change', filter_changed);
     $(window).on('resize', on_window_resize);
+    $('.filter-container button.btn-success').on('click', load_listings);
 
     load_listings();
 });

@@ -163,6 +163,10 @@
     vertical-align: top;
 }
 
+.filter-container button.btn-success {
+    margin-left: 15px;
+}
+
 /* Styles for listing list stuff buy.html */
 
 .listing-list-container {
