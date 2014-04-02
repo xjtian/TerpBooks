@@ -224,7 +224,10 @@ function display_listing_detail(is_separate, container, url) {
 
 
 function connect_listing_click_handler() {
-    $('.listing-list .listing').on('click', listing_selected);
+    var listings = $('.listing-list .listing');
+
+    listings.off('click');
+    listings.on('click', listing_selected);
 }
 
 $(document).ready(function() {
