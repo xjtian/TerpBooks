@@ -32,7 +32,7 @@ class ListingNestedBookView(generics.ListAPIView):
 
 class ListingListView(ListView):
     model = Listing
-    queryset = Listing.objects.filter(status=Listing.AVAILABLE).order_by('-date_created')
+    queryset = Listing.objects.select_related().filter(status=Listing.AVAILABLE).order_by('-date_created')
 
     paginate_by = 3
 
@@ -60,7 +60,7 @@ class ListingListView(ListView):
 
 class ListingDetailView(DetailView):
     model = Listing
-    queryset = Listing.objects.filter(status=Listing.AVAILABLE)
+    queryset = Listing.objects.select_related().filter(status=Listing.AVAILABLE)
 
     context_object_name = 'listing'
     template_name = 'buy/listing-detail.html'
