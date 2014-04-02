@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from rest_framework import viewsets, generics
 
+from django.db.models import Q
 from django.views.generic import ListView, DetailView
 from django.shortcuts import render
 
@@ -37,6 +38,24 @@ class ListingListView(ListView):
 
     context_object_name = 'listings_list'
     template_name = 'buy/list-partial.html'
+
+    def get_queryset(self):
+        qs = super(ListingListView, self).get_queryset()
+        query = Q()
+
+        for key in self.request.GET:
+            if key not in [u'title', u'isbn', u'course_code']:
+                continue
+
+            iexact = 'book__%s__iexact' % key
+            icontains = 'book__%s__icontains' % key
+            values = self.request.GET.getlist(key)
+
+            for v in values:
+                query |= Q(**{iexact: v})
+                query |= Q(**{icontains: v})
+
+        return qs.filter(query)
 
 
 class ListingDetailView(DetailView):
