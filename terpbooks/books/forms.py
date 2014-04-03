@@ -2,29 +2,30 @@ from __future__ import absolute_import
 
 from django import forms
 
+from terpbooks.forms import BootstrapForm, BootstrapModelForm
 from .models import Textbook, Semester, Professor, Author
 
 
-class TextbookForm(forms.ModelForm):
+class TextbookForm(BootstrapModelForm):
     class Meta:
         model = Textbook
         fields = ('title', 'edition', 'isbn', 'course_code', )
 
 
-class SemesterForm(forms.ModelForm):
+class SemesterForm(BootstrapModelForm):
     class Meta:
         model = Semester
         fields = ('semester', 'year', )
 
 
-class AuthorForm(forms.ModelForm):
+class AuthorForm(BootstrapModelForm):
     class Meta:
         model = Author
         fields = ('first_name', 'last_name', )
 
 
-class ProfessorForm(forms.Form):
-    professor = forms.CharField(max_length=60, blank=False)
+class ProfessorForm(BootstrapForm):
+    professor = forms.CharField(max_length=60)
 
     def is_valid(self):
         valid = super(ProfessorForm, self).is_valid()
