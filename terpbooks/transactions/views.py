@@ -1,7 +1,5 @@
 from __future__ import absolute_import
 
-from rest_framework import viewsets, generics
-
 from django.db.models import Q
 from django.views.generic import ListView, DetailView, View
 from django.shortcuts import render
@@ -12,29 +10,8 @@ from django.contrib.auth.decorators import login_required
 
 from books.forms import TextbookForm, AuthorForm, SemesterForm, ProfessorForm
 
-from .models import Listing, TransactionRequest, TransactionRequestThread
-from .serializers import ListingSerializer, RequestSerializer, RequestThreadSerializer, ListingNestedSerializer
+from .models import Listing
 from .forms import ListingForm
-
-
-class ListingViewSet(viewsets.ModelViewSet):
-    queryset = Listing.objects.all()
-    serializer_class = ListingSerializer
-
-
-class TransactionRequestViewSet(viewsets.ModelViewSet):
-    queryset = TransactionRequest.objects.all()
-    serializer_class = RequestSerializer
-
-
-class RequestThreadViewSet(viewsets.ModelViewSet):
-    queryset = TransactionRequestThread.objects.all()
-    serializer_class = RequestThreadSerializer
-
-
-class ListingNestedBookView(generics.ListAPIView):
-    queryset = Listing.objects.all()
-    serializer_class = ListingNestedSerializer
 
 
 class ListingListView(ListView):
