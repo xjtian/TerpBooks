@@ -1,11 +1,11 @@
 from __future__ import absolute_import
 
-from django import forms
+from terpbooks.forms import BootstrapModelForm
 
 from .models import Listing
 
 
-class ListingForm(forms.ModelForm):
+class ListingForm(BootstrapModelForm):
     class Meta:
         model = Listing
         fields = ('asking_price', 'comments', )

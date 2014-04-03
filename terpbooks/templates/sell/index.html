@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}TerpBooks | Sell{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12 sell-form-container">
+            <form action="">
+                {{ book_form.as_p }}
+                {{ semester_form.as_p }}
+                {{ listing_form.as_p }}
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -5,7 +5,7 @@ from django.views.generic import RedirectView
 
 from django.contrib import admin
 
-from transactions.views import buy_index
+from transactions.views import buy_index, SellPage
 
 admin.autodiscover()
 
@@ -28,4 +28,5 @@ urlpatterns += patterns('',
     url(r'^transactions/', include('transactions.urls')),
     url(r'^messages/', include('messages.urls')),
     url(r'^buy$', buy_index, name='buy'),
+    url(r'^sell$', SellPage.as_view(), name='sell'),
 )

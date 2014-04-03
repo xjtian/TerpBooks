@@ -3,11 +3,14 @@ from __future__ import absolute_import
 from rest_framework import viewsets, generics
 
 from django.db.models import Q
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View
 from django.shortcuts import render
+
+from books.forms import TextbookForm, AuthorForm, SemesterForm, ProfessorForm
 
 from .models import Listing, TransactionRequest, TransactionRequestThread
 from .serializers import ListingSerializer, RequestSerializer, RequestThreadSerializer, ListingNestedSerializer
+from .forms import ListingForm
 
 
 class ListingViewSet(viewsets.ModelViewSet):
@@ -84,3 +87,18 @@ def buy_index(request):
     return render(request, 'buy/index.html', {
         'active': 'buy',
     })
+
+
+class SellPage(View):
+    """
+    Sell page view
+    """
+    def get(self, request):
+        return render(request, 'sell/index.html', {
+            'active': 'sell',
+            'book_form': TextbookForm(),
+            'listing_form': ListingForm(request.user),
+        })
+
+    def post(self, request):
+        pass

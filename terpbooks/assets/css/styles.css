@@ -252,3 +252,13 @@
 .listing-list > button.listing-back {
     margin-top: 20px;
 }
+
+
+/***********************************************
+*
+* Sell Page Styles
+*
+************************************************/
+.sell-form-container {
+    text-align: center;
+}
