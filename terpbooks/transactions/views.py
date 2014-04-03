@@ -43,7 +43,11 @@ class ListingListView(ListView):
         qs = super(ListingListView, self).get_queryset()
         query = Q()
 
+        sort_field = None
         for key in self.request.GET:
+            if key == u'order_by':
+                sort_field = self.request.GET[key]
+
             if key not in [u'title', u'isbn', u'course_code']:
                 continue
 
@@ -57,7 +61,11 @@ class ListingListView(ListView):
                 kquery |= Q(**{icontains: v})
             query &= kquery
 
-        return qs.filter(query)
+        qs = qs.filter(query)
+        if sort_field is not None:
+            qs = qs.order_by(sort_field)
+
+        return qs
 
 
 class ListingDetailView(DetailView):
