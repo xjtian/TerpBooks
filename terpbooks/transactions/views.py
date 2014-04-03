@@ -51,9 +51,11 @@ class ListingListView(ListView):
             icontains = 'book__%s__icontains' % key
             values = self.request.GET.getlist(key)
 
+            kquery = Q()
             for v in values:
-                query |= Q(**{iexact: v})
-                query |= Q(**{icontains: v})
+                kquery |= Q(**{iexact: v})
+                kquery |= Q(**{icontains: v})
+            query &= kquery
 
         return qs.filter(query)
 
