@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from django.conf.urls import patterns, include, url
 from django.core.urlresolvers import reverse_lazy
 from django.conf import settings
@@ -5,7 +7,7 @@ from django.views.generic import RedirectView
 
 from django.contrib import admin
 
-from transactions.views import BuyPage, SellPage
+from .views import BuyPage, SellPage
 
 admin.autodiscover()
 
@@ -26,7 +28,6 @@ urlpatterns += patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^books/', include('books.urls')),
     url(r'^transactions/', include('transactions.urls')),
-    url(r'^messages/', include('messages.urls')),
     url(r'^buy$', BuyPage.as_view(), name='buy'),
     url(r'^sell$', SellPage.as_view(), name='sell'),
 )
