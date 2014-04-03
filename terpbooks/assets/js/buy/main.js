@@ -139,6 +139,12 @@ function load_listings() {
         stack.push($.param(o));
     });
 
+    stack.push(
+        $.param({
+            order_by: $('select.listing-sort').find('option').filter(':selected').val()
+        })
+    );
+
     var querystring = '';
     if (stack.length > 0) {
         querystring = '?' + stack.join('&');
@@ -221,8 +227,6 @@ function connect_listing_click_handler() {
 }
 
 $(document).ready(function() {
-    // TODO: sorting listings
-    // TODO: filtering listings logic
     $('.add-filter-field').on('click', add_filter_field);
     $('.listing-filter').on('change', filter_changed);
     $(window).on('resize', on_window_resize);

@@ -46,7 +46,8 @@ class ListingListView(ListView):
         sort_field = None
         for key in self.request.GET:
             if key == u'order_by':
-                sort_field = self.request.GET[key]
+                if self.request.GET[key] in [u'book__title', u'-asking_price', u'asking_price', u'-date_created']:
+                    sort_field = self.request.GET[key]
 
             if key not in [u'title', u'isbn', u'course_code']:
                 continue
