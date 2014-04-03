@@ -123,6 +123,7 @@ function set_scroll_wrapper_height() {
  * Populate listings list via ajax call.
  */
 function load_listings() {
+    // Implemented this way because there can be multiple filter fields on same key
     var stack = [];
     $('.listing-filter-group').each(function() {
         var sel = $(this).find('select').find('option').filter(':selected');
@@ -149,8 +150,6 @@ function load_listings() {
     if (stack.length > 0) {
         querystring = '?' + stack.join('&');
     }
-
-    console.log(querystring);
 
     $.get(LISTING_LIST_URL + querystring, function(data) {
         $(list_container_name()).html(data);
