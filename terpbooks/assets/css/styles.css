@@ -265,6 +265,11 @@
     text-align: center;
 }
 
+.sell-form-container p.bg-success,
+.sell-form-container p.bg-danger {
+    padding: 15px;
+}
+
 .sell-form > .sell-form-col {
     text-align: left;
 }

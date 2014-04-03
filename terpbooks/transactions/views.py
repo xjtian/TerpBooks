@@ -6,6 +6,10 @@ from django.db.models import Q
 from django.views.generic import ListView, DetailView, View
 from django.shortcuts import render
 
+from django.utils.decorators import method_decorator
+
+from django.contrib.auth.decorators import login_required
+
 from books.forms import TextbookForm, AuthorForm, SemesterForm, ProfessorForm
 
 from .models import Listing, TransactionRequest, TransactionRequestThread
@@ -93,12 +97,41 @@ class SellPage(View):
     """
     Sell page view
     """
+    @method_decorator(login_required)
     def get(self, request):
         return render(request, 'sell/index.html', {
             'active': 'sell',
             'book_form': TextbookForm(),
-            'listing_form': ListingForm(request.user),
+            'listing_form': ListingForm(),
         })
 
+    @method_decorator(login_required)
     def post(self, request):
-        pass
+        book_form = TextbookForm(request.POST)
+        listing_form = ListingForm(request.POST)
+
+        biv = book_form.is_valid()
+        liv = listing_form.is_valid()
+
+        if biv and liv:
+            book = book_form.save()
+            listing = listing_form.save(commit=False)
+
+            listing.book = book
+            listing.owner = request.user
+
+            listing.save()
+
+            return render(request, 'sell/index.html', {
+                'active': 'sell',
+                'book_form': TextbookForm(),
+                'listing_form': ListingForm(),
+                'success_message': 'Listing successfully added!',
+            })
+
+        return render(request, 'sell/index.html', {
+            'active': 'sell',
+            'book_form': book_form,
+            'listing_form': listing_form,
+            'error_message': 'There were issues with your submission',
+        })

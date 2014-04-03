@@ -5,7 +5,15 @@
 
 {% block content %}
     <div class="row sell-form-container">
-        <form class="sell-form" method="post">
+        {% if success_message %}
+            <p class="bg-success">{{ success_message }}</p>
+        {% endif %}
+        {% if error_message %}
+            <p class="bg-danger">{{ error_message }}</p>
+        {% endif %}
+
+        <form class="sell-form" method="post" action="{% url "sell" %}">
+            {% csrf_token %}
             <div class="col-xs-6 sell-form-col">
                 {% for field in book_form %}
                     <div class="form-group">
