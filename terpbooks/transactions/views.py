@@ -84,13 +84,14 @@ class ListingDetailView(DetailView):
     template_name = 'buy/listing-detail.html'
 
 
-def buy_index(request):
+class BuyPage(View):
     """
     Buy page view.
     """
-    return render(request, 'buy/index.html', {
-        'active': 'buy',
-    })
+    def get(self, request):
+        return render(request, 'buy/index.html', {
+            'active': 'buy',
+        })
 
 
 class SellPage(View):
