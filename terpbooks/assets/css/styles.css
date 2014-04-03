@@ -259,6 +259,23 @@
 * Sell Page Styles
 *
 ************************************************/
+
 .sell-form-container {
+    margin-top: 20px;
     text-align: center;
+}
+
+.sell-form > .sell-form-col {
+    text-align: left;
+}
+
+.sell-form input[type="number"] {
+    width: 25%;
+}
+
+
+.sell-form > button.btn-success {
+    margin: 30px;
+    font-size: 20px;
+    padding: 10px;
 }

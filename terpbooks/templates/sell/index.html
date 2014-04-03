@@ -4,13 +4,30 @@
 {% block title %}TerpBooks | Sell{% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-xs-12 sell-form-container">
-            <form action="">
-                {{ book_form.as_p }}
-                {{ semester_form.as_p }}
-                {{ listing_form.as_p }}
-            </form>
-        </div>
+    <div class="row sell-form-container">
+        <form class="sell-form" method="post">
+            <div class="col-xs-6 sell-form-col">
+                {% for field in book_form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field.errors }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+            </div>
+
+
+            <div class="col-xs-6 sell-form-col">
+                {% for field in listing_form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field.errors }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
     </div>
 {% endblock %}
