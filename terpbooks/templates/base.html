@@ -34,8 +34,8 @@
                 </div>
                 <div class="collapse navbar-collapse" id="top-nav-collapse">
                     <ul class="nav navbar-nav">
-                        <li {% if active == "buy" %}class="active"{% endif %}><a href="#">Buy</a></li>
-                        <li {% if active == "sell" %}class="active"{% endif %}><a href="#">Sell</a></li>
+                        <li {% if active == "buy" %}class="active"{% endif %}><a href="{% url "buy" %}">Buy</a></li>
+                        <li {% if active == "sell" %}class="active"{% endif %}><a href="{% url "sell" %}">Sell</a></li>
                         <li {% if active == "lol" %}class="active"{% endif %}><a href="#">Log In</a></li>
                     </ul>
                 </div>
