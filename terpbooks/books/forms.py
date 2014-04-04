@@ -36,7 +36,7 @@ class NameSplitBootstrapForm(BootstrapForm):
         if not valid:
             return False
 
-        if len(self.cleaned_data['name_field_name']) == 0:
+        if len(self.cleaned_data[self.name_field_name]) == 0:
             return True
 
         first_name, last_name = self.cleaned_data[self.name_field_name].split()
@@ -50,12 +50,14 @@ class NameSplitBootstrapForm(BootstrapForm):
         return True
 
     def save(self, commit=True):
-        if len(self.cleaned_data['name_field_name']) == 0:
+        if len(self.cleaned_data[self.name_field_name]) == 0:
             return None
 
-        fn, ln = self.cleaned_data['professor'].split()
-        if self.model_class.objects.filter(first_name=fn, last_name=ln).exists():
-            return self.model_class.objects.get(first_name=fn, last_name=ln)
+        fn, ln = self.cleaned_data[self.name_field_name].split()
+        if self.model_class.objects.filter(**{
+            self.first_name_field: fn, self.last_name_field: ln
+        }).exists():
+            return self.model_class.objects.get(**{self.first_name_field: fn, self.last_name_field: ln})
 
         p = self.model_class(**{self.first_name_field: fn, self.last_name_field: ln})
         if commit:

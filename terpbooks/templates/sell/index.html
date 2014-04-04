@@ -22,6 +22,14 @@
                         {{ field }}
                     </div>
                 {% endfor %}
+
+                {% for field in author_form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field.errors }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
             </div>
 
 
