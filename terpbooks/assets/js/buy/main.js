@@ -1,6 +1,7 @@
 // Save stuff relevant to selections
 var selection_url = null;
 var separate_on_selection = true;
+var listing_list_cache = null;
 
 // <editor-fold desc="event handlers">
 /*******************
@@ -29,7 +30,7 @@ function on_window_resize() {
         // Expanding past breakpoint
         if (is_separate && !separate_on_selection) {
             separate_on_selection = true;
-            load_listings();
+            load_listings_cached();
         }
 
         // This is the same regardless if expanded or shrank past breakpoint
@@ -75,6 +76,8 @@ function listing_selected() {
 
     $('.listing-list .listing.selection').removeClass('selection');
     $(this).addClass('selection');
+
+    listing_list_cache = $(list_container_name()).html();
 
     display_listing_detail(is_separate, $(detail_container_name(is_separate)), url);
 }
@@ -165,9 +168,22 @@ function load_listings() {
 
                 $(list_container_name()).find('.listing-list').append(lis);
                 connect_listing_click_handler();
+                listing_list_cache = $(list_container_name()).html();
             });
         })
     });
+}
+
+
+/**
+ * Load listings list from saved previous HTML
+ */
+function load_listings_cached() {
+    if (listing_list_cache == null) {
+        load_listings();
+    } else {
+        $(list_container_name()).html(listing_list_cache);
+    }
 }
 
 
@@ -212,7 +228,8 @@ function display_listing_detail(is_separate, container, url) {
     container.find('button.listing-back').on('click', function() {
         selection_url = null;
         $(detail_container_name(true)).empty();
-        load_listings();
+        load_listings_cached();
+        $(list_container_name()).find('.listing.selection').removeClass('selection');
         connect_listing_click_handler();
     });
 }
