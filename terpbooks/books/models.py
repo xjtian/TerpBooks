@@ -1,4 +1,7 @@
+from datetime import date
+
 from django.db import models
+from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 
 
 class Semester(models.Model):
@@ -17,7 +20,12 @@ class Semester(models.Model):
         (SUMMER, 'Summer'),
     )
 
-    year = models.IntegerField()
+    year = models.IntegerField(
+        validators=[
+            MinValueValidator(2000),
+            MaxValueValidator(date.today().year + 1)
+        ])
+
     semester = models.CharField(max_length=3,
                                 choices=SEMESTER_CHOICES,
                                 default=FALL)
@@ -48,10 +56,22 @@ class Textbook(models.Model):
     Information about a textbook.
     """
     title = models.CharField(max_length=200, blank=False)
-    edition = models.IntegerField(null=True, blank=True)
-    isbn = models.CharField(max_length=13, blank=True)
+    edition = models.IntegerField(null=True,
+                                  blank=True,
+                                  validators=[MinValueValidator(1)])
+    isbn = models.CharField(max_length=13,
+                            blank=True,
+                            validators=[RegexValidator(
+                                regex=r'^[0-9 \-]*$',
+                                message="Only numbers, dashes, and spaces are allowed in ISBN's."
+                            )])
 
-    course_code = models.CharField(max_length=20, blank=True)
+    course_code = models.CharField(max_length=20,
+                                   blank=True,
+                                   validators=[RegexValidator(
+                                       regex=r'^[A-Z]{4}[0-9]{3}$',
+                                       message="Course codes must be formatted like 'ABCD123'"
+                                   )])
     semester = models.ForeignKey(Semester, null=True, blank=True)
     professor = models.ForeignKey(Professor, null=True, blank=True)
 
