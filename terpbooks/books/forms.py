@@ -1,9 +1,11 @@
 from __future__ import absolute_import
 
+from datetime import date
+
 from django import forms
 from django.forms.util import ErrorList
 from django.forms.formsets import formset_factory
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 
 from terpbooks.forms import BootstrapForm, BootstrapModelForm
 from .models import Textbook, Semester, Professor, Author
@@ -21,7 +23,11 @@ class SemesterForm(BootstrapForm):
 
     semester = forms.ChoiceField(choices=CHOICES,
                                  required=False)
-    year = forms.IntegerField(required=False)
+    year = forms.IntegerField(required=False,
+                              validators=[
+                                  MinValueValidator(2000),
+                                  MaxValueValidator(date.today().year + 1)
+                              ])
 
     def is_valid(self):
         valid = super(SemesterForm, self).is_valid()
