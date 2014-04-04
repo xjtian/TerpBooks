@@ -47,7 +47,16 @@
             Not provided
         {% endif %}
     </dd>
+    <dt>Comments:</dt>
+    <dd>
+        {% if listing.comments %}
+            {{ listing.comments }}
+        {% else %}
+            Not provided
+        {% endif %}
+    </dd>
 </dl>
+
 
 <p>Asking Price: <span>${{ listing.asking_price }}</span></p>
 <button type="button" class="btn btn-success">Contact Seller</button>
