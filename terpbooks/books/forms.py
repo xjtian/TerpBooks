@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from django import forms
 from django.forms.formsets import formset_factory
 
-from terpbooks.forms import BootstrapForm, BootstrapModelForm
+from terpbooks.forms import BootstrapModelForm
 from .models import Textbook, Semester, Professor, Author
 
 
@@ -29,7 +29,7 @@ class NameSplitBootstrapForm(forms.Form):
 
         super(NameSplitBootstrapForm, self).__init__(*args, **kwargs)
 
-        self.fields[self.name_field_name] = forms.CharField(max_length=60)
+        self.fields[self.name_field_name] = forms.CharField(max_length=60, required=False)
         self.fields[self.name_field_name].widget.attrs.update({'class': 'form-control'})
 
     def is_valid(self):
@@ -37,7 +37,7 @@ class NameSplitBootstrapForm(forms.Form):
         if not valid:
             return False
 
-        if len(self.cleaned_data[self.name_field_name]) == 0:
+        if self.name_field_name not in self.cleaned_data or len(self.cleaned_data[self.name_field_name]) == 0:
             return True
 
         split = self.cleaned_data[self.name_field_name].split()
@@ -50,16 +50,16 @@ class NameSplitBootstrapForm(forms.Form):
 
         first_name, last_name = split
         if len(first_name) == 0:
-            self._errors['empty_fn'] = 'Empty first name'
+            self._errors[self.name_field_name] = 'Empty first name'
             return False
         if len(last_name) == 0:
-            self._errors['empty_ln'] = 'Empty Last name'
+            self._errors[self.name_field_name] = 'Empty last name'
             return False
 
         return True
 
     def save(self, commit=True):
-        if len(self.cleaned_data[self.name_field_name]) == 0:
+        if self.name_field_name not in self.cleaned_data or len(self.cleaned_data[self.name_field_name]) == 0:
             return None
 
         fn, ln = self.cleaned_data[self.name_field_name].split()
@@ -82,3 +82,9 @@ class AuthorForm(NameSplitBootstrapForm):
 
 
 AuthorFormSet = formset_factory(AuthorForm)
+
+
+class ProfessorForm(NameSplitBootstrapForm):
+    def __init__(self, *args, **kwargs):
+        kwargs.update({'name_field_name': 'professor'})
+        super(ProfessorForm, self).__init__(Professor, *args, **kwargs)
