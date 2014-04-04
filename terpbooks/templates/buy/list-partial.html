@@ -3,7 +3,18 @@
         <li class="listing" detail-url="{% url "listings-detail-tmpl" listing.pk %}">
             <h3>{{ listing.book.title }}</h3>
             <h4 class="listing-price">${{ listing.asking_price }}</h4>
-            <h4>{{ listing.book.course_code }}, {{ listing.book.semester.get_semester_display }} {{ listing.book.semester.year }}</h4>
+            <h4>
+                {% if listing.book.course_code %}
+                    {{ listing.book.course_code }}
+                {% else %}
+                    No class information
+                {% endif %}
+
+                {% if listing.book.semester %}
+                    , {{ listing.book.semester.get_semester_display }} {{ listing.book.semester.year }}
+                {% endif %}
+            </h4>
+
             <h4 class="listing-date">Posted {{ listing.date_created | date:"n/j/Y" }}</h4>
         </li>
     {% endfor %}
