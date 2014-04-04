@@ -40,7 +40,15 @@ class NameSplitBootstrapForm(forms.Form):
         if len(self.cleaned_data[self.name_field_name]) == 0:
             return True
 
-        first_name, last_name = self.cleaned_data[self.name_field_name].split()
+        split = self.cleaned_data[self.name_field_name].split()
+        if len(split) < 2:
+            return False
+
+        if len(split) > 2:
+            split[1] = u' '.join(split[1:])
+            split = split[:2]
+
+        first_name, last_name = split
         if len(first_name) == 0:
             self._errors['empty_fn'] = 'Empty first name'
             return False
