@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from django import forms
+from django.forms.formsets import formset_factory
 
 from terpbooks.forms import BootstrapForm, BootstrapModelForm
 from .models import Textbook, Semester, Professor, Author
@@ -18,7 +19,7 @@ class SemesterForm(BootstrapModelForm):
         fields = ('semester', 'year', )
 
 
-class NameSplitBootstrapForm(BootstrapForm):
+class NameSplitBootstrapForm(forms.Form):
     def __init__(self, model_class, *args, **kwargs):
         self.first_name_field = kwargs.pop('first_name_field', 'first_name')
         self.last_name_field = kwargs.pop('last_name_field', 'last_name')
@@ -70,3 +71,6 @@ class AuthorForm(NameSplitBootstrapForm):
     def __init__(self, *args, **kwargs):
         kwargs.update({'name_field_name': 'author'})
         super(AuthorForm, self).__init__(Author, *args, **kwargs)
+
+
+AuthorFormSet = formset_factory(AuthorForm)
