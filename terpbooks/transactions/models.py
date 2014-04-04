@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.validators import MinValueValidator
 
 from books.models import Textbook
 
@@ -23,7 +24,9 @@ class Listing(models.Model):
     status = models.CharField(max_length=2,
                               choices=STATUS_CHOICES,
                               default=AVAILABLE)
-    asking_price = models.DecimalField(max_digits=10, decimal_places=2)
+    asking_price = models.DecimalField(max_digits=10,
+                                       decimal_places=2,
+                                       validators=[MinValueValidator(0)])
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='listings')
 
     book = models.OneToOneField(Textbook, related_name='listing')
@@ -52,7 +55,9 @@ class TransactionRequest(models.Model):
     """
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='request_messages')
 
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10,
+                                decimal_places=2,
+                                validators=[MinValueValidator(0)])
     text = models.TextField(blank=True)
 
     thread = models.ForeignKey(TransactionRequestThread, related_name='messages')
