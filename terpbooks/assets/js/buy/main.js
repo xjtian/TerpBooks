@@ -102,6 +102,21 @@ function add_filter_field() {
     lf.on('change', filter_changed);
 }
 
+function paginate_click() {
+    var this_closure = $(this);
+    var url = this_closure.find('h4').attr('paginate-data');
+
+    $.get(url, function(data) {
+        this_closure.remove();
+        var lis = $(data).filter('ul').html();
+
+        $(list_container_name()).find('.listing-list').append(lis);
+        connect_listing_click_handler();
+        listing_list_cache = $(list_container_name()).html();
+
+        $('li.paginator').on('click', paginate_click);
+    });
+}
 /*************************
  *
  * End Event Handlers
@@ -158,19 +173,7 @@ function load_listings() {
         $(list_container_name()).html(data);
         connect_listing_click_handler();
 
-        $('li.paginator').on('click', function() {
-            var this_closure = $(this);
-            var url = this_closure.find('h4').attr('paginate-data');
-
-            $.get(url, function(data) {
-                this_closure.remove();
-                var lis = $(data).filter('ul').html();
-
-                $(list_container_name()).find('.listing-list').append(lis);
-                connect_listing_click_handler();
-                listing_list_cache = $(list_container_name()).html();
-            });
-        })
+        $('li.paginator').on('click', paginate_click);
     });
 }
 
