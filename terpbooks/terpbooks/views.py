@@ -4,7 +4,7 @@ from django.utils.decorators import method_decorator
 
 from django.contrib.auth.decorators import login_required
 
-from books.forms import TextbookForm, AuthorFormSet
+from books.forms import TextbookForm, AuthorFormSet, ProfessorForm
 from transactions.forms import ListingForm
 
 
@@ -29,6 +29,7 @@ class SellPage(generic.View):
             'book_form': TextbookForm(),
             'listing_form': ListingForm(),
             'author_formset': AuthorFormSet(),
+            'professor_form': ProfessorForm(),
         })
 
     @method_decorator(login_required)
@@ -36,13 +37,19 @@ class SellPage(generic.View):
         book_form = TextbookForm(request.POST)
         listing_form = ListingForm(request.POST)
         author_formset = AuthorFormSet(request.POST)
+        prof_form = ProfessorForm(request.POST)
 
         biv = book_form.is_valid()
         liv = listing_form.is_valid()
         aiv = author_formset.is_valid()
+        piv = prof_form.is_valid()
 
-        if biv and liv and aiv:
-            book = book_form.save()
+        if biv and liv and aiv and piv:
+            prof = prof_form.save(commit=True)
+            book = book_form.save(commit=False)
+            if prof is not None:
+                book.professor = prof
+            book.save()
 
             for form in author_formset.forms:
                 author = form.save(commit=False)
@@ -60,6 +67,7 @@ class SellPage(generic.View):
                 'book_form': TextbookForm(),
                 'listing_form': ListingForm(),
                 'author_formset': AuthorFormSet(),
+                'professor_form': ProfessorForm(),
                 'success_message': 'Listing successfully added!',
             })
 
@@ -68,5 +76,6 @@ class SellPage(generic.View):
             'book_form': book_form,
             'listing_form': listing_form,
             'author_formset': author_formset,
+            'professor_form': prof_form,
             'error_message': 'There were issues with your submission',
         })
