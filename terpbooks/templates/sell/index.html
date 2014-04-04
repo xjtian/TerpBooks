@@ -21,7 +21,7 @@
 
         <form class="sell-form" method="post" action="{% url "sell" %}">
             {% csrf_token %}
-            <div class="col-xs-6 sell-form-col">
+            <div class="col-xs-12 col-sm-6 sell-form-col">
                 {% for field in book_form %}
                     <div class="form-group">
                         {{ field.label_tag }}
@@ -44,7 +44,7 @@
                 </div>
             </div>
 
-            <div class="col-xs-6 sell-form-col">
+            <div class="col-xs-12 col-sm-6 sell-form-col">
                 {% for field in listing_form %}
                     <div class="form-group">
                         {{ field.label_tag }}
