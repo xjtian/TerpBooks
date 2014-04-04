@@ -4,7 +4,7 @@ from django import forms
 from django.forms.util import ErrorList
 from django.forms.formsets import formset_factory
 
-from terpbooks.forms import BootstrapModelForm
+from terpbooks.forms import BootstrapForm, BootstrapModelForm
 from .models import Textbook, Semester, Professor, Author
 
 
@@ -14,10 +14,44 @@ class TextbookForm(BootstrapModelForm):
         fields = ('title', 'edition', 'isbn', 'course_code', )
 
 
-class SemesterForm(BootstrapModelForm):
-    class Meta:
-        model = Semester
-        fields = ('semester', 'year', )
+class SemesterForm(BootstrapForm):
+    CHOICES = list(Semester.SEMESTER_CHOICES)
+    CHOICES.insert(0, ('', ''))
+
+    semester = forms.ChoiceField(choices=CHOICES,
+                                 required=False)
+    year = forms.IntegerField(required=False)
+
+    def is_valid(self):
+        valid = super(SemesterForm, self).is_valid()
+        if not valid:
+            return False
+
+        sem_empty = len(self.cleaned_data['semester']) == 0
+        year_empty = self.cleaned_data['year'] is None
+
+        if sem_empty ^ year_empty:
+            errors = self._errors.setdefault('__all__', ErrorList())
+            errors.append(u'Semester and year must be provided together, or not at all.')
+            return False
+
+        return True
+
+    def save(self, commit=True):
+        semester = self.cleaned_data['semester']
+        year = self.cleaned_data['year']
+
+        if len(semester) == 0 and year is None:
+            return None
+
+        if Semester.objects.filter(semester=semester, year=year).exists():
+            return Semester.objects.get(semester=semester, year=year)
+
+        s = Semester(semester=semester, year=year)
+        if commit:
+            s.save()
+
+        return s
 
 
 class NameSplitBootstrapForm(forms.Form):

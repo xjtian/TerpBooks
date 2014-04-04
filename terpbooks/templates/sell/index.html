@@ -30,6 +30,27 @@
                     </div>
                 {% endfor %}
 
+                {% for field in semester_form %}
+
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field.errors }}
+
+                        {% if forloop.first %}
+                            {% if semester_form.non_field_errors %}
+                                <ul class="errorlist">
+                                    {% for error in semester_form.non_field_errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endif %}
+
+                        {{ field }}
+                    </div>
+                {% endfor %}
+
+
                 {% for field in professor_form %}
                     <div class="form-group">
                         {{ field.label_tag }}
