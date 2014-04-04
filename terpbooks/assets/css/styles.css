@@ -236,6 +236,10 @@
 
 /* Styles for listing info stuff buy.html */
 
+.listing-info {
+    overflow-y: auto;
+}
+
 .listing-info > p {
     margin-left: 30px;
     font-size: 20px;

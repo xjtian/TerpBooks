@@ -20,7 +20,7 @@ function on_window_resize() {
     }
 
     timeoutID = setTimeout(function() {
-        set_scroll_wrapper_height();
+        set_container_heights();
 
         var is_separate = is_detail_separate();
         if ((is_separate && separate_on_selection) || (!is_separate && !separate_on_selection)) {
@@ -127,13 +127,14 @@ function paginate_click() {
 
 
 /**
- * Set listing list container height to fix exactly window minus nav and banner.
+ * Set listing list and detail container heights to window size - navbar - banner
  */
-function set_scroll_wrapper_height() {
+function set_container_heights() {
     // Window height - navbar height - banner height - filter bar height
     var h = $(window).height() - $('.navbar').height() - $('.banner').height() - $('.filter-container').outerHeight();
 
     $(list_container_name()).height(h);
+    $(detail_container_name(is_detail_separate())).height(h);
 }
 
 
@@ -187,6 +188,8 @@ function load_listings_cached() {
     } else {
         $(list_container_name()).html(listing_list_cache);
     }
+
+    $('li.paginator').on('click', paginate_click);
 }
 
 
@@ -255,6 +258,6 @@ $(document).ready(function() {
 });
 
 $(window).load(function() {
-    set_scroll_wrapper_height();
+    set_container_heights();
 });
 
