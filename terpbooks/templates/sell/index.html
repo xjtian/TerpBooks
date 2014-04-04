@@ -23,12 +23,15 @@
                     </div>
                 {% endfor %}
 
-                {% for field in author_form %}
-                    <div class="form-group">
-                        {{ field.label_tag }}
-                        {{ field.errors }}
-                        {{ field }}
-                    </div>
+                {{ author_formset.management_form }}
+                {% for form in author_formset %}
+                    {% for field in form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field.errors }}
+                            {{ field }}
+                        </div>
+                    {% endfor %}
                 {% endfor %}
             </div>
 
