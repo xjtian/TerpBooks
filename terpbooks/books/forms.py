@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from django import forms
+from django.forms.util import ErrorList
 from django.forms.formsets import formset_factory
 
 from terpbooks.forms import BootstrapModelForm
@@ -42,6 +43,8 @@ class NameSplitBootstrapForm(forms.Form):
 
         split = self.cleaned_data[self.name_field_name].split()
         if len(split) < 2:
+            errors = self._errors.setdefault(self.name_field_name, ErrorList())
+            errors.append(u'Names must have at 2 separate words. This field can be left blank.')
             return False
 
         if len(split) > 2:
@@ -50,10 +53,12 @@ class NameSplitBootstrapForm(forms.Form):
 
         first_name, last_name = split
         if len(first_name) == 0:
-            self._errors[self.name_field_name] = 'Empty first name'
+            errors = self._errors.setdefault(self.name_field_name, ErrorList())
+            errors.append(u'Empty first name')
             return False
         if len(last_name) == 0:
-            self._errors[self.name_field_name] = 'Empty last name'
+            errors = self._errors.setdefault(self.name_field_name, ErrorList())
+            errors.append(u'Empty last name')
             return False
 
         return True

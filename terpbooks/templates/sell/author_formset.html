@@ -2,16 +2,9 @@
 
 {{ author_formset.management_form }}
 {% for form in author_formset %}
-
     {% for field in form %}
         <div class="form-group">
             {{ field.label_tag }}
-            {% if error_message %}
-                {% if forloop.parentloop.first %}
-                    <p class="bg-danger">{{ error_message }}</p>
-                {% endif %}
-            {% endif %}
-
             {{ field.errors }}
             {% if forloop.parentloop.last %}
                 <div class="last-authorfield-wrapper">
