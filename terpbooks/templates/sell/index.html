@@ -2,6 +2,13 @@
 {% load staticfiles %}
 
 {% block title %}TerpBooks | Sell{% endblock %}
+{% block extra_head %}
+    <script>
+        var FORMSET_URL = '{% url "author-formset" %}';
+        var CSRF = '{{ csrf_token }}';
+    </script>
+    <script src="{% static "js/sell/main.js" %}"></script>
+{% endblock %}
 
 {% block content %}
     <div class="row sell-form-container">
@@ -23,16 +30,9 @@
                     </div>
                 {% endfor %}
 
-                {{ author_formset.management_form }}
-                {% for form in author_formset %}
-                    {% for field in form %}
-                        <div class="form-group">
-                            {{ field.label_tag }}
-                            {{ field.errors }}
-                            {{ field }}
-                        </div>
-                    {% endfor %}
-                {% endfor %}
+                <div class="author-formset-container">
+                    {% include "sell/author_formset.html" %}
+                </div>
             </div>
 
 

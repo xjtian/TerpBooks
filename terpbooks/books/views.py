@@ -16,7 +16,29 @@ class AuthorFormSetView(generic.View):
         n = int(n)
         n = max(n, 1)
 
-        formset = formset_factory(AuthorForm, AuthorFormSet, extra=n)()
+        formset = formset_factory(AuthorForm, extra=n)()
+
         return render(request, 'sell/author_formset.html', {
-            'formset': formset
+            'author_formset': formset,
+        })
+
+    def post(self, request, *args, **kwargs):
+        posted_formset = AuthorFormSet(request.POST)
+        if not posted_formset.is_valid():
+            return render(request, 'sell/author_formset.html', {
+                'author_formset': posted_formset,
+                'error_message': 'Author fields must have at least a first and last name separated by a space.',
+            })
+
+        initial = []
+        for form in posted_formset:
+            data = {}
+            for field in form.fields:
+                data[field] = form.cleaned_data[field]
+            initial.append(data)
+
+        formset = AuthorFormSet(initial=initial)
+
+        return render(request, 'sell/author_formset.html', {
+            'author_formset': formset,
         })
