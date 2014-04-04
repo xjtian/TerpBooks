@@ -10,7 +10,7 @@ class ListingListView(ListView):
     model = Listing
     queryset = Listing.objects.select_related().filter(status=Listing.AVAILABLE).order_by('-date_created')
 
-    paginate_by = 3
+    paginate_by = 10
 
     context_object_name = 'listings_list'
     template_name = 'buy/list-partial.html'
