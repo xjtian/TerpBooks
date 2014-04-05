@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
+{% block extra_head %}
+    <script>
+        var YOUR_LISTINGS_URL = '{% url "profile-listings" %}';
+    </script>
+    <script src="{% static "js/profile/main.js" %}"></script>
+{% endblock %}
+
 {% block content %}
     <div class="row">
         <div class="col-sm-12 col-md-4 listing-list-container">

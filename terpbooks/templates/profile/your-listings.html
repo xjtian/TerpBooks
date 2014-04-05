@@ -1,0 +1,16 @@
+<ul class="listing-list">
+    {% for listing in listings_list %}
+        <li class="listing" detail-url="{% url "listings-detail-tmpl" listing.pk %}">
+            <h3>{{ listing.book.title }}</h3>
+            <h4 class="listing-price">${{ listing.asking_price }}</h4>
+            <h4 class="listing-date">Posted {{ listing.date_created | date:"n/j/Y" }}</h4>
+            <h4 class="{% if listing.is_sold %}listing-sold-text{% else %}listing-req-count{% endif %}">
+                {% if listing.is_sold %}
+                    SOLD
+                {% else %}
+                    {% if listing.is_pending %}PENDING: {% endif %}{{ listing.request_count }} ongoing requests
+                {% endif %}
+            </h4>
+        </li>
+    {% endfor %}
+</ul>

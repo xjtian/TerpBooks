@@ -35,6 +35,21 @@ class Listing(models.Model):
     def __unicode__(self):
         return u'%s: %s' % (self.book.title, self.get_status_display())
 
+    def request_count(self):
+        """
+        Returns the number of transaction requests for this listing.
+        """
+        return TransactionRequestThread.objects.filter(listing=self).count()
+
+    def is_sold(self):
+        return self.status == Listing.SOLD
+
+    def is_pending(self):
+        return self.status == Listing.PENDING
+
+    def is_available(self):
+        return self.status == Listing.AVAILABLE
+
 
 class TransactionRequestThread(models.Model):
     """

@@ -51,3 +51,13 @@ class ListingDetailView(DetailView):
 
     context_object_name = 'listing'
     template_name = 'buy/listing-detail.html'
+
+
+class YourListingsView(ListView):
+    model = Listing
+
+    context_object_name = 'listings_list'
+    template_name = 'profile/your-listings.html'
+
+    def get_queryset(self):
+        return Listing.objects.filter(owner=self.request.user).order_by('-date_created')
