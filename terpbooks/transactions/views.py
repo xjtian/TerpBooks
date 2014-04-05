@@ -1,9 +1,16 @@
 from __future__ import absolute_import
 
 from django.db.models import Q
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View
+from django.shortcuts import render
+from django.http import HttpResponseForbidden
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 
+from .forms import ListingForm
 from .models import Listing
+from books.forms import TextbookForm, AuthorFormSet, ProfessorForm, SemesterForm
 
 
 class ListingListView(ListView):
@@ -51,6 +58,146 @@ class ListingDetailView(DetailView):
 
     context_object_name = 'listing'
     template_name = 'buy/listing-detail.html'
+
+
+class ListingFormView(View):
+    template_name = 'sell/index.html'
+    post_url = 'sell'
+
+    def render_to_template(self, pk, extra_context):
+        if pk is not None:
+            action = reverse(self.post_url, kwargs={'pk': pk})
+        else:
+            action = reverse(self.post_url)
+
+        context = {
+            'active': 'sell',
+            'action': action,
+        }
+
+        context.update(extra_context)
+
+        return render(self.request, self.template_name, context)
+
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        if 'pk' not in kwargs:
+            book_form = TextbookForm()
+            listing_form = ListingForm()
+            author_formset = AuthorFormSet()
+            professor_form = ProfessorForm()
+            semester_form = SemesterForm()
+
+            pk = None
+        else:
+            pk = int(kwargs['pk'])
+
+            listing = Listing.objects.select_related().get(pk=pk)
+            if listing.owner != request.user:
+                return HttpResponseForbidden()
+
+            book_form = TextbookForm(instance=listing.book)
+            listing_form = ListingForm(instance=listing)
+
+            initial = []
+            for author in listing.book.authors.all():
+                initial.append({'author': unicode(author)})
+            author_formset = AuthorFormSet(initial=initial)
+
+            if listing.book.professor is not None:
+                professor_form = ProfessorForm(initial={'professor': unicode(listing.book.professor)})
+            else:
+                professor_form = ProfessorForm()
+
+            if listing.book.semester is not None:
+                semester_form = SemesterForm(initial={
+                    'semester': listing.book.semester.semester,
+                    'year': listing.book.semester.year
+                })
+            else:
+                semester_form = SemesterForm()
+
+        return self.render_to_template(pk, {
+            'book_form': book_form,
+            'listing_form': listing_form,
+            'author_formset': author_formset,
+            'professor_form': professor_form,
+            'semester_form': semester_form,
+        })
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        prof_form = ProfessorForm(request.POST)
+        sem_form = SemesterForm(request.POST)
+        author_formset = AuthorFormSet(request.POST)
+
+        if 'pk' not in kwargs:
+            book_form = TextbookForm(request.POST)
+            listing_form = ListingForm(request.POST)
+            pk = None
+        else:
+            pk = int(kwargs['pk'])
+
+            listing = Listing.objects.select_related().get(pk=pk)
+            if listing.owner != request.user:
+                return HttpResponseForbidden()
+            book_form = TextbookForm(request.POST, instance=listing.book)
+            listing_form = ListingForm(request.POST, instance=listing)
+
+
+        biv = book_form.is_valid()
+        liv = listing_form.is_valid()
+        aiv = author_formset.is_valid()
+        piv = prof_form.is_valid()
+        siv = sem_form.is_valid()
+
+        extra_context = {}
+        valid = biv and liv and aiv and piv and siv
+
+        if valid:
+            book = book_form.save(commit=False)
+
+            semester = sem_form.save(commit=True)
+            if semester is not None:
+                book.semester = semester
+
+            prof = prof_form.save(commit=True)
+            if prof is not None:
+                book.professor = prof
+
+            book.save()
+
+            for form in author_formset.forms:
+                author = form.save(commit=False)
+                if author is not None:
+                    author.book = book
+                    author.save()
+
+            listing = listing_form.save(commit=False)
+            listing.book = book
+            listing.owner = request.user
+            listing.save()
+
+            book_form = TextbookForm()
+            listing_form = ListingForm()
+            author_formset = AuthorFormSet()
+            prof_form = ProfessorForm()
+            sem_form = SemesterForm()
+
+            extra_context.update({'success_message': 'Listing successfully added!'})
+
+        extra_context.update({
+            'book_form': book_form,
+            'listing_form': listing_form,
+            'author_formset': author_formset,
+            'professor_form': prof_form,
+            'semester_form': sem_form,
+        })
+
+        if not valid:
+            extra_context.update({'error_message': 'There were issues with your submission'})
+
+        return self.render_to_template(pk, extra_context)
 
 
 class YourListingsView(ListView):
