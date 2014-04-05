@@ -14,6 +14,7 @@ function load_listings() {
         var listings_container = $('.listing-list-container');
         listings_container.find('ul').remove();
         listings_container.append(data);
+        connect_listing_click_handler();
     });
 }
 
