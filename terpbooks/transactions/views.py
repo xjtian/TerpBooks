@@ -162,8 +162,7 @@ class ListingFormView(View):
                 book.semester = semester
 
             prof = prof_form.save(commit=True)
-            if prof is not None:
-                book.professor = prof
+            book.professor = prof
 
             book.save()
 
