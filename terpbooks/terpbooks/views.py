@@ -90,3 +90,11 @@ class SellPage(generic.View):
             'semester_form': sem_form,
             'error_message': 'There were issues with your submission',
         })
+
+
+class ProfilePage(generic.View):
+    @method_decorator(login_required)
+    def get(self, request):
+        return render(request, 'profile/index.html', {
+            'active': 'profile',
+        })

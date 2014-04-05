@@ -304,3 +304,13 @@
     margin: -5px 0 0 5px;
     cursor: pointer;
 }
+
+/*********************************
+*
+* Profile page styles
+*
+***********************************/
+
+.profile-heading {
+    font-weight: 700;
+}

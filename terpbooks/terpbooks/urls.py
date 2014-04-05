@@ -7,7 +7,7 @@ from django.views.generic import RedirectView
 
 from django.contrib import admin
 
-from .views import BuyPage, SellPage
+from .views import BuyPage, SellPage, ProfilePage
 
 admin.autodiscover()
 
@@ -30,4 +30,5 @@ urlpatterns += patterns('',
     url(r'^transactions/', include('transactions.urls')),
     url(r'^buy$', BuyPage.as_view(), name='buy'),
     url(r'^sell$', SellPage.as_view(), name='sell'),
+    url(r'^profile$', ProfilePage.as_view(), name='profile'),
 )

@@ -36,7 +36,15 @@
                     <ul class="nav navbar-nav">
                         <li {% if active == "buy" %}class="active"{% endif %}><a href="{% url "buy" %}">Buy</a></li>
                         <li {% if active == "sell" %}class="active"{% endif %}><a href="{% url "sell" %}">Sell</a></li>
-                        <li {% if active == "lol" %}class="active"{% endif %}><a href="#">Log In</a></li>
+                        <li {% if active == "profile" %}class="active"{% endif %}>
+                            <a href="{% if user.is_authenticated %}{% url "profile" %}{% else %}#{% endif %}">
+                                {% if user.is_authenticated %}
+                                Profile
+                                {% else %}
+                                Log In
+                                {% endif %}
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
