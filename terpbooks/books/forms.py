@@ -62,10 +62,11 @@ class SemesterForm(BootstrapForm):
 
 
 class NameSplitBootstrapForm(forms.Form):
-    def __init__(self, model_class, *args, **kwargs):
+    def __init__(self, model_class, unique, *args, **kwargs):
         self.first_name_field = kwargs.pop('first_name_field', 'first_name')
         self.last_name_field = kwargs.pop('last_name_field', 'last_name')
         self.model_class = model_class
+        self.unique = unique
 
         self.name_field_name = kwargs.pop('name_field_name', 'name')
 
@@ -90,10 +91,11 @@ class NameSplitBootstrapForm(forms.Form):
             split = split[:2]
 
         fn, ln = split
-        if self.model_class.objects.filter(**{
-            self.first_name_field: fn, self.last_name_field: ln
-        }).exists():
-            return self.model_class.objects.get(**{self.first_name_field: fn, self.last_name_field: ln})
+        if self.unique:
+            if self.model_class.objects.filter(**{
+                self.first_name_field: fn, self.last_name_field: ln
+            }).exists():
+                return self.model_class.objects.get(**{self.first_name_field: fn, self.last_name_field: ln})
 
         p = self.model_class(**{self.first_name_field: fn, self.last_name_field: ln})
         if commit:
@@ -105,7 +107,7 @@ class NameSplitBootstrapForm(forms.Form):
 class AuthorForm(NameSplitBootstrapForm):
     def __init__(self, *args, **kwargs):
         kwargs.update({'name_field_name': 'author'})
-        super(AuthorForm, self).__init__(Author, *args, **kwargs)
+        super(AuthorForm, self).__init__(Author, False, *args, **kwargs)
 
 
 AuthorFormSet = formset_factory(AuthorForm)
@@ -114,4 +116,4 @@ AuthorFormSet = formset_factory(AuthorForm)
 class ProfessorForm(NameSplitBootstrapForm):
     def __init__(self, *args, **kwargs):
         kwargs.update({'name_field_name': 'professor'})
-        super(ProfessorForm, self).__init__(Professor, *args, **kwargs)
+        super(ProfessorForm, self).__init__(Professor, True, *args, **kwargs)
