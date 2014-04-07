@@ -8,7 +8,7 @@
                 {% if listing.is_sold %}
                     SOLD
                 {% else %}
-                    {% if listing.is_pending %}PENDING: {% endif %}{{ listing.request_count }} ongoing requests
+                    {% if listing.is_pending %}PENDING: {% endif %}{{ listing.request_count }} ongoing request{% if listing.request_count > 1 %}s{% endif %}
                 {% endif %}
             </h4>
         </li>
