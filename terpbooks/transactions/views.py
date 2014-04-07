@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 from .forms import ListingForm
-from .models import Listing
+from .models import Listing, TransactionRequestThread
 from books.forms import TextbookForm, AuthorFormSet, ProfessorForm, SemesterForm
 
 
@@ -216,4 +216,14 @@ class YourListingsView(ListView):
     template_name = 'profile/your-listings.html'
 
     def get_queryset(self):
-        return Listing.objects.filter(owner=self.request.user).order_by('-date_created')
+        return Listing.objects.select_related().filter(owner=self.request.user).order_by('-date_created')
+
+
+class InboxView(ListView):
+    model = TransactionRequestThread
+
+    context_object_name = 'request_list'
+    template_name = 'profile/inbox.html'
+
+    def get_queryset(self):
+        return TransactionRequestThread.objects.select_related().filter(listing__owner=self.request.user).order_by('-date_created')
