@@ -135,6 +135,7 @@ class ListingFormView(View):
             book_form = TextbookForm(request.POST)
             listing_form = ListingForm(request.POST)
             pk = None
+            current_book_authors = []
         else:
             pk = int(kwargs['pk'])
 
@@ -144,6 +145,7 @@ class ListingFormView(View):
             book_form = TextbookForm(request.POST, instance=listing.book)
             listing_form = ListingForm(request.POST, instance=listing)
 
+            current_book_authors = list(listing.book.authors.all())
 
         biv = book_form.is_valid()
         liv = listing_form.is_valid()
@@ -166,18 +168,32 @@ class ListingFormView(View):
 
             book.save()
 
+            # On update, delete all authors that aren't kept in the form, save new authors
             for form in author_formset.forms:
-                form.save(book=book)
+                new_author = form.save(book, commit=False)
+                if new_author is None:
+                    continue
+
+                if new_author in current_book_authors:
+                    current_book_authors.remove(new_author)
+                else:
+                    new_author.save()
+
+            # These are the authors that weren't resubmitted - delete them
+            for leftover_author in current_book_authors:
+                leftover_author.delete()
 
             listing_form.save(book=book, owner=request.user)
 
+            extra_context.update({'success_message': 'Listing successfully added!'})
+
+        # pk None means listing created - return blank forms. Otherwise, return bound stuff
+        if pk is None:
             book_form = TextbookForm()
             listing_form = ListingForm()
             author_formset = AuthorFormSet()
             prof_form = ProfessorForm()
             sem_form = SemesterForm()
-
-            extra_context.update({'success_message': 'Listing successfully added!'})
 
         extra_context.update({
             'book_form': book_form,
