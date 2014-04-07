@@ -82,12 +82,16 @@ class TransactionRequestThread(models.Model):
         """
         return self.messages.exclude(created_by=self.sender, read=False).count()
 
+    def last_offer_price(self):
+        return self.messages.filter(created_by=self.sender).order_by('-date_created')[0].price
+
 
 class TransactionRequest(models.Model):
     """
     Transaction request for a textbook.
     """
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='request_messages')
+    date_created = models.DateTimeField(auto_now_add=True, editable=False)
 
     price = models.DecimalField(max_digits=10,
                                 decimal_places=2,
