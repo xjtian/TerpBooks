@@ -157,25 +157,19 @@ class ListingFormView(View):
         if valid:
             book = book_form.save(commit=False)
 
-            semester = sem_form.save(commit=True)
+            semester = sem_form.save()
             if semester is not None:
                 book.semester = semester
 
-            prof = prof_form.save(commit=True)
+            prof = prof_form.save()
             book.professor = prof
 
             book.save()
 
             for form in author_formset.forms:
-                author = form.save(commit=False)
-                if author is not None:
-                    author.book = book
-                    author.save()
+                form.save(book=book)
 
-            listing = listing_form.save(commit=False)
-            listing.book = book
-            listing.owner = request.user
-            listing.save()
+            listing_form.save(book=book, owner=request.user)
 
             book_form = TextbookForm()
             listing_form = ListingForm()

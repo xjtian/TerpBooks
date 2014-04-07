@@ -62,11 +62,9 @@ class SemesterForm(BootstrapForm):
 
 
 class NameSplitBootstrapForm(forms.Form):
-    def __init__(self, model_class, unique, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         self.first_name_field = kwargs.pop('first_name_field', 'first_name')
         self.last_name_field = kwargs.pop('last_name_field', 'last_name')
-        self.model_class = model_class
-        self.unique = unique
 
         self.name_field_name = kwargs.pop('name_field_name', 'name')
 
@@ -81,9 +79,12 @@ class NameSplitBootstrapForm(forms.Form):
                                                             )])
         self.fields[self.name_field_name].widget.attrs.update({'class': 'form-control'})
 
-    def save(self, commit=True):
+    def save_helper(self):
+        """
+        Returns the split first and last names from field input.
+        """
         if self.name_field_name not in self.cleaned_data or len(self.cleaned_data[self.name_field_name]) == 0:
-            return None
+            return '', ''
 
         split = self.cleaned_data[self.name_field_name].split()
         if len(split) > 2:
@@ -91,29 +92,65 @@ class NameSplitBootstrapForm(forms.Form):
             split = split[:2]
 
         fn, ln = split
-        if self.unique:
-            if self.model_class.objects.filter(**{
-                self.first_name_field: fn, self.last_name_field: ln
-            }).exists():
-                return self.model_class.objects.get(**{self.first_name_field: fn, self.last_name_field: ln})
-
-        p = self.model_class(**{self.first_name_field: fn, self.last_name_field: ln})
-        if commit:
-            p.save()
-
-        return p
+        return fn, ln
 
 
 class AuthorForm(NameSplitBootstrapForm):
     def __init__(self, *args, **kwargs):
         kwargs.update({'name_field_name': 'author'})
-        super(AuthorForm, self).__init__(Author, False, *args, **kwargs)
+        super(AuthorForm, self).__init__(*args, **kwargs)
+
+    def save(self, book, commit=True):
+        fn, ln = super(AuthorForm, self).save_helper()
+        if len(fn) == 0 or len(ln) == 0:
+            return None
+
+        to_delete = self.cleaned_data.get('DELETE', False)
+
+        if book is None:
+            raise Exception('Cannot save author form with empty book.')
+
+        # Respect unique_together
+        existing = Author.objects.filter(first_name=fn, last_name=ln, book=book)
+        if existing.exists():
+            return Author.objects.get(first_name=fn, last_name=ln, book=book)
+
+        if not to_delete:
+            author = Author(first_name=fn, last_name=ln, book=book)
+
+            if commit:
+                author.save()
+
+            return author
+        else:
+            if existing.exists():
+                # Delete the first instance if there are multiple authors with the same name
+                existing[0].delete()
+
+            return None
 
 
 AuthorFormSet = formset_factory(AuthorForm)
+AuthorDeleteFormSet = formset_factory(AuthorForm, can_delete=True)
 
 
 class ProfessorForm(NameSplitBootstrapForm):
     def __init__(self, *args, **kwargs):
         kwargs.update({'name_field_name': 'professor'})
-        super(ProfessorForm, self).__init__(Professor, True, *args, **kwargs)
+        super(ProfessorForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        fn, ln = super(ProfessorForm, self).save_helper()
+
+        if len(fn) == 0 or len(ln) == 0:
+            return None
+
+        # Respect unique_together constraint
+        if Professor.objects.filter(first_name=fn, last_name=ln).exists():
+            return Professor.objects.get(first_name=fn, last_name=ln)
+
+        p = Professor(first_name=fn, last_name=ln)
+        if commit:
+            p.save()
+
+        return p
