@@ -83,8 +83,8 @@ class Textbook(models.Model):
         Returns Unicode string with list of authors
         """
         all_authors = Author.objects.filter(book=self).order_by('last_name')
-        if len(all_authors) == 0:
-            return 'Not provided'
+        if not all_authors.exists():
+            return u'Not provided'
 
         return u', '.join([unicode(a) for a in all_authors])
 
@@ -97,6 +97,9 @@ class Author(models.Model):
     last_name = models.CharField(max_length=30, blank=False)
 
     book = models.ForeignKey(Textbook, related_name='authors')
+
+    class Meta:
+        unique_together = (('first_name', 'last_name', 'book'),)
 
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)
