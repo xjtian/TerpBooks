@@ -39,7 +39,13 @@ class Listing(models.Model):
         """
         Returns the number of transaction requests for this listing.
         """
-        return TransactionRequestThread.objects.filter(listing=self).count()
+        return self.requests.count()
+
+    def unread_messages(self):
+        """
+        Returns the number of unread transaction messages for this listing.
+        """
+        return sum(map(lambda l: l.unread_messages_seller(), self.requests.all()))
 
     def is_sold(self):
         return self.status == Listing.SOLD
@@ -55,6 +61,7 @@ class TransactionRequestThread(models.Model):
     """
     Container for replies to/about a transaction request.
     """
+    # The sender is the potential buyer
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='sent_requests')
     date_created = models.DateTimeField(auto_now_add=True, editable=False)
 
@@ -62,6 +69,18 @@ class TransactionRequestThread(models.Model):
 
     def __unicode__(self):
         return u'%s' % self.listing.book.title
+
+    def unread_messages_seller(self):
+        """
+        How many unread messages in this thread the seller has.
+        """
+        return self.messages.filter(created_by=self.sender, read=False).count()
+
+    def unread_messages_buyer(self):
+        """
+        How many unread messages in this thread the buyer has.
+        """
+        return self.messages.exclude(created_by=self.sender, read=False).count()
 
 
 class TransactionRequest(models.Model):
@@ -74,5 +93,6 @@ class TransactionRequest(models.Model):
                                 decimal_places=2,
                                 validators=[MinValueValidator(0)])
     text = models.TextField(blank=True)
+    read = models.BooleanField(default=False)
 
     thread = models.ForeignKey(TransactionRequestThread, related_name='messages')

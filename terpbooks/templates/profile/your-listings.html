@@ -9,6 +9,7 @@
                     SOLD
                 {% else %}
                     {% if listing.is_pending %}PENDING: {% endif %}{{ listing.request_count }} ongoing request{% if listing.request_count > 1 %}s{% endif %}
+                     ({{ listing.unread_messages }} unread)
                 {% endif %}
             </h4>
         </li>
