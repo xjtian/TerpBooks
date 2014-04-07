@@ -1,6 +1,31 @@
-function listing_selected() {
-    console.log('MOCK');
+function add_form_handler() {
+    $('#edit-modal').find('form').on('submit', form_submitted);
 }
+
+
+function listing_selected() {
+    var url = $(this).attr('form-url');
+
+    $('#edit-modal').modal();
+    $.get(url, function(data) {
+        var modal = $('#edit-modal');
+        modal.find('.modal-body').html(data);
+        add_form_handler();
+    });
+}
+
+
+function form_submitted() {
+    var data = $(this).serialize();
+    $.post($(this).attr('action'), data, function(data) {
+        $('#edit-modal').find('.modal-body').html(data);
+        add_form_handler();
+        load_listings();
+    });
+
+    return false;
+}
+
 
 function connect_listing_click_handler() {
     var listings = $('.listing-list-container .listing');
@@ -9,6 +34,10 @@ function connect_listing_click_handler() {
     listings.on('click', listing_selected);
 }
 
+
+/**
+ * Ajax load all listings belonging to current user into left list.
+ */
 function load_listings() {
     $.get(YOUR_LISTINGS_URL, function(data) {
         var listings_container = $('.listing-list-container');
@@ -17,6 +46,7 @@ function load_listings() {
         connect_listing_click_handler();
     });
 }
+
 
 $(document).ready(function() {
     load_listings();

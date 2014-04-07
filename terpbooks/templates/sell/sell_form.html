@@ -4,6 +4,7 @@
 {% if error_message %}
     <p class="bg-danger">{{ error_message }}</p>
 {% endif %}
+
 <form class="sell-form" method="post" action="{{ action }}">
     {% csrf_token %}
     <div class="col-xs-12 col-sm-6 sell-form-col">

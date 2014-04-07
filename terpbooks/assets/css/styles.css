@@ -314,3 +314,13 @@
 .profile-heading {
     font-weight: 700;
 }
+
+.modal-body {
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+#edit-modal p.bg-success,
+#edit-modal p.bg-danger {
+    padding: 15px;
+}
