@@ -6,3 +6,4 @@ Unipath==1.0
 coverage==3.7.1
 django-cors-headers==0.12
 git+https://git@github.com/kstateome/django-cas.git@0.9.1#egg=cas
+django-suit==0.2.7

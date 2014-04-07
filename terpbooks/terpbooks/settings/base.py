@@ -1,4 +1,5 @@
 from unipath import Path
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 
 # Paths
 PROJECT_DIR = Path(__file__).ancestor(3)
@@ -21,6 +22,7 @@ TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
+    'suit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -68,3 +70,7 @@ USE_CAS = False
 CAS_SERVER_URL = 'https://login.umd.edu/cas/'
 CAS_VERSION = '2'
 CAS_LOGOUT_COMPLETELY = True
+
+TEMPLATE_CONTEXT_PROCESSORS = TCP + (
+    'django.core.context_processors.request',
+)
