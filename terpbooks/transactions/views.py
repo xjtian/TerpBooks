@@ -302,6 +302,8 @@ class RequestThreadDetail(View):
             if thread.listing.owner != request.user and thread.sender != request.user:
                 return HttpResponseForbidden()
 
+            thread.mark_seen_by(request.user)
+
         return super(RequestThreadDetail, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):

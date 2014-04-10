@@ -94,6 +94,15 @@ class TransactionRequestThread(models.Model):
         """
         return self.messages.order_by('date_created')
 
+    def mark_seen_by(self, user):
+        """
+        Mark all messages in thread not sent by provided user as read.
+        """
+        qs = self.messages.exclude(created_by=user).filter(read=False)
+        for message in qs:
+            message.read = True
+            message.save()
+
 
 class TransactionRequest(models.Model):
     """
