@@ -325,39 +325,35 @@
     padding: 15px;
 }
 
-.inbox-list {
+.profile-list {
     list-style-type: none;
     padding: 0;
 }
 
-.inbox-list .inbox-request {
+.profile-list .profile-item {
     padding: 20px 0 20px 30px;
     cursor: pointer;
     border: 1px solid #999;
 }
 
-.inbox-list .inbox-request.selection {
-    background-color: #ff0000;
-    border: 2px solid #0c0;
-    border-top: 0;
-}
-
-.inbox-request h3 {
+.profile-item h3 {
     margin: 0 0 10px 0;
     font-weight: 700;
     font-size: 20px;
 }
 
-.inbox-request h4 {
+.profile-item h4 {
     font-size: 15px;
     margin: 5px 0;
 }
 
-.inbox-request>h4.inbox-price>span {
+.profile-item > h4.inbox-price > span,
+.profile-item > h4.listing-price {
     color: #0c0;
 }
 
-.inbox-request h4.inbox-last-message {
+.profile-item > h4.inbox-last-msg,
+.profile-item > h4.listing-date {
     margin-bottom: 0;
     color: #999;
 }

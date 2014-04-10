@@ -16,7 +16,7 @@ function form_submitted() {
 
 
 function connect_listing_click_handler() {
-    var listings = $('.listing-list-container .listing');
+    var listings = $('.listing-list-container .profile-item');
 
     listings.off('click');
     listings.on('click', listing_selected);

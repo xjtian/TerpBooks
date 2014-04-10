@@ -1,6 +1,6 @@
-<ul class="listing-list">
+<ul class="profile-list">
     {% for listing in listings_list %}
-        <li class="listing" form-url="{% url "listing-form-bound" listing.pk %}">
+        <li class="profile-item" form-url="{% url "listing-form-bound" listing.pk %}">
             <h3>{{ listing.book.title }}</h3>
             <h4 class="listing-price">${{ listing.asking_price }}</h4>
             <h4 class="listing-date">Posted {{ listing.date_created | date:"n/j/Y" }}</h4>
