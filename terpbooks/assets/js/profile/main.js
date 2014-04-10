@@ -49,13 +49,17 @@ function message_selected() {
     $.get(url, show_message_thread);
 }
 
+
 function show_message_thread(data) {
     var container = $('.inbox-list-container');
     container.find('ul').remove();
+    container.find('.thread-container').remove();
     container.append(data);
 
     container.find('.thread-container button.inbox-back').on('click', back_message_thread);
+    container.find('.thread-container form').on('submit', message_form_submit);
 }
+
 
 function back_message_thread() {
     $('.inbox-list-container > div.thread-container').remove();
@@ -63,6 +67,13 @@ function back_message_thread() {
     load_inbox();
 }
 
+
+function message_form_submit() {
+    var data = $(this).serialize();
+    $.post($(this).attr('action'), data, show_message_thread);
+
+    return false;
+}
 
 /**
  * Ajax load all listings belonging to current user into left list.

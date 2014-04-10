@@ -1,14 +1,17 @@
 from __future__ import absolute_import
 
 from django.db.models import Q
-from django.views.generic import ListView, DetailView, View
-from django.shortcuts import render
+
+from django.views.generic import ListView, DetailView, FormView, View
+from django.views.generic.detail import SingleObjectMixin
 from django.http import HttpResponseForbidden
+
+from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
-from .forms import ListingForm
+from .forms import ListingForm, TransactionRequestForm
 from .models import Listing, TransactionRequestThread
 from books.forms import TextbookForm, AuthorFormSet, ProfessorForm, SemesterForm
 
@@ -229,19 +232,14 @@ class InboxView(ListView):
         return TransactionRequestThread.objects.select_related().filter(listing__owner=self.request.user).order_by('-date_created')
 
 
-class RequestThreadDetailView(DetailView):
+class RequestThreadDisplay(DetailView):
+    """
+    View to display message thread and empty form for submitting a reply.
+    """
     model = TransactionRequestThread
 
     context_object_name = 'thread'
     template_name = 'profile/thread.html'
-
-    def dispatch(self, request, *args, **kwargs):
-        if 'pk' in kwargs:
-            thread = self.model.objects.get(pk=int(kwargs['pk']))
-            if thread.listing.owner != request.user and thread.sender != request.user:
-                return HttpResponseForbidden()
-
-        return super(RequestThreadDetailView, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         """
@@ -250,3 +248,66 @@ class RequestThreadDetailView(DetailView):
         return TransactionRequestThread.objects.select_related().filter(
             Q(listing__owner=self.request.user) | Q(sender=self.request.user)
         )
+
+    def get_context_data(self, **kwargs):
+        context = super(RequestThreadDisplay, self).get_context_data(**kwargs)
+        context['form'] = TransactionRequestForm()
+
+        return context
+
+
+class RequestThreadSubmit(SingleObjectMixin, FormView):
+    """
+    View that handles message thread reply form submission.
+    """
+    form_class = TransactionRequestForm
+
+    model = TransactionRequestThread
+    context_object_name = 'thread'
+
+    template_name = 'profile/thread.html'
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(RequestThreadSubmit, self).post(request, *args, **kwargs)
+
+    def get_queryset(self):
+        """
+        Limit to message threads that the authenticated user is involved in.
+        """
+        return TransactionRequestThread.objects.select_related().filter(
+            Q(listing__owner=self.request.user) | Q(sender=self.request.user)
+        )
+
+    def form_valid(self, form):
+        thread = self.get_object()
+        form.save(thread=thread, user=self.request.user)
+
+        return super(RequestThreadSubmit, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('thread', kwargs={'pk': self.get_object().pk})
+
+
+class RequestThreadDetail(View):
+    """
+    Combines RequestThreadSubmit and RequestThreadDisplay views.
+    """
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Return 403 if accessing user isn't involved in the message thread.
+        """
+        if 'pk' in kwargs:
+            thread = TransactionRequestThread.objects.get(pk=int(kwargs['pk']))
+            if thread.listing.owner != request.user and thread.sender != request.user:
+                return HttpResponseForbidden()
+
+        return super(RequestThreadDetail, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        view = RequestThreadDisplay.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = RequestThreadSubmit.as_view()
+        return view(request, *args, **kwargs)

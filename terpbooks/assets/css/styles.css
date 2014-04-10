@@ -398,3 +398,7 @@
     color: #999;
     border-bottom: 1px solid #999;
 }
+
+.message-form {
+    margin-top: 20px;
+}
