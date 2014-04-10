@@ -1,6 +1,6 @@
 <ul class="profile-list">
     {% for request in request_list %}
-        <li class="profile-item{% if request.listing.unread_messages > 0 %} unread{% endif %}">
+        <li class="profile-item{% if request.listing.unread_messages > 0 %} unread{% endif %}" thread-url="{% url "thread" request.pk %}">
             <h3>{{ request.listing.book.title }}</h3>
             <h4 class="inbox-price">Last offer: <span>${{ request.last_offer_price }}</span></h4>
             <h4 class="inbox-last-msg">Last message: {{ request.last_message_time|date:"n/j/y g:i A" }}</h4>

@@ -36,7 +36,7 @@ function listing_selected() {
 
 
 function connect_inbox_click_handler() {
-    var messages = $('.inbox-list-container .inbox-request');
+    var messages = $('.inbox-list-container .profile-item');
 
     messages.off('click');
     messages.on('click', message_selected);
@@ -44,7 +44,23 @@ function connect_inbox_click_handler() {
 
 
 function message_selected() {
-    console.log('MOCK');
+    var url = $(this).attr('thread-url');
+
+    $.get(url, show_message_thread);
+}
+
+function show_message_thread(data) {
+    var container = $('.inbox-list-container');
+    container.find('ul').remove();
+    container.append(data);
+
+    container.find('.thread-container button.inbox-back').on('click', back_message_thread);
+}
+
+function back_message_thread() {
+    $('.inbox-list-container > div.thread-container').remove();
+
+    load_inbox();
 }
 
 
@@ -68,7 +84,7 @@ function load_inbox() {
         var inbox_container = $('.inbox-list-container');
         inbox_container.find('ul').remove();
         inbox_container.append(data);
-
+        connect_inbox_click_handler();
     });
 }
 

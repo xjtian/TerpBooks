@@ -92,7 +92,7 @@ class TransactionRequestThread(models.Model):
         """
         Return all messages in this thread chronologically.
         """
-        return self.messages.order_by('-date_created')
+        return self.messages.order_by('date_created')
 
 
 class TransactionRequest(models.Model):

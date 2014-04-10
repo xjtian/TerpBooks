@@ -361,3 +361,40 @@
     margin-bottom: 0;
     color: #999;
 }
+
+
+/* Message thread table styles */
+.thread-book-asking > span {
+    color: #0c0;
+}
+
+.inbox-back {
+    margin-bottom: 15px;
+}
+
+.message-thread-table td {
+    padding-bottom: 10px;
+    vertical-align: middle;
+}
+
+.message-thread-table tr {
+    vertical-align: middle;
+}
+
+.message-thread-table td.message-sender {
+    padding-top: 10px;
+    font-weight: 700;
+}
+
+.message-thread-table td.message-price {
+    color: #0c0;
+    padding: 0 10px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.message-thread-table td.message-date {
+    font-size: 12px;
+    color: #999;
+    border-bottom: 1px solid #999;
+}

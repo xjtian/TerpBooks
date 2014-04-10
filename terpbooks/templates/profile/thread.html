@@ -1,20 +1,29 @@
-<table class="message-thread-table">
-{% for message in thread.chron_messages %}
-    <tr>
-        <td class="message-sender">
-            {% if message.created_by == user %}
-                You:
-            {% else %}
-                {{ message.created_by.username }}:
-            {% endif %}
-        </td>
-    </tr>
-    <tr>
-        <td>{{ message.text }}</td>
-        <td class="message-price">${{ message.price }}</td>
-    </tr>
-    <tr>
-        <td class="message-date">{{ message.date_created|date:"n/j/y g:i A" }}</td>
-    </tr>
-{% endfor %}
-</table>
+<div class="thread-container">
+    <button class="btn btn-default inbox-back"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
+
+    <h4 class="thread-book-title">{{ thread.listing.book.title }}</h4>
+    <h5 class="thread-book-asking">Asking price: <span>${{ thread.listing.asking_price }}</span></h5>
+
+    <table class="message-thread-table">
+    {% for message in thread.chron_messages %}
+        <tbody>
+            <tr>
+                <td class="message-sender">
+                    {% if message.created_by == user %}
+                        You:
+                    {% else %}
+                        {{ message.created_by.username }}:
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ message.text }}</td>
+                <td class="message-price">${{ message.price }}</td>
+            </tr>
+            <tr>
+                <td class="message-date">{{ message.date_created|date:"n/j/y g:i A" }}</td>
+            </tr>
+        </tbody>
+    {% endfor %}
+    </table>
+</div>
