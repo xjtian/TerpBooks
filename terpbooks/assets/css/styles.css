@@ -337,7 +337,7 @@
 }
 
 .profile-list > .profile-item.unread {
-    border: 2px solid #ff9640;
+    border: 1px solid #ff9640;
 }
 
 .profile-item > h3 {
