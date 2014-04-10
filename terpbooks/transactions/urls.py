@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
 
-from .views import ListingListView, ListingDetailView, YourListingsView, ListingFormView, InboxView
+from .views import ListingListView, ListingDetailView, YourListingsView, ListingFormView, InboxView, RequestThreadDetailView
 
 
 urlpatterns = patterns('',
@@ -18,5 +18,6 @@ urlpatterns = patterns('',
         ListingFormView.as_view(template_name='sell/sell_form.html',
                                 post_url='listing-form-bound'),
         name='listing-form-bound'),
-    url(r'^inbox$', InboxView.as_view(), name='inbox'),
+    url(r'^inbox$', login_required(InboxView.as_view()), name='inbox'),
+    url(r'^threads/(?P<pk>\d+)$', login_required(RequestThreadDetailView.as_view()), name='thread'),
 )

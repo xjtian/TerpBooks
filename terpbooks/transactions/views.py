@@ -227,3 +227,26 @@ class InboxView(ListView):
 
     def get_queryset(self):
         return TransactionRequestThread.objects.select_related().filter(listing__owner=self.request.user).order_by('-date_created')
+
+
+class RequestThreadDetailView(DetailView):
+    model = TransactionRequestThread
+
+    context_object_name = 'thread'
+    template_name = 'profile/thread.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if 'pk' in kwargs:
+            thread = self.model.objects.get(pk=int(kwargs['pk']))
+            if thread.listing.owner != request.user and thread.sender != request.user:
+                return HttpResponseForbidden()
+
+        return super(RequestThreadDetailView, self).dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        """
+        Limit to message threads that the authenticated user is involved in.
+        """
+        return TransactionRequestThread.objects.select_related().filter(
+            Q(listing__owner=self.request.user) | Q(sender=self.request.user)
+        )

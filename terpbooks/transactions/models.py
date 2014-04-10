@@ -88,6 +88,12 @@ class TransactionRequestThread(models.Model):
     def last_message_time(self):
         return self.messages.order_by('-date_created')[0].date_created
 
+    def chron_messages(self):
+        """
+        Return all messages in this thread chronologically.
+        """
+        return self.messages.order_by('-date_created')
+
 
 class TransactionRequest(models.Model):
     """

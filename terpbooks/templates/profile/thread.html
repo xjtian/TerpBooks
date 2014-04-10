@@ -1,0 +1,20 @@
+<table class="message-thread-table">
+{% for message in thread.chron_messages %}
+    <tr>
+        <td class="message-sender">
+            {% if message.created_by == user %}
+                You:
+            {% else %}
+                {{ message.created_by.username }}:
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>{{ message.text }}</td>
+        <td class="message-price">${{ message.price }}</td>
+    </tr>
+    <tr>
+        <td class="message-date">{{ message.date_created|date:"n/j/y g:i A" }}</td>
+    </tr>
+{% endfor %}
+</table>
