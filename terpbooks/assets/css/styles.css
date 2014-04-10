@@ -330,19 +330,23 @@
     padding: 0;
 }
 
-.profile-list .profile-item {
+.profile-list > .profile-item {
     padding: 20px 0 20px 30px;
     cursor: pointer;
     border: 1px solid #999;
 }
 
-.profile-item h3 {
+.profile-list > .profile-item.unread {
+    border: 2px solid #ff9640;
+}
+
+.profile-item > h3 {
     margin: 0 0 10px 0;
     font-weight: 700;
     font-size: 20px;
 }
 
-.profile-item h4 {
+.profile-item > h4 {
     font-size: 15px;
     margin: 5px 0;
 }
