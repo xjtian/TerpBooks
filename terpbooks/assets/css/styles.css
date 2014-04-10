@@ -324,3 +324,40 @@
 #edit-modal p.bg-danger {
     padding: 15px;
 }
+
+.inbox-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.inbox-list .inbox-request {
+    padding: 20px 0 20px 30px;
+    cursor: pointer;
+    border: 1px solid #999;
+}
+
+.inbox-list .inbox-request.selection {
+    background-color: #ff0000;
+    border: 2px solid #0c0;
+    border-top: 0;
+}
+
+.inbox-request h3 {
+    margin: 0 0 10px 0;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.inbox-request h4 {
+    font-size: 15px;
+    margin: 5px 0;
+}
+
+.inbox-request>h4.inbox-price>span {
+    color: #0c0;
+}
+
+.inbox-request h4.inbox-last-message {
+    margin-bottom: 0;
+    color: #999;
+}
