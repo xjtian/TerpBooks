@@ -7,7 +7,7 @@ from django.shortcuts import render
 from .forms import AuthorForm, AuthorFormSet
 
 
-class AuthorFormSetView(generic.View):
+class DynamicAuthorForms(generic.View):
     def post(self, request):
         posted_formset = AuthorFormSet(request.POST)
 

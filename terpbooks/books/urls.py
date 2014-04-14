@@ -2,9 +2,9 @@ from __future__ import absolute_import
 
 from django.conf.urls import patterns, url
 
-from .views import AuthorFormSetView
+from .views import DynamicAuthorForms
 
 
 urlpatterns = patterns('',
-    url(r'^authorformset/$', AuthorFormSetView.as_view(), name='author-formset'),
+    url(r'^authorformset/$', DynamicAuthorForms.as_view(), name='author-formset'),
 )

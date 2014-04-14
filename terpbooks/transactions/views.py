@@ -7,8 +7,6 @@ from django.views.generic.detail import SingleObjectMixin
 from django.http import HttpResponseForbidden
 
 from django.shortcuts import render
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 from .forms import ListingForm, TransactionRequestForm
@@ -16,7 +14,10 @@ from .models import Listing, TransactionRequestThread
 from books.forms import TextbookForm, AuthorFormSet, ProfessorForm, SemesterForm
 
 
-class ListingListView(ListView):
+class ListingList(ListView):
+    """
+    List of all available listings. Filtering and ordering specified by GET parameters.
+    """
     model = Listing
     queryset = Listing.objects.select_related().filter(status=Listing.AVAILABLE).order_by('-date_created')
 
@@ -26,7 +27,7 @@ class ListingListView(ListView):
     template_name = 'buy/list-partial.html'
 
     def get_queryset(self):
-        qs = super(ListingListView, self).get_queryset()
+        qs = super(ListingList, self).get_queryset()
         query = Q()
 
         sort_field = None
@@ -55,7 +56,10 @@ class ListingListView(ListView):
         return qs
 
 
-class ListingDetailView(DetailView):
+class ListingDetail(DetailView):
+    """
+    Detail for a specific listing.
+    """
     model = Listing
     queryset = Listing.objects.select_related().filter(status=Listing.AVAILABLE)
 
@@ -63,7 +67,10 @@ class ListingDetailView(DetailView):
     template_name = 'buy/listing-detail.html'
 
 
-class ListingFormView(View):
+class CreateEditListing(View):
+    """
+    Listing form view for creating a new listing or editing an existing one.
+    """
     template_name = 'sell/index.html'
     post_url = 'sell'
 
@@ -82,8 +89,10 @@ class ListingFormView(View):
 
         return render(self.request, self.template_name, context)
 
-    @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
+        """
+        Form is bound if pk is in kwargs, otherwise return a blank form.
+        """
         if 'pk' not in kwargs:
             book_form = TextbookForm()
             listing_form = ListingForm()
@@ -128,8 +137,10 @@ class ListingFormView(View):
             'semester_form': semester_form,
         })
 
-    @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
+        """
+        Form has associated instances if pk in kwargs, otherwise create a new listing.
+        """
         prof_form = ProfessorForm(request.POST)
         sem_form = SemesterForm(request.POST)
         author_formset = AuthorFormSet(request.POST)
@@ -212,7 +223,10 @@ class ListingFormView(View):
         return self.render_to_template(pk, extra_context)
 
 
-class YourListingsView(ListView):
+class ProfileListings(ListView):
+    """
+    List of all listings the authenticated user has created.
+    """
     model = Listing
 
     context_object_name = 'listings_list'
