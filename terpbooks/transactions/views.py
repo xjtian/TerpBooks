@@ -342,3 +342,78 @@ class RequestThreadDetail(View):
     def post(self, request, *args, **kwargs):
         view = RequestThreadSubmit.as_view()
         return view(request, *args, **kwargs)
+
+
+class CreateListingRequest(SingleObjectMixin, FormView):
+    """
+    Create (or update) a listing thread for a listing. If the authenticated
+    user already has a pending request for this listing, this will add the
+    request message to the thread.
+    """
+    form_class = TransactionRequestForm
+
+    model = Listing
+    queryset = Listing.objects.filter(status=Listing.AVAILABLE)
+    context_object_name = 'listing'
+
+    template_name = 'buy/send_request.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Return an error message with no form if listing owner is submitter.
+        """
+        self.object = self.get_object()
+
+        if self.object.owner == request.user:
+            # You can't buy your own book
+            return render(request, 'buy/send_request.html', {
+                'error_message': "You can't buy your own book!",
+            })
+
+        return super(CreateListingRequest, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form(self.get_form_class())
+
+        if form.is_valid():
+            return self.form_valid(form, **kwargs)
+        else:
+            return self.form_invalid(form, **kwargs)
+
+    def form_valid(self, form, **kwargs):
+        listing = self.object
+
+        # Did this user already create a request thread for this listing?
+        qs = listing.requests.filter(sender=self.request.user)
+        if qs.exists():
+            form.save(thread=qs[0], user=self.request.user)
+        else:
+            # Create a new thread
+            thread = TransactionRequestThread(
+                sender=self.request.user,
+                listing=listing,
+            )
+
+            thread.save()
+
+            # Save this message to the thread
+            form.save(thread=thread, user=self.request.user)
+
+        form = self.get_form_class()()
+
+        context = super(CreateListingRequest, self).get_context_data(**kwargs)
+        context.update({'form': form})
+
+        context.update({'success_message': 'Listing request successfully created!'})
+
+        return self.render_to_response(context)
+
+    def form_invalid(self, form, **kwargs):
+        context = super(CreateListingRequest, self).get_context_data(**kwargs)
+        context.update({'form': form})
+        context.update({'error_message': 'There was an error with your submission.'})
+
+        return self.render_to_response(context)
+
+    def get_success_url(self):
+        return reverse('create_thread', kwargs={'pk': self.get_object().pk})
