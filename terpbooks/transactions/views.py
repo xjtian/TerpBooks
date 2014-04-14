@@ -135,6 +135,7 @@ class CreateEditListing(View):
             'author_formset': author_formset,
             'professor_form': professor_form,
             'semester_form': semester_form,
+            'pk': pk,
         })
 
     def post(self, request, *args, **kwargs):
@@ -215,6 +216,7 @@ class CreateEditListing(View):
             'author_formset': author_formset,
             'professor_form': prof_form,
             'semester_form': sem_form,
+            'pk': pk,
         })
 
         if not valid:

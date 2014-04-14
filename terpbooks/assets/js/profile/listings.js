@@ -43,7 +43,32 @@ function listing_selected() {
         var modal = $('#edit-modal');
         modal.find('.modal-body').html(data);
         add_edit_form_handler();
+
+        var url = modal.find('.delete-submit').attr('data-url');
+        modal.find('.delete-submit').on('click', delete_listing_first(url));
     });
+}
+
+
+function delete_listing_first(url) {
+    return function() {
+        var body = $('#edit-modal').find('.modal-body');
+        body.html(
+            '<p class="strong">This will delete the listing permanently and all associated requests. ' +
+            'Are you sure you want to do this?</p>' +
+            '<button class="btn btn-danger confirm-delete-btn">Yes, delete this listing.</button>' +
+            '<button class="btn btn-default" data-dismiss="modal">No, take me away from here!</button>'
+        );
+
+        body.find('button.confirm-delete-btn').on('click', function() {
+            $.post(url, {
+                'csrfmiddlewaretoken': CSRF
+            }, function(data) {
+                body.html(data);
+                load_listings();
+            });
+        });
+    }
 }
 
 

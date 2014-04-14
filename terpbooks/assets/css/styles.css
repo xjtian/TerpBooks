@@ -287,10 +287,15 @@
     width: 25%;
 }
 
-.sell-form > button.btn-success {
+.sell-form > button.sell-submit,
+.sell-form > button.delete-submit {
     margin: 30px;
     font-size: 20px;
     padding: 10px;
+}
+
+.modal-body > button.confirm-delete-btn {
+    margin-right: 20px;
 }
 
 .last-authorfield-wrapper {

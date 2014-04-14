@@ -6,6 +6,8 @@
         var YOUR_LISTINGS_URL = '{% url "profile-listings" %}';
         var INBOX_URL = '{% url "inbox" %}';
         var OUTBOX_URL = '{% url "outbox" %}';
+
+        var CSRF = '{{ csrf_token }}';
     </script>
     <script src="{% static "js/profile/listings.js" %}"></script>
     <script src="{% static "js/profile/inbox.js" %}"></script>
