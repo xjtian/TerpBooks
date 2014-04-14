@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
 
-from .views import ListingList, ListingDetail, ProfileListings, CreateEditListing, Inbox, Outbox, RequestThreadDetail, CreateListingRequest
+from .views import ListingList, ListingDetail, ProfileListings, CreateEditListing, Inbox, Outbox, RequestThreadDetail, CreateListingRequest, DeleteListing
 
 
 urlpatterns = patterns('',
@@ -22,4 +22,5 @@ urlpatterns = patterns('',
     url(r'^outbox$', login_required(Outbox.as_view()), name='outbox'),
     url(r'^threads/(?P<pk>\d+)$', login_required(RequestThreadDetail.as_view()), name='thread'),
     url(r'^create-thread/(?P<pk>\d+)$', login_required(CreateListingRequest.as_view()), name='create_thread'),
+    url(r'^delete-listing/(?P<pk>\d+)$', login_required(DeleteListing.as_view()), name='delete_listing'),
 )

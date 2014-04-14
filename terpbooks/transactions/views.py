@@ -431,3 +431,19 @@ class CreateListingRequest(SingleObjectMixin, FormView):
 
     def get_success_url(self):
         return reverse('create_thread', kwargs={'pk': self.get_object().pk})
+
+
+class DeleteListing(View):
+    def delete_listing(self, pk):
+        listing = Listing.objects.get(pk=pk)
+
+        if listing.owner != self.request.user:
+            context = {'error_message': "You're not allowed to delete a listing you don't own!"}
+        else:
+            context = {'success_message': "Listing successfully deleted."}
+            listing.delete()
+
+        return render(self.request, 'profile/delete_listing.html', context)
+
+    def post(self, *args, **kwargs):
+        return self.delete_listing(int(kwargs['pk']))
