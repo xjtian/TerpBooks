@@ -202,7 +202,7 @@ class CreateEditListing(View):
             extra_context.update({'success_message': 'Listing successfully added!'})
 
         # pk None means listing created - return blank forms. Otherwise, return bound stuff
-        if pk is None:
+        if pk is None and valid:
             book_form = TextbookForm()
             listing_form = ListingForm()
             author_formset = AuthorFormSet()
