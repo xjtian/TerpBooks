@@ -84,7 +84,7 @@ CREATE TABLE `auth_permission` (
   UNIQUE KEY `content_type_id` (`content_type_id`,`codename`),
   KEY `auth_permission_37ef4eb4` (`content_type_id`),
   CONSTRAINT `content_type_id_refs_id_d043b34a` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `auth_permission` (
 
 LOCK TABLES `auth_permission` WRITE;
 /*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can add permission',2,'add_permission'),(5,'Can change permission',2,'change_permission'),(6,'Can delete permission',2,'delete_permission'),(7,'Can add group',3,'add_group'),(8,'Can change group',3,'change_group'),(9,'Can delete group',3,'delete_group'),(10,'Can add user',4,'add_user'),(11,'Can change user',4,'change_user'),(12,'Can delete user',4,'delete_user'),(13,'Can add content type',5,'add_contenttype'),(14,'Can change content type',5,'change_contenttype'),(15,'Can delete content type',5,'delete_contenttype'),(16,'Can add session',6,'add_session'),(17,'Can change session',6,'change_session'),(18,'Can delete session',6,'delete_session'),(19,'Can add message thread',7,'add_messagethread'),(20,'Can change message thread',7,'change_messagethread'),(21,'Can delete message thread',7,'delete_messagethread'),(22,'Can add message',8,'add_message'),(23,'Can change message',8,'change_message'),(24,'Can delete message',8,'delete_message'),(25,'Can add migration history',9,'add_migrationhistory'),(26,'Can change migration history',9,'change_migrationhistory'),(27,'Can delete migration history',9,'delete_migrationhistory'),(28,'Can add semester',10,'add_semester'),(29,'Can change semester',10,'change_semester'),(30,'Can delete semester',10,'delete_semester'),(31,'Can add professor',11,'add_professor'),(32,'Can change professor',11,'change_professor'),(33,'Can delete professor',11,'delete_professor'),(34,'Can add textbook',12,'add_textbook'),(35,'Can change textbook',12,'change_textbook'),(36,'Can delete textbook',12,'delete_textbook'),(37,'Can add author',13,'add_author'),(38,'Can change author',13,'change_author'),(39,'Can delete author',13,'delete_author'),(40,'Can add listing',14,'add_listing'),(41,'Can change listing',14,'change_listing'),(42,'Can delete listing',14,'delete_listing'),(43,'Can add transaction request thread',15,'add_transactionrequestthread'),(44,'Can change transaction request thread',15,'change_transactionrequestthread'),(45,'Can delete transaction request thread',15,'delete_transactionrequestthread'),(46,'Can add transaction request',16,'add_transactionrequest'),(47,'Can change transaction request',16,'change_transactionrequest'),(48,'Can delete transaction request',16,'delete_transactionrequest');
+INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can add permission',2,'add_permission'),(5,'Can change permission',2,'change_permission'),(6,'Can delete permission',2,'delete_permission'),(7,'Can add group',3,'add_group'),(8,'Can change group',3,'change_group'),(9,'Can delete group',3,'delete_group'),(10,'Can add user',4,'add_user'),(11,'Can change user',4,'change_user'),(12,'Can delete user',4,'delete_user'),(13,'Can add content type',5,'add_contenttype'),(14,'Can change content type',5,'change_contenttype'),(15,'Can delete content type',5,'delete_contenttype'),(16,'Can add session',6,'add_session'),(17,'Can change session',6,'change_session'),(18,'Can delete session',6,'delete_session'),(19,'Can add migration history',7,'add_migrationhistory'),(20,'Can change migration history',7,'change_migrationhistory'),(21,'Can delete migration history',7,'delete_migrationhistory'),(22,'Can add semester',8,'add_semester'),(23,'Can change semester',8,'change_semester'),(24,'Can delete semester',8,'delete_semester'),(25,'Can add professor',9,'add_professor'),(26,'Can change professor',9,'change_professor'),(27,'Can delete professor',9,'delete_professor'),(28,'Can add textbook',10,'add_textbook'),(29,'Can change textbook',10,'change_textbook'),(30,'Can delete textbook',10,'delete_textbook'),(31,'Can add author',11,'add_author'),(32,'Can change author',11,'change_author'),(33,'Can delete author',11,'delete_author'),(34,'Can add listing',12,'add_listing'),(35,'Can change listing',12,'change_listing'),(36,'Can delete listing',12,'delete_listing'),(37,'Can add transaction request thread',13,'add_transactionrequestthread'),(38,'Can change transaction request thread',13,'change_transactionrequestthread'),(39,'Can delete transaction request thread',13,'delete_transactionrequestthread'),(40,'Can add transaction request',14,'add_transactionrequest'),(41,'Can change transaction request',14,'change_transactionrequest'),(42,'Can delete transaction request',14,'delete_transactionrequest');
 /*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -127,7 +127,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$v36NvYOpOufT$zu8k6M4YemY/pD1db589FTmhVtTKZG/xb7Txjj+qYyk=','2014-03-31 19:46:38',1,'admin','','','',1,1,'2014-03-31 19:46:38'),(2,'pbkdf2_sha256$12000$1UsgRfN3RQ3d$I9s0u03+7dXsMnRJJrryteDF0GiSp2gCH/LudK9Q2U4=','2014-03-31 19:46:46',0,'user1','','','',0,1,'2014-03-31 19:46:46'),(3,'pbkdf2_sha256$12000$5XteDOSMVqxd$sOcwPAJM6Ol/KOa5mpUKDKlAHK1s0E3RLMSJQooLA4A=','2014-03-31 19:46:46',0,'user2','','','',0,1,'2014-03-31 19:46:46');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$TOuBjGOgUxqN$hcDjlZke07ChW++pPgY5GGXDcMHOoU3s0+Oy6TVQsIA=','2014-04-14 04:58:40',1,'admin','','','',1,1,'2014-04-08 16:55:08'),(2,'pbkdf2_sha256$12000$ae9ZVZsVXWqE$kqQdHMWnbM/XuFlsI2iq5syrQ8WcK3uVw6BUxvmHppQ=','2014-04-08 16:55:16',0,'user1','','','',1,1,'2014-04-08 16:55:16'),(3,'pbkdf2_sha256$12000$Jy41ayj8jnIG$9W63nuwiWnkThYRa+dpSvK0iGnpH9tX87/tfFl8Cb0w=','2014-04-14 04:57:58',0,'user2','','','',1,1,'2014-04-08 16:55:16');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -202,9 +202,10 @@ CREATE TABLE `books_author` (
   `last_name` varchar(30) NOT NULL,
   `book_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `first_name` (`first_name`,`last_name`,`book_id`),
   KEY `books_author_36c249d7` (`book_id`),
   CONSTRAINT `book_id_refs_id_eaea90d6` FOREIGN KEY (`book_id`) REFERENCES `books_textbook` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -213,7 +214,7 @@ CREATE TABLE `books_author` (
 
 LOCK TABLES `books_author` WRITE;
 /*!40000 ALTER TABLE `books_author` DISABLE KEYS */;
-INSERT INTO `books_author` VALUES (1,'Bob','Doe',1),(2,'Bob','Grant',1),(3,'Bob','Doe',2),(4,'Bob','Doe',3),(5,'Bob','Grant',3),(6,'Bob','Gray',3),(7,'Bob','Doe',4),(8,'Bob','Grant',4),(9,'Bob','Gray',4),(10,'Bob','Doe',5),(11,'Bob','Doe',6),(12,'Bob','Grant',6),(13,'Bob','Doe',7),(14,'Bob','Grant',7),(15,'Bob','Doe',8),(16,'Bob','Grant',8),(17,'Bob','Gray',8),(18,'Bob','Doe',9),(19,'Bob','Grant',9),(20,'Bob','Doe',10),(21,'Bob','Grant',10),(22,'Bob','Doe',11),(23,'Bob','Grant',11),(24,'Bob','Gray',11),(25,'Bob','Doe',12),(26,'Bob','Grant',12),(27,'Bob','Doe',13),(28,'Bob','Doe',14),(29,'Bob','Grant',14),(30,'Bob','Gray',14),(31,'Bob','Doe',15),(32,'Bob','Grant',15),(33,'Bob','Gray',15),(34,'Bob','Doe',16),(35,'Bob','Grant',16),(36,'Bob','Gray',16);
+INSERT INTO `books_author` VALUES (1,'Bob','Doe',1),(4,'Bob','Doe',2),(7,'Bob','Doe',3),(10,'Bob','Doe',4),(11,'Bob','Doe',5),(12,'Bob','Doe',6),(13,'Bob','Doe',7),(16,'Bob','Doe',8),(18,'Bob','Doe',9),(19,'Bob','Doe',10),(20,'Bob','Doe',11),(21,'Bob','Doe',12),(24,'Bob','Doe',13),(27,'Bob','Doe',14),(30,'Bob','Doe',15),(31,'Bob','Doe',16),(2,'Bob','Grant',1),(5,'Bob','Grant',2),(8,'Bob','Grant',3),(14,'Bob','Grant',7),(17,'Bob','Grant',8),(22,'Bob','Grant',12),(25,'Bob','Grant',13),(28,'Bob','Grant',14),(3,'Bob','Gray',1),(6,'Bob','Gray',2),(9,'Bob','Gray',3),(15,'Bob','Gray',7),(23,'Bob','Gray',12),(26,'Bob','Gray',13),(29,'Bob','Gray',14);
 /*!40000 ALTER TABLE `books_author` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,8 +288,8 @@ CREATE TABLE `books_textbook` (
   PRIMARY KEY (`id`),
   KEY `books_textbook_7ce38e1e` (`semester_id`),
   KEY `books_textbook_b9498a38` (`professor_id`),
-  CONSTRAINT `professor_id_refs_id_a2f41842` FOREIGN KEY (`professor_id`) REFERENCES `books_professor` (`id`),
-  CONSTRAINT `semester_id_refs_id_311fc002` FOREIGN KEY (`semester_id`) REFERENCES `books_semester` (`id`)
+  CONSTRAINT `semester_id_refs_id_311fc002` FOREIGN KEY (`semester_id`) REFERENCES `books_semester` (`id`),
+  CONSTRAINT `professor_id_refs_id_a2f41842` FOREIGN KEY (`professor_id`) REFERENCES `books_professor` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -298,7 +299,7 @@ CREATE TABLE `books_textbook` (
 
 LOCK TABLES `books_textbook` WRITE;
 /*!40000 ALTER TABLE `books_textbook` DISABLE KEYS */;
-INSERT INTO `books_textbook` VALUES (1,'A History of Physics',3,'9086119559474','CMSC101',1,1),(2,'A History of Technical Writing',3,'2322269445564','CMSC201',2,2),(3,'A History of Calculus',3,'7073780419073','CMSC301',3,3),(4,'A History of Algorithms',1,'7925361378937','CMSC401',4,4),(5,'General Background of Physics',3,'5708033104134','PHYS101',5,5),(6,'General Background of Technical Writing',2,'9355038468096','PHYS201',6,6),(7,'General Background of Calculus',1,'8504090340105','PHYS301',7,7),(8,'General Background of Algorithms',2,'0647152308721','PHYS401',8,8),(9,'Beginner\'s Guide to Physics',1,'8295510296854','MATH101',9,9),(10,'Beginner\'s Guide to Technical Writing',2,'8202341075809','MATH201',10,10),(11,'Beginner\'s Guide to Calculus',3,'0948644221071','MATH301',11,11),(12,'Beginner\'s Guide to Algorithms',2,'6436345794067','MATH401',12,12),(13,'Become an Expert in Physics',1,'6343513470614','ENGL101',13,13),(14,'Become an Expert in Technical Writing',2,'0323457300276','ENGL201',14,14),(15,'Become an Expert in Calculus',2,'9496394924899','ENGL301',15,15),(16,'Become an Expert in Algorithms',2,'5854391023803','ENGL401',16,16);
+INSERT INTO `books_textbook` VALUES (1,'A History of Physics',1,'4537239203655','CMSC101',1,1),(2,'A History of Technical Writing',2,'7346540103530','CMSC201',2,2),(3,'A History of Calculus',1,'4061773408573','CMSC301',3,3),(4,'A History of Algorithms',1,'0786216959808','CMSC401',4,4),(5,'General Background of Physics',1,'5763948366923','PHYS101',5,5),(6,'General Background of Technical Writing',1,'4302043539078','PHYS201',6,6),(7,'General Background of Calculus',3,'9745267357440','PHYS301',7,7),(8,'General Background of Algorithms',3,'7883017156409','PHYS401',8,8),(9,'Beginner\'s Guide to Physics',2,'9333914774210','MATH101',9,9),(10,'Beginner\'s Guide to Technical Writing',3,'4454544228233','MATH201',10,10),(11,'Beginner\'s Guide to Calculus',1,'2572724025124','MATH301',11,11),(12,'Beginner\'s Guide to Algorithms',2,'2217372447314','MATH401',12,12),(13,'Become an Expert in Physics',3,'7819985138034','ENGL101',13,13),(14,'Become an Expert in Technical Writing',1,'8015839829586','ENGL201',14,14),(15,'Become an Expert in Calculus',1,'1610147052570','ENGL301',15,15),(16,'Become an Expert in Algorithms',1,'6770096315863','ENGL401',16,16);
 /*!40000 ALTER TABLE `books_textbook` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -323,7 +324,7 @@ CREATE TABLE `django_admin_log` (
   KEY `django_admin_log_37ef4eb4` (`content_type_id`),
   CONSTRAINT `content_type_id_refs_id_93d2d1f8` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `user_id_refs_id_c0d12874` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -332,6 +333,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
+INSERT INTO `django_admin_log` VALUES (1,'2014-04-08 16:56:39',1,12,'1','A History of Physics: Available',2,'Changed owner.'),(2,'2014-04-08 16:56:46',1,12,'4','A History of Algorithms: Available',2,'Changed owner.'),(3,'2014-04-10 00:56:43',1,13,'1','A History of Physics',2,'Added transaction request \"TransactionRequest object\".'),(4,'2014-04-10 01:20:23',1,13,'1','A History of Physics',2,'Changed text for transaction request \"TransactionRequest object\".'),(5,'2014-04-10 03:22:04',1,4,'3','user2',2,'Changed is_staff.'),(6,'2014-04-10 03:22:36',1,4,'1','admin',2,'Changed password.'),(7,'2014-04-10 03:22:39',1,4,'3','user2',2,'No fields changed.'),(8,'2014-04-14 04:35:41',1,13,'17','Become an Expert in Calculus',1,''),(9,'2014-04-14 04:57:08',1,4,'1','admin',2,'Changed password.'),(10,'2014-04-14 04:57:15',1,4,'2','user1',2,'Changed is_staff.');
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -349,7 +351,7 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_label` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -358,7 +360,7 @@ CREATE TABLE `django_content_type` (
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'log entry','admin','logentry'),(2,'permission','auth','permission'),(3,'group','auth','group'),(4,'user','auth','user'),(5,'content type','contenttypes','contenttype'),(6,'session','sessions','session'),(7,'message thread','messages','messagethread'),(8,'message','messages','message'),(9,'migration history','south','migrationhistory'),(10,'semester','books','semester'),(11,'professor','books','professor'),(12,'textbook','books','textbook'),(13,'author','books','author'),(14,'listing','transactions','listing'),(15,'transaction request thread','transactions','transactionrequestthread'),(16,'transaction request','transactions','transactionrequest');
+INSERT INTO `django_content_type` VALUES (1,'log entry','admin','logentry'),(2,'permission','auth','permission'),(3,'group','auth','group'),(4,'user','auth','user'),(5,'content type','contenttypes','contenttype'),(6,'session','sessions','session'),(7,'migration history','south','migrationhistory'),(8,'semester','books','semester'),(9,'professor','books','professor'),(10,'textbook','books','textbook'),(11,'author','books','author'),(12,'listing','transactions','listing'),(13,'transaction request thread','transactions','transactionrequestthread'),(14,'transaction request','transactions','transactionrequest');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -384,65 +386,8 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
+INSERT INTO `django_session` VALUES ('smu7pk1g05lz0uip31ieinrix3csm572','ZDgzNTBjOGI0NjllNjc1YTE4ZWUxMjFiYTkyNGZmZTZkYjdkN2FiYzp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MX0=','2014-04-28 04:58:40');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `messages_message`
---
-
-DROP TABLE IF EXISTS `messages_message`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `messages_message` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `owner_id` int(11) NOT NULL,
-  `subject` varchar(200) NOT NULL,
-  `text` longtext NOT NULL,
-  `thread_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `messages_message_cb902d83` (`owner_id`),
-  KEY `messages_message_bd1a2e3a` (`thread_id`),
-  CONSTRAINT `thread_id_refs_id_8fd0c475` FOREIGN KEY (`thread_id`) REFERENCES `messages_messagethread` (`id`),
-  CONSTRAINT `owner_id_refs_id_1c93ff62` FOREIGN KEY (`owner_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `messages_message`
---
-
-LOCK TABLES `messages_message` WRITE;
-/*!40000 ALTER TABLE `messages_message` DISABLE KEYS */;
-/*!40000 ALTER TABLE `messages_message` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `messages_messagethread`
---
-
-DROP TABLE IF EXISTS `messages_messagethread`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `messages_messagethread` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `sender_id` int(11) NOT NULL,
-  `recipient_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `messages_messagethread_0a681a64` (`sender_id`),
-  KEY `messages_messagethread_3e31d986` (`recipient_id`),
-  CONSTRAINT `recipient_id_refs_id_0d1b7384` FOREIGN KEY (`recipient_id`) REFERENCES `auth_user` (`id`),
-  CONSTRAINT `sender_id_refs_id_0d1b7384` FOREIGN KEY (`sender_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `messages_messagethread`
---
-
-LOCK TABLES `messages_messagethread` WRITE;
-/*!40000 ALTER TABLE `messages_messagethread` DISABLE KEYS */;
-/*!40000 ALTER TABLE `messages_messagethread` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -499,7 +444,7 @@ CREATE TABLE `transactions_listing` (
 
 LOCK TABLES `transactions_listing` WRITE;
 /*!40000 ALTER TABLE `transactions_listing` DISABLE KEYS */;
-INSERT INTO `transactions_listing` VALUES (1,'2014-03-31','AV',6.18,2,1,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(2,'2014-03-31','SD',4.43,3,2,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(3,'2014-03-31','SD',4.25,2,3,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(4,'2014-03-31','AV',5.53,3,4,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(5,'2014-03-31','PN',5.42,2,5,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(6,'2014-03-31','SD',5.18,3,6,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(7,'2014-03-31','SD',9.98,2,7,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(8,'2014-03-31','AV',1.76,3,8,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(9,'2014-03-31','PN',3.29,2,9,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(10,'2014-03-31','AV',9.13,3,10,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(11,'2014-03-31','AV',2.29,2,11,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(12,'2014-03-31','AV',3.40,3,12,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(13,'2014-03-31','SD',2.47,2,13,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(14,'2014-03-31','SD',6.52,3,14,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(15,'2014-03-31','PN',8.67,2,15,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(16,'2014-03-31','SD',8.02,3,16,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
+INSERT INTO `transactions_listing` VALUES (1,'2014-04-08','AV',5.54,1,1,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(2,'2014-04-08','SD',0.48,3,2,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(3,'2014-04-08','PN',4.05,2,3,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(4,'2014-04-08','AV',1.82,1,4,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(5,'2014-04-08','PN',6.14,2,5,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(6,'2014-04-08','AV',7.44,3,6,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(7,'2014-04-08','PN',5.72,2,7,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(8,'2014-04-08','AV',1.12,3,8,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(9,'2014-04-08','PN',5.42,2,9,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(10,'2014-04-08','AV',6.11,3,10,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(11,'2014-04-08','SD',3.94,2,11,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(12,'2014-04-08','PN',6.83,3,12,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(13,'2014-04-08','PN',0.56,2,13,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(14,'2014-04-08','SD',8.04,3,14,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(15,'2014-04-08','AV',7.86,2,15,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),(16,'2014-04-08','SD',8.34,3,16,'Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
 /*!40000 ALTER TABLE `transactions_listing` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -513,15 +458,17 @@ DROP TABLE IF EXISTS `transactions_transactionrequest`;
 CREATE TABLE `transactions_transactionrequest` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `created_by_id` int(11) NOT NULL,
+  `date_created` datetime NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `text` longtext NOT NULL,
+  `read` tinyint(1) NOT NULL,
   `thread_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `transactions_transactionrequest_0c98d849` (`created_by_id`),
   KEY `transactions_transactionrequest_bd1a2e3a` (`thread_id`),
-  CONSTRAINT `thread_id_refs_id_d88a8a39` FOREIGN KEY (`thread_id`) REFERENCES `transactions_transactionrequestthread` (`id`),
-  CONSTRAINT `created_by_id_refs_id_5489323b` FOREIGN KEY (`created_by_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
+  CONSTRAINT `created_by_id_refs_id_5489323b` FOREIGN KEY (`created_by_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `thread_id_refs_id_d88a8a39` FOREIGN KEY (`thread_id`) REFERENCES `transactions_transactionrequestthread` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -530,7 +477,7 @@ CREATE TABLE `transactions_transactionrequest` (
 
 LOCK TABLES `transactions_transactionrequest` WRITE;
 /*!40000 ALTER TABLE `transactions_transactionrequest` DISABLE KEYS */;
-INSERT INTO `transactions_transactionrequest` VALUES (1,3,1.69,'Sed elementum est eget nibh venenatis vestibulum.',1),(2,2,2.15,'Sed elementum est eget nibh venenatis vestibulum.',1),(3,2,0.92,'Sed elementum est eget nibh venenatis vestibulum.',2),(4,3,2.73,'Sed elementum est eget nibh venenatis vestibulum.',3),(5,2,3.24,'Sed elementum est eget nibh venenatis vestibulum.',4),(6,3,3.15,'Sed elementum est eget nibh venenatis vestibulum.',5),(7,2,5.34,'Sed elementum est eget nibh venenatis vestibulum.',5),(8,3,1.39,'Sed elementum est eget nibh venenatis vestibulum.',5),(9,2,4.39,'Sed elementum est eget nibh venenatis vestibulum.',6),(10,3,4.20,'Sed elementum est eget nibh venenatis vestibulum.',6),(11,2,3.95,'Sed elementum est eget nibh venenatis vestibulum.',6),(12,3,2.17,'Sed elementum est eget nibh venenatis vestibulum.',6),(13,3,9.56,'Sed elementum est eget nibh venenatis vestibulum.',7),(14,2,1.27,'Sed elementum est eget nibh venenatis vestibulum.',7),(15,2,1.56,'Sed elementum est eget nibh venenatis vestibulum.',8),(16,3,0.07,'Sed elementum est eget nibh venenatis vestibulum.',8),(17,2,1.56,'Sed elementum est eget nibh venenatis vestibulum.',8),(18,3,0.40,'Sed elementum est eget nibh venenatis vestibulum.',8),(19,3,2.38,'Sed elementum est eget nibh venenatis vestibulum.',9),(20,2,0.37,'Sed elementum est eget nibh venenatis vestibulum.',9),(21,3,1.00,'Sed elementum est eget nibh venenatis vestibulum.',9),(22,2,7.84,'Sed elementum est eget nibh venenatis vestibulum.',10),(23,3,2.62,'Sed elementum est eget nibh venenatis vestibulum.',10),(24,2,2.34,'Sed elementum est eget nibh venenatis vestibulum.',10),(25,3,2.00,'Sed elementum est eget nibh venenatis vestibulum.',10),(26,3,0.44,'Sed elementum est eget nibh venenatis vestibulum.',11),(27,2,2.42,'Sed elementum est eget nibh venenatis vestibulum.',12),(28,3,1.68,'Sed elementum est eget nibh venenatis vestibulum.',12),(29,2,3.09,'Sed elementum est eget nibh venenatis vestibulum.',12),(30,3,1.05,'Sed elementum est eget nibh venenatis vestibulum.',13),(31,2,1.38,'Sed elementum est eget nibh venenatis vestibulum.',13),(32,3,1.89,'Sed elementum est eget nibh venenatis vestibulum.',13),(33,2,0.35,'Sed elementum est eget nibh venenatis vestibulum.',13),(34,2,3.40,'Sed elementum est eget nibh venenatis vestibulum.',14),(35,3,0.80,'Sed elementum est eget nibh venenatis vestibulum.',14),(36,2,4.35,'Sed elementum est eget nibh venenatis vestibulum.',14),(37,3,0.32,'Sed elementum est eget nibh venenatis vestibulum.',15),(38,2,6.09,'Sed elementum est eget nibh venenatis vestibulum.',16),(39,3,6.92,'Sed elementum est eget nibh venenatis vestibulum.',16),(40,2,6.09,'Sed elementum est eget nibh venenatis vestibulum.',16),(41,3,6.29,'Sed elementum est eget nibh venenatis vestibulum.',16);
+INSERT INTO `transactions_transactionrequest` VALUES (1,3,'2014-04-08 16:55:16',2.38,'Sed elementum est eget nibh venenatis vestibulum.',1,1),(2,2,'2014-04-08 16:55:16',0.28,'Sed elementum est eget nibh venenatis vestibulum.',1,2),(3,3,'2014-04-08 16:55:16',0.67,'Sed elementum est eget nibh venenatis vestibulum.',0,3),(4,2,'2014-04-08 16:55:16',0.23,'Sed elementum est eget nibh venenatis vestibulum.',0,3),(5,3,'2014-04-08 16:55:16',3.80,'Sed elementum est eget nibh venenatis vestibulum.',0,3),(6,2,'2014-04-08 16:55:16',1.79,'Sed elementum est eget nibh venenatis vestibulum.',1,4),(7,3,'2014-04-08 16:55:16',4.54,'Sed elementum est eget nibh venenatis vestibulum.',0,5),(8,2,'2014-04-08 16:55:16',5.00,'Sed elementum est eget nibh venenatis vestibulum.',0,5),(9,3,'2014-04-08 16:55:16',2.20,'Sed elementum est eget nibh venenatis vestibulum.',0,5),(10,2,'2014-04-08 16:55:16',1.54,'Sed elementum est eget nibh venenatis vestibulum.',0,5),(11,2,'2014-04-08 16:55:16',0.80,'Sed elementum est eget nibh venenatis vestibulum.',0,6),(12,3,'2014-04-08 16:55:16',2.50,'Sed elementum est eget nibh venenatis vestibulum.',0,7),(13,2,'2014-04-08 16:55:16',2.09,'Sed elementum est eget nibh venenatis vestibulum.',0,7),(14,3,'2014-04-08 16:55:16',5.47,'Sed elementum est eget nibh venenatis vestibulum.',0,7),(15,2,'2014-04-08 16:55:16',0.97,'Sed elementum est eget nibh venenatis vestibulum.',0,8),(16,3,'2014-04-08 16:55:16',0.65,'Sed elementum est eget nibh venenatis vestibulum.',0,8),(17,2,'2014-04-08 16:55:16',0.74,'Sed elementum est eget nibh venenatis vestibulum.',0,8),(18,3,'2014-04-08 16:55:16',0.22,'Sed elementum est eget nibh venenatis vestibulum.',0,9),(19,2,'2014-04-08 16:55:16',4.92,'Sed elementum est eget nibh venenatis vestibulum.',1,10),(20,3,'2014-04-08 16:55:16',4.53,'Sed elementum est eget nibh venenatis vestibulum.',0,10),(21,2,'2014-04-08 16:55:16',4.97,'Sed elementum est eget nibh venenatis vestibulum.',1,10),(22,3,'2014-04-08 16:55:16',1.70,'Sed elementum est eget nibh venenatis vestibulum.',0,11),(23,2,'2014-04-08 16:55:16',1.39,'Sed elementum est eget nibh venenatis vestibulum.',0,11),(24,3,'2014-04-08 16:55:16',2.30,'Sed elementum est eget nibh venenatis vestibulum.',0,11),(25,2,'2014-04-08 16:55:16',1.95,'Sed elementum est eget nibh venenatis vestibulum.',0,11),(26,2,'2014-04-08 16:55:16',6.44,'Sed elementum est eget nibh venenatis vestibulum.',1,12),(27,3,'2014-04-08 16:55:16',1.33,'Sed elementum est eget nibh venenatis vestibulum.',0,12),(28,3,'2014-04-08 16:55:16',0.17,'Sed elementum est eget nibh venenatis vestibulum.',0,13),(29,2,'2014-04-08 16:55:16',0.20,'Sed elementum est eget nibh venenatis vestibulum.',0,13),(30,3,'2014-04-08 16:55:16',0.12,'Sed elementum est eget nibh venenatis vestibulum.',0,13),(31,2,'2014-04-08 16:55:17',6.20,'Sed elementum est eget nibh venenatis vestibulum.',1,14),(32,3,'2014-04-08 16:55:17',2.13,'Sed elementum est eget nibh venenatis vestibulum.',0,14),(33,2,'2014-04-08 16:55:17',1.06,'Sed elementum est eget nibh venenatis vestibulum.',1,14),(34,3,'2014-04-08 16:55:17',0.89,'Sed elementum est eget nibh venenatis vestibulum.',0,15),(35,2,'2014-04-08 16:55:17',3.42,'Sed elementum est eget nibh venenatis vestibulum.',0,15),(36,2,'2014-04-08 16:55:17',4.45,'Sed elementum est eget nibh venenatis vestibulum.',1,16),(37,3,'2014-04-08 16:55:17',5.14,'Sed elementum est eget nibh venenatis vestibulum.',0,16),(38,2,'2014-04-08 16:55:17',6.34,'Sed elementum est eget nibh venenatis vestibulum.',1,16),(39,1,'2014-04-10 00:56:43',5.02,'LOL bro wtf u trying to say????? In hac habitasse platea dictumst. Mauris iaculis eleifend enim, sed malesuada felis pharetra eu. Praesent pretium aliquam mi ut accumsan. Sed sed est non ipsum sodales euismod. Nam hendrerit ac enim ac bibendum. Etiam aliquet vehicula nunc, vitae iaculis orci ultricies vitae. Mauris at gravida sapien.',0,1),(40,1,'2014-04-10 02:42:32',1.00,'test',0,1),(41,1,'2014-04-10 02:45:55',3.00,'Test2',0,1),(42,1,'2014-04-10 02:46:26',1.00,'test3',0,1),(43,1,'2014-04-10 02:52:08',2.00,'test4',0,1),(44,1,'2014-04-10 02:57:54',0.01,'test5',0,1),(45,1,'2014-04-10 03:00:48',0.01,'test6',0,1),(46,1,'2014-04-10 03:01:47',2.00,'test7',0,1),(47,1,'2014-04-14 04:35:41',1.00,'YOLOSWAG420',0,17),(48,1,'2014-04-14 05:12:41',2.00,'Message 2',0,17),(49,1,'2014-04-14 05:12:54',2.00,'Message 2',0,17),(50,1,'2014-04-14 05:13:55',2.10,'Message 4',0,17);
 /*!40000 ALTER TABLE `transactions_transactionrequest` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -551,7 +498,7 @@ CREATE TABLE `transactions_transactionrequestthread` (
   KEY `transactions_transactionrequestthread_cc7968a2` (`listing_id`),
   CONSTRAINT `listing_id_refs_id_09a7f81e` FOREIGN KEY (`listing_id`) REFERENCES `transactions_listing` (`id`),
   CONSTRAINT `sender_id_refs_id_aa82fd1b` FOREIGN KEY (`sender_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -560,7 +507,7 @@ CREATE TABLE `transactions_transactionrequestthread` (
 
 LOCK TABLES `transactions_transactionrequestthread` WRITE;
 /*!40000 ALTER TABLE `transactions_transactionrequestthread` DISABLE KEYS */;
-INSERT INTO `transactions_transactionrequestthread` VALUES (1,3,'2014-03-31 19:46:46',1),(2,2,'2014-03-31 19:46:46',2),(3,3,'2014-03-31 19:46:46',3),(4,2,'2014-03-31 19:46:46',4),(5,3,'2014-03-31 19:46:46',5),(6,2,'2014-03-31 19:46:46',6),(7,3,'2014-03-31 19:46:46',7),(8,2,'2014-03-31 19:46:46',8),(9,3,'2014-03-31 19:46:46',9),(10,2,'2014-03-31 19:46:46',10),(11,3,'2014-03-31 19:46:46',11),(12,2,'2014-03-31 19:46:46',12),(13,3,'2014-03-31 19:46:46',13),(14,2,'2014-03-31 19:46:46',14),(15,3,'2014-03-31 19:46:46',15),(16,2,'2014-03-31 19:46:46',16);
+INSERT INTO `transactions_transactionrequestthread` VALUES (1,3,'2014-04-08 16:55:16',1),(2,2,'2014-04-08 16:55:16',2),(3,3,'2014-04-08 16:55:16',3),(4,2,'2014-04-08 16:55:16',4),(5,3,'2014-04-08 16:55:16',5),(6,2,'2014-04-08 16:55:16',6),(7,3,'2014-04-08 16:55:16',7),(8,2,'2014-04-08 16:55:16',8),(9,3,'2014-04-08 16:55:16',9),(10,2,'2014-04-08 16:55:16',10),(11,3,'2014-04-08 16:55:16',11),(12,2,'2014-04-08 16:55:16',12),(13,3,'2014-04-08 16:55:16',13),(14,2,'2014-04-08 16:55:17',14),(15,3,'2014-04-08 16:55:17',15),(16,2,'2014-04-08 16:55:17',16),(17,1,'2014-04-14 04:35:41',15);
 /*!40000 ALTER TABLE `transactions_transactionrequestthread` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -573,4 +520,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-31 19:48:00
+-- Dump completed on 2014-04-14  5:19:00
