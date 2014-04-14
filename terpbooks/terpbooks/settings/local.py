@@ -38,7 +38,10 @@ if USE_CAS:
 INSTALLED_APPS += ('debug_toolbar',)
 
 
-def custom_show_toolbar(self):
+def custom_show_toolbar(request):
+    if request.is_ajax():
+        return False
+
     return True
 
 
