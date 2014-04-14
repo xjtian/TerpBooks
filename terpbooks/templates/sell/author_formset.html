@@ -1,5 +1,6 @@
 {% load staticfiles %}
 
+<body>
 {{ author_formset.management_form }}
 {% for form in author_formset %}
     {% for field in form %}
@@ -17,3 +18,4 @@
         </div>
     {% endfor %}
 {% endfor %}
+</body>

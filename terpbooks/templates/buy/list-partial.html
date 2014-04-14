@@ -1,3 +1,4 @@
+<body>
 <ul class="listing-list">
     {% for listing in listings_list %}
         <li class="listing" detail-url="{% url "listings-detail-tmpl" listing.pk %}">
@@ -25,3 +26,4 @@
         </li>
     {% endif %}
 </ul>
+</body>

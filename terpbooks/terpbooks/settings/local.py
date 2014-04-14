@@ -34,3 +34,14 @@ if USE_CAS:
     MIDDLEWARE_CLASSES += (
         'cas.middleware.CASMiddleware',
     )
+
+INSTALLED_APPS += ('debug_toolbar',)
+
+
+def custom_show_toolbar(self):
+    return True
+
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': 'terpbooks.settings.local.custom_show_toolbar',
+}
