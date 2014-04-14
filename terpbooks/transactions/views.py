@@ -222,14 +222,43 @@ class YourListingsView(ListView):
         return Listing.objects.select_related().filter(owner=self.request.user).order_by('-date_created')
 
 
-class InboxView(ListView):
+class BoxBase(ListView):
+    """
+    Base CBV for inbox and outbox.
+    """
     model = TransactionRequestThread
 
     context_object_name = 'request_list'
     template_name = 'profile/inbox.html'
 
+    # Set to either 'inbox' or 'outbox' by subclasses
+    box = None
+
+    def get_context_data(self, **kwargs):
+        context = super(BoxBase, self).get_context_data(**kwargs)
+        context.update({'box': self.box})
+
+        return context
+
+
+class Inbox(BoxBase):
+    """
+    List of all requests the authenticated user has received for his/her listings.
+    """
+    box = 'inbox'
+
     def get_queryset(self):
         return TransactionRequestThread.objects.select_related().filter(listing__owner=self.request.user).order_by('-date_created')
+
+
+class Outbox(BoxBase):
+    """
+    List of all requests the authenticated user has sent.
+    """
+    box = 'outbox'
+
+    def get_queryset(self):
+        return TransactionRequestThread.objects.select_related().filter(sender=self.request.user).order_by('-date_created')
 
 
 class RequestThreadDisplay(DetailView):

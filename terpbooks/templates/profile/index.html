@@ -5,9 +5,11 @@
     <script>
         var YOUR_LISTINGS_URL = '{% url "profile-listings" %}';
         var INBOX_URL = '{% url "inbox" %}';
+        var OUTBOX_URL = '{% url "outbox" %}';
     </script>
     <script src="{% static "js/profile/listings.js" %}"></script>
     <script src="{% static "js/profile/inbox.js" %}"></script>
+    <script src="{% static "js/profile/outbox.js" %}"></script>
     <script src="{% static "js/profile/main.js" %}"></script>
 {% endblock %}
 
@@ -22,7 +24,7 @@
             <h3 class="profile-heading">Received Requests</h3>
         </div>
 
-        <div class="col-sm-12 col-md-4 sent-list-container">
+        <div class="col-sm-12 col-md-4 outbox-list-container">
             <h3 class="profile-heading">Sent Requests</h3>
         </div>
     </div>

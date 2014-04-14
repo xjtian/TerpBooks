@@ -372,6 +372,10 @@
     margin-bottom: 15px;
 }
 
+.message-thread-table {
+    width: 100%;
+}
+
 .message-thread-table td {
     padding-bottom: 10px;
     vertical-align: middle;
@@ -391,6 +395,7 @@
     padding: 0 10px;
     font-size: 20px;
     font-weight: 700;
+    float: right;
 }
 
 .message-thread-table td.message-date {
