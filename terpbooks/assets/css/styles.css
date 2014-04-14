@@ -249,12 +249,17 @@
     color: #0c0;
 }
 
-.listing-info > button.btn-success {
-    margin: 20px 0 0 60px;
+.listing-info > button.create-thread-btn {
+    margin: 20px 0 20px 60px;
 }
 
 .listing-list > button.listing-back {
     margin-top: 20px;
+}
+
+#create-modal p.bg-success,
+#create-modal p.bg-danger {
+    padding: 15px;
 }
 
 

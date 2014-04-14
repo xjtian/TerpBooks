@@ -117,6 +117,24 @@ function paginate_click() {
         $('li.paginator').on('click', paginate_click);
     });
 }
+
+
+function add_create_form_handler() {
+    $('#create-modal').find('form').on('submit', create_form_submitted);
+}
+
+
+function create_form_submitted() {
+    var data = $(this).serialize();
+    $.post($(this).attr('action'), data, function(data) {
+        $('#create-modal').find('.modal-body').html(data);
+        add_create_form_handler();
+    });
+
+    return false;
+}
+
+
 /*************************
  *
  * End Event Handlers
@@ -229,6 +247,19 @@ function display_listing_detail(is_separate, container, url) {
 
     $.get(url, function(data) {
         container.append(data);
+
+        // Modal popup on 'contact seller' button click
+        container.find('button.create-thread-btn').on('click', function() {
+            var url = $(this).attr('form-url') ;
+
+            $('#create-modal').modal();
+            $.get(url, function(data) {
+                var modal = $('#create-modal');
+                modal.find('.modal-body').html(data);
+
+                add_create_form_handler();
+            });
+        });
     });
 
     container.find('button.listing-back').on('click', function() {
