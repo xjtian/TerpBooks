@@ -40,6 +40,11 @@
         {% endfor %}
 
         <button type="submit" class="btn btn-success">Submit</button>
+        {% if thread.listing.is_available %}
+            <button class="btn btn-default mark-pend-btn" type="button">Mark as Pending</button>
+        {% elif thread.listing.is_pending %}
+            <button class="btn btn-default mark-sold-btn">Mark as Sold</button>
+        {% endif %}
     </form>
 </div>
 </body>

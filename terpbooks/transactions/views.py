@@ -435,17 +435,47 @@ class CreateListingRequest(SingleObjectMixin, FormView):
         return reverse('create_thread', kwargs={'pk': self.get_object().pk})
 
 
-class DeleteListing(View):
-    def delete_listing(self, pk):
+class ListingModificationBase(View):
+    """
+    Base CBV for DeleteListing and MarkListingPending.
+    """
+    def take_action(self, listing):
+        pass
+
+    def post(self, *args, **kwargs):
+        pk = int(kwargs['pk'])
         listing = Listing.objects.get(pk=pk)
 
         if listing.owner != self.request.user:
-            context = {'error_message': "You're not allowed to delete a listing you don't own!"}
+            context = {'error_message': "You're not allowed to modify or delete a listing you don't own!"}
         else:
-            context = {'success_message': "Listing successfully deleted."}
-            listing.delete()
+            context = {'success_message': "Listing successfully modified/deleted."}
+            self.take_action(listing)
 
         return render(self.request, 'profile/delete_listing.html', context)
 
-    def post(self, *args, **kwargs):
-        return self.delete_listing(int(kwargs['pk']))
+
+class DeleteListing(ListingModificationBase):
+    """
+    Delete a listing.
+    """
+    def take_action(self, listing):
+        listing.delete()
+
+
+class MarkListingPending(ListingModificationBase):
+    """
+    Mark a listing as transaction pending.
+    """
+    def take_action(self, listing):
+        listing.status = Listing.PENDING
+        listing.save()
+
+
+class MarkListingSold(ListingModificationBase):
+    """
+    Mark a listing as sold.
+    """
+    def take_action(self, listing):
+        listing.status = Listing.SOLD
+        listing.save()
