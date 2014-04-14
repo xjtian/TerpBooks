@@ -31,6 +31,10 @@ class TransactionRequestForm(BootstrapModelForm):
         model = TransactionRequest
         fields = ('text', 'price', )
 
+    def __init__(self, *args, **kwargs):
+        super(TransactionRequestForm, self).__init__(*args, **kwargs)
+        self.fields['text'].widget.attrs.update({'rows': 5})
+
     def save(self, commit=True, thread=None, user=None):
         request = super(TransactionRequestForm, self).save(commit=False)
 

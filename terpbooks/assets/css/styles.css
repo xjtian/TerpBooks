@@ -351,12 +351,12 @@
     margin: 5px 0;
 }
 
-.profile-item > h4.inbox-price > span,
+.profile-item > h4.inbox-price > span.price,
 .profile-item > h4.listing-price {
     color: #0c0;
 }
 
-.profile-item > h4.inbox-last-msg,
+.profile-item span.time,
 .profile-item > h4.listing-date {
     margin-bottom: 0;
     color: #999;

@@ -82,10 +82,47 @@ class TransactionRequestThread(models.Model):
         """
         return self.messages.exclude(created_by=self.sender, read=False).count()
 
-    def last_offer_price(self):
+    def last_buyer_offer_price(self):
+        """
+        Value of the last offer sent by the buyer.
+        """
         return self.messages.filter(created_by=self.sender).order_by('-date_created')[0].price
 
+    def last_buyer_offer_time(self):
+        """
+        Returns the time that the last buyer offer was made.
+        """
+        return self.messages.filter(created_by=self.sender).order_by('-date_created')[0].date_created
+
+    def last_seller_offer_time(self):
+        """
+        Returns the time that the last seller counteroffer was made,
+        or None if no counteroffers are in this thread yet.
+        """
+        qs = self.messages.exclude(created_by=self.sender).order_by('-date_created')
+        time = None
+
+        if qs.exists():
+            time = qs[0].date_created
+
+        return time
+
+    def last_seller_offer_price(self):
+        """
+        Value of the last counteroffer sent by the seller.
+        """
+        qs = self.messages.exclude(created_by=self.sender).order_by('-date_created')
+        price = 0.00
+
+        if qs.exists():
+            price = qs[0].price
+
+        return price
+
     def last_message_time(self):
+        """
+        Time of the most recent message by either the seller or buyer.
+        """
         return self.messages.order_by('-date_created')[0].date_created
 
     def chron_messages(self):

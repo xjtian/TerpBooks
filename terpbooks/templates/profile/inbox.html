@@ -2,8 +2,14 @@
     {% for request in request_list %}
         <li class="profile-item{% if request.listing.unread_messages > 0 %} unread{% endif %}" thread-url="{% url "thread" request.pk %}">
             <h3>{{ request.listing.book.title }}</h3>
-            <h4 class="inbox-price">Last received offer: <span>${{ request.last_offer_price }}</span></h4>
-            <h4 class="inbox-last-msg">Last message: {{ request.last_message_time|date:"n/j/y g:i A" }}</h4>
+            <h4 class="inbox-price">
+                Last offer: <span class="price">${{ request.last_buyer_offer_price }}</span><span class="time"> at {{ request.last_buyer_offer_time|date:"n/j/y g:i A" }}</span>
+            </h4>
+            <h4 class="inbox-price">Last counteroffer: <span class="price">${{ request.last_seller_offer_price|floatformat:2 }}</span>
+                {% if request.last_seller_offer_time %}
+                    <span class="time">at {{ request.last_seller_offer_time|date:"n/j/y g:i A" }}</span>
+                {% endif %}
+            </h4>
             <h4>Buyer: {{ request.sender }}</h4>
         </li>
     {% endfor %}
