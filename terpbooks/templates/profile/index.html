@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
+{% block title %}TerpBooks | Profile{% endblock %}
 {% block extra_head %}
     <script>
         var YOUR_LISTINGS_URL = '{% url "profile-listings" %}';

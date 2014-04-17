@@ -20,6 +20,17 @@ if settings.USE_CAS:
         url(r'^accounts/logout$', 'cas.views.logout', name='logout'),
         url('^admin/logout/$', RedirectView.as_view(url=reverse_lazy('logout'))),
     )
+else:
+    urlpatterns += patterns('',
+        url(r'^accounts/login$', 'django.contrib.auth.views.login', {
+            'template_name': 'login.html',
+            #'next': reverse_lazy('buy'),
+        }, name='login'),
+
+        url(r'^accounts/logout$', 'django.contrib.auth.views.logout', {
+            'template_name': 'logout.html',
+        }, name='logout'),
+    )
 
 urlpatterns += patterns('',
     # Examples:

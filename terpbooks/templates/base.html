@@ -37,7 +37,7 @@
                         <li {% if active == "buy" %}class="active"{% endif %}><a href="{% url "buy" %}">Buy</a></li>
                         <li {% if active == "sell" %}class="active"{% endif %}><a href="{% url "sell" %}">Sell</a></li>
                         <li {% if active == "profile" %}class="active"{% endif %}>
-                            <a href="{% if user.is_authenticated %}{% url "profile" %}{% else %}#{% endif %}">
+                            <a href="{% if user.is_authenticated %}{% url "profile" %}{% else %}{% url "login" %}{% endif %}">
                                 {% if user.is_authenticated %}
                                 Profile
                                 {% else %}
@@ -45,6 +45,9 @@
                                 {% endif %}
                             </a>
                         </li>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url "logout" %}">Logout</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
