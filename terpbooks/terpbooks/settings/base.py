@@ -1,5 +1,7 @@
 from unipath import Path
+
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
+from django.core.urlresolvers import reverse_lazy
 
 # Paths
 PROJECT_DIR = Path(__file__).ancestor(3)
@@ -74,3 +76,5 @@ CAS_LOGOUT_COMPLETELY = True
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (
     'django.core.context_processors.request',
 )
+
+LOGIN_REDIRECT_URL = reverse_lazy('profile')
