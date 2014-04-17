@@ -28,23 +28,35 @@
     {% endfor %}
     </table>
 
-    <form class="message-form" method="post" action="{% url "thread" thread.pk %}">
-        {% csrf_token %}
-        <h4>Submit a Counteroffer/Message</h4>
-        {% for field in form %}
-            <div class="form-group">
-                {{ field.label_tag }}
-                {{ field.errors }}
-                {{ field }}
-            </div>
-        {% endfor %}
+    {% if thread.listing.is_available %}
+        <form class="message-form" method="post" action="{% url "thread" thread.pk %}">
+            {% csrf_token %}
+            <h4>Submit a Counteroffer/Message</h4>
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field.errors }}
+                    {{ field }}
+                </div>
+            {% endfor %}
 
-        <button type="submit" class="btn btn-success">Submit</button>
-        {% if thread.listing.is_available %}
-            <button class="btn btn-default mark-pend-btn" type="button">Mark as Pending</button>
-        {% elif thread.listing.is_pending %}
-            <button class="btn btn-default mark-sold-btn">Mark as Sold</button>
+            <button type="submit" class="btn btn-success">Submit</button>
+            {% if thread.listing.is_available %}
+                <button class="btn btn-default mark-pend-btn" type="button" data-url="{% url "pending_listing" thread.listing.pk %}">Mark as Pending</button>
+            {% elif thread.listing.is_pending %}
+                <button class="btn btn-default mark-sold-btn" type="button" data-url="{% url "sold_listing" thread.listing.pk %}">Mark as Sold</button>
+            {% endif %}
+        </form>
+    {% elif thread.listing.is_pending %}
+        {% if user == thread.listing.owner %}
+            <p>You've marked this listing as "pending" - messaging is now disabled.</p>
+            <button class="btn btn-default mark-avail-btn" type="button" data-url="{% url "available_listing" thread.listing.pk %}">Mark as Available Again</button>
+        {% else %}
+            <p>The seller has marked this listing as "pending" - he/she has come to an agreement with you or another buyer to sell this book.
+                New messages are now disabled.</p>
         {% endif %}
-    </form>
+    {% elif thread.listing.is_sold %}
+        <p>This listing has been sold.</p>
+    {% endif %}
 </div>
 </body>

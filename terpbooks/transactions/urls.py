@@ -4,7 +4,7 @@ from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
 
 from .views import ListingList, ListingDetail, ProfileListings, CreateEditListing, Inbox, Outbox, RequestThreadDetail, CreateListingRequest
-from .views import DeleteListing, MarkListingPending, MarkListingSold
+from .views import DeleteListing, MarkListingPending, MarkListingSold, MarkListingAvailable
 
 
 urlpatterns = patterns('',
@@ -31,4 +31,5 @@ urlpatterns = patterns('',
     url(r'^delete-listing/(?P<pk>\d+)$', login_required(DeleteListing.as_view()), name='delete_listing'),
     url(r'^pending-listing/(?P<pk>\d+)$', login_required(MarkListingPending.as_view()), name='pending_listing'),
     url(r'^sold-listing/(?P<pk>\d+)$', login_required(MarkListingSold.as_view()), name='sold_listing'),
+    url(r'^available-listing/(?P<pk>\d+)$', login_required(MarkListingAvailable.as_view()), name='available_listing'),
 )

@@ -51,6 +51,24 @@ function show_message_thread(container_str, box) {
 
         container.find('.thread-container button.inbox-back').on('click', back_message_thread(box));
         container.find('.thread-container form').on('submit', message_form_submit(container_str, box));
+
+        // Connect handlers for marking listings as pending/sold/available
+        container.find('.thread-container button.mark-pend-btn').on('click', mark_listing(
+            '<p>Marking a listing as pending means that you have come to an ' +
+                'agreement with a buyer. This will disable all further messages and requests ' +
+                'about this listing. Are you sure you want to do this?</p>',
+            'Yes'
+        ));
+
+        container.find('.thread-container button.mark-sold-btn').on('click', mark_listing(
+            '<p>Are you sure you want to mark this listing as sold?</p>',
+            'Yes'
+        ));
+
+        container.find('.thread-container button.mark-avail-btn').on('click', mark_listing(
+            '<p>Are you sure you want to mark this listing as available again?</p>',
+            'Yes'
+        ));
     }
 }
 

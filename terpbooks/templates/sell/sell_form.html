@@ -6,65 +6,67 @@
     <p class="bg-danger">{{ error_message }}</p>
 {% endif %}
 
-<form class="sell-form" method="post" action="{{ action }}">
-    {% csrf_token %}
-    <div class="col-xs-12 col-sm-6 sell-form-col">
-        {% for field in book_form %}
-            <div class="form-group">
-                {{ field.label_tag }}
-                {{ field.errors }}
-                {{ field }}
-            </div>
-        {% endfor %}
+{% if book_form and semester_form and professor_form and author_formset and listing_form %}
+    <form class="sell-form" method="post" action="{{ action }}">
+        {% csrf_token %}
+        <div class="col-xs-12 col-sm-6 sell-form-col">
+            {% for field in book_form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field.errors }}
+                    {{ field }}
+                </div>
+            {% endfor %}
 
-        {% for field in semester_form %}
+            {% for field in semester_form %}
 
-            <div class="form-group">
-                {{ field.label_tag }}
-                {{ field.errors }}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field.errors }}
 
-                {% if forloop.first %}
-                    {% if semester_form.non_field_errors %}
-                        <ul class="errorlist">
-                            {% for error in semester_form.non_field_errors %}
-                                <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
+                    {% if forloop.first %}
+                        {% if semester_form.non_field_errors %}
+                            <ul class="errorlist">
+                                {% for error in semester_form.non_field_errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
 
-                {{ field }}
+                    {{ field }}
+                </div>
+            {% endfor %}
+
+
+            {% for field in professor_form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field.errors }}
+                    {{ field }}
+                </div>
+            {% endfor %}
+
+
+            <div class="author-formset-container">
+                {% include "sell/author_formset.html" %}
             </div>
-        {% endfor %}
-
-
-        {% for field in professor_form %}
-            <div class="form-group">
-                {{ field.label_tag }}
-                {{ field.errors }}
-                {{ field }}
-            </div>
-        {% endfor %}
-
-
-        <div class="author-formset-container">
-            {% include "sell/author_formset.html" %}
         </div>
-    </div>
 
-    <div class="col-xs-12 col-sm-6 sell-form-col">
-        {% for field in listing_form %}
-            <div class="form-group">
-                {{ field.label_tag }}
-                {{ field.errors }}
-                {{ field }}
-            </div>
-        {% endfor %}
-    </div>
+        <div class="col-xs-12 col-sm-6 sell-form-col">
+            {% for field in listing_form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field.errors }}
+                    {{ field }}
+                </div>
+            {% endfor %}
+        </div>
 
-    <button type="submit" class="btn btn-success sell-submit">Submit</button>
-    {% if pk %}
-        <button class="btn btn-danger delete-submit" type="button" data-url="{% url "delete_listing" pk %}">Delete this Listing</button>
-    {% endif %}
-</form>
+        <button type="submit" class="btn btn-success sell-submit">Submit</button>
+        {% if pk %}
+            <button class="btn btn-danger delete-submit" type="button" data-url="{% url "delete_listing" pk %}">Delete this Listing</button>
+        {% endif %}
+    </form>
+{% endif %}
 </body>

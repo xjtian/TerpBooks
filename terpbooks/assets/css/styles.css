@@ -415,5 +415,15 @@
 }
 
 .message-form {
-    margin-top: 20px;
+    margin: 25px auto;
+}
+
+.message-form > button.mark-pend-btn,
+.message-form > button.mark-sold-btn {
+    float: right;
+}
+
+button.mark-avail-btn {
+    float: right;
+    margin-bottom: 25px;
 }

@@ -108,6 +108,13 @@ class CreateEditListing(View):
             if listing.owner != request.user:
                 return HttpResponseForbidden()
 
+            if not listing.is_available():
+                if listing.is_pending():
+                    return self.render_to_template(pk, {'error_message': "You've marked this listing as pending, so it is uneditable."})
+                elif listing.is_sold():
+                    return self.render_to_template(pk, {'error_message': "You've marked this listing as sold, so it is uneditable."})
+                raise Exception()
+
             book_form = TextbookForm(instance=listing.book)
             listing_form = ListingForm(instance=listing)
 
@@ -155,8 +162,17 @@ class CreateEditListing(View):
             pk = int(kwargs['pk'])
 
             listing = Listing.objects.select_related().get(pk=pk)
+
             if listing.owner != request.user:
                 return HttpResponseForbidden()
+
+            if not listing.is_available():
+                if listing.is_pending():
+                    return self.render_to_template(pk, {'error_message': "You've marked this listing as pending, so it is uneditable."})
+                elif listing.is_sold():
+                    return self.render_to_template(pk, {'error_message': "You've marked this listing as sold, so it is uneditable."})
+                raise Exception()
+
             book_form = TextbookForm(request.POST, instance=listing.book)
             listing_form = ListingForm(request.POST, instance=listing)
 
@@ -314,6 +330,11 @@ class RequestThreadSubmit(SingleObjectMixin, FormView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
+
+        # TODO: return error message instead of 403 for message added to unavailable listing
+        if not self.object.is_available():
+            return HttpResponseForbidden()
+
         return super(RequestThreadSubmit, self).post(request, *args, **kwargs)
 
     def get_queryset(self):
@@ -325,7 +346,7 @@ class RequestThreadSubmit(SingleObjectMixin, FormView):
         )
 
     def form_valid(self, form):
-        thread = self.get_object()
+        thread = self.object
         form.save(thread=thread, user=self.request.user)
 
         return super(RequestThreadSubmit, self).form_valid(form)
@@ -435,30 +456,53 @@ class CreateListingRequest(SingleObjectMixin, FormView):
         return reverse('create_thread', kwargs={'pk': self.get_object().pk})
 
 
-class ListingModificationBase(View):
+class ListingModificationBase(SingleObjectMixin, View):
     """
-    Base CBV for DeleteListing and MarkListingPending.
+    Base CBV for DeleteListing, MarkListingPending, MarkListingSold, and MarkListingAvailable.
     """
+    success_message = "Listing successfully modified/deleted."
+
+    model = Listing
+
     def take_action(self, listing):
+        """
+        Action to take on the listing.
+        """
         pass
 
+    def extra_validation(self, listing):
+        """
+        Extra validation action to take on dispatch.
+        """
+        return True, ''
+
+    def get_queryset(self):
+        return Listing.objects.filter(owner=self.request.user)
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        valid, message = self.extra_validation(self.object)
+        if not valid:
+            return render(self.request, 'profile/modify_listing.html', {'error_message': message})
+
+        return super(ListingModificationBase, self).dispatch(request, *args, **kwargs)
+
     def post(self, *args, **kwargs):
-        pk = int(kwargs['pk'])
-        listing = Listing.objects.get(pk=pk)
+        listing = self.object
 
-        if listing.owner != self.request.user:
-            context = {'error_message': "You're not allowed to modify or delete a listing you don't own!"}
-        else:
-            context = {'success_message': "Listing successfully modified/deleted."}
-            self.take_action(listing)
+        context = {'success_message': self.success_message}
+        self.take_action(listing)
 
-        return render(self.request, 'profile/delete_listing.html', context)
+        return render(self.request, 'profile/modify_listing.html', context)
 
 
 class DeleteListing(ListingModificationBase):
     """
     Delete a listing.
     """
+    success_message = "Listing successfully deleted."
+
     def take_action(self, listing):
         listing.delete()
 
@@ -467,9 +511,18 @@ class MarkListingPending(ListingModificationBase):
     """
     Mark a listing as transaction pending.
     """
+    success_message = "Listing successfully marked as pending"
+    error_message = "You're not allowed to modify a listing you don't own!"
+
     def take_action(self, listing):
         listing.status = Listing.PENDING
         listing.save()
+
+    def extra_validation(self, listing):
+        if listing.status != Listing.AVAILABLE:
+            return False, "Only available listings can be marked as available."
+
+        return True, ''
 
 
 class MarkListingSold(ListingModificationBase):
@@ -478,4 +531,19 @@ class MarkListingSold(ListingModificationBase):
     """
     def take_action(self, listing):
         listing.status = Listing.SOLD
+        listing.save()
+
+    def extra_validation(self, listing):
+        if listing.status != Listing.PENDING:
+            return False, "Only pending listings can be marked as sold."
+
+        return True, ''
+
+
+class MarkListingAvailable(ListingModificationBase):
+    """
+    Mark a listing as available.
+    """
+    def take_action(self, listing):
+        listing.status = Listing.AVAILABLE
         listing.save()
