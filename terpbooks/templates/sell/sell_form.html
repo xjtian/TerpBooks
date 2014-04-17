@@ -65,7 +65,7 @@
 
         <button type="submit" class="btn btn-success sell-submit">Submit</button>
         {% if pk %}
-            <button class="btn btn-danger delete-submit" type="button" data-url="{% url "delete_listing" pk %}">Delete this Listing</button>
+            <button class="btn btn-danger delete-submit" type="button" data-url="{% url "delete-listing" pk %}">Delete this Listing</button>
         {% endif %}
     </form>
 {% endif %}

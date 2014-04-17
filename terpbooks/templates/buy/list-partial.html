@@ -1,7 +1,7 @@
 <body>
 <ul class="listing-list">
     {% for listing in listings_list %}
-        <li class="listing" detail-url="{% url "listings-detail-tmpl" listing.pk %}">
+        <li class="listing" detail-url="{% url "listing-detail" listing.pk %}">
             <h3>{{ listing.book.title }}</h3>
             <h4 class="listing-price">${{ listing.asking_price }}</h4>
             <h4>
@@ -22,7 +22,7 @@
 
     {% if page_obj.has_next %}
         <li class="paginator">
-            <h4 paginate-data="{% url "listings-all" %}?page={{ page_obj.next_page_number }}">Load More</h4>
+            <h4 paginate-data="{% url "listing-list" %}?page={{ page_obj.next_page_number }}">Load More</h4>
         </li>
     {% endif %}
 </ul>

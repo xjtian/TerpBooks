@@ -453,7 +453,7 @@ class CreateListingRequest(SingleObjectMixin, FormView):
         return self.render_to_response(context)
 
     def get_success_url(self):
-        return reverse('create_thread', kwargs={'pk': self.get_object().pk})
+        return reverse('create-thread', kwargs={'pk': self.get_object().pk})
 
 
 class ListingModificationBase(SingleObjectMixin, View):

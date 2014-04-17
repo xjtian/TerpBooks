@@ -8,8 +8,8 @@ from .views import DeleteListing, MarkListingPending, MarkListingSold, MarkListi
 
 
 urlpatterns = patterns('',
-    url(r'^listings/all$', ListingList.as_view(), name='listings-all'),
-    url(r'^listings/all/(?P<pk>\d+)$', ListingDetail.as_view(), name='listings-detail-tmpl'),
+    url(r'^listings/all$', ListingList.as_view(), name='listing-list'),
+    url(r'^listings/all/(?P<pk>\d+)$', ListingDetail.as_view(), name='listing-detail'),
 
     url(r'^listings/profile$', login_required(ProfileListings.as_view()), name='profile-listings'),
 
@@ -26,10 +26,10 @@ urlpatterns = patterns('',
     url(r'^outbox$', login_required(Outbox.as_view()), name='outbox'),
 
     url(r'^threads/(?P<pk>\d+)$', login_required(RequestThreadDetail.as_view()), name='thread'),
-    url(r'^create-thread/(?P<pk>\d+)$', login_required(CreateListingRequest.as_view()), name='create_thread'),
+    url(r'^create-thread/(?P<pk>\d+)$', login_required(CreateListingRequest.as_view()), name='create-thread'),
 
-    url(r'^delete-listing/(?P<pk>\d+)$', login_required(DeleteListing.as_view()), name='delete_listing'),
-    url(r'^pending-listing/(?P<pk>\d+)$', login_required(MarkListingPending.as_view()), name='pending_listing'),
-    url(r'^sold-listing/(?P<pk>\d+)$', login_required(MarkListingSold.as_view()), name='sold_listing'),
-    url(r'^available-listing/(?P<pk>\d+)$', login_required(MarkListingAvailable.as_view()), name='available_listing'),
+    url(r'^delete-listing/(?P<pk>\d+)$', login_required(DeleteListing.as_view()), name='delete-listing'),
+    url(r'^pending-listing/(?P<pk>\d+)$', login_required(MarkListingPending.as_view()), name='pending-listing'),
+    url(r'^sold-listing/(?P<pk>\d+)$', login_required(MarkListingSold.as_view()), name='sold-listing'),
+    url(r'^available-listing/(?P<pk>\d+)$', login_required(MarkListingAvailable.as_view()), name='available-listing'),
 )
