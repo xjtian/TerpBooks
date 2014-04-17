@@ -321,6 +321,12 @@
 *
 ***********************************/
 
+.listing-list-container,
+.inbox-list-container,
+.outbox-list-container {
+    overflow-y: auto;
+}
+
 .profile-heading {
     font-weight: 700;
 }

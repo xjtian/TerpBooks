@@ -49,6 +49,8 @@ function show_message_thread(container_str, box) {
         container.find('.thread-container').remove();
         container.append(data);
 
+        container.animate({ scrollTop: container.prop('scrollHeight') }, 500);
+
         container.find('.thread-container button.inbox-back').on('click', back_message_thread(box));
         container.find('.thread-container form').on('submit', message_form_submit(container_str, box));
 
@@ -72,8 +74,41 @@ function show_message_thread(container_str, box) {
     }
 }
 
+
+/**
+ * Resizes all columns on profile page to page height - header and banner
+ */
+function resize_columns() {
+    var h = $(window).height() - $('.navbar').height() - $('.banner').height();
+
+    $('.listing-list-container').height(h);
+    $('.inbox-list-container').height(h);
+    $('.outbox-list-container').height(h);
+}
+
+
+function on_resize_handler() {
+    var timeout_id = null;
+
+    return function() {
+        if (timeout_id != null) {
+            clearTimeout(timeout_id);
+        }
+
+        timeout_id = setTimeout(function() {
+            resize_columns();
+        }, 200);
+    }
+}
+
+
 $(document).ready(function() {
     load_listings();
     load_inbox();
     load_outbox();
+});
+
+$(window).load(function() {
+    resize_columns();
+    $(window).on('resize', on_resize_handler());
 });
