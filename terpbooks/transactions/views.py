@@ -331,7 +331,6 @@ class RequestThreadSubmit(SingleObjectMixin, FormView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
 
-        # TODO: return error message instead of 403 for message added to unavailable listing
         if not self.object.is_available():
             return HttpResponseForbidden()
 
@@ -390,7 +389,7 @@ class CreateListingRequest(SingleObjectMixin, FormView):
     form_class = TransactionRequestForm
 
     model = Listing
-    queryset = Listing.objects.filter(status=Listing.AVAILABLE)
+    queryset = Listing.objects.all()
     context_object_name = 'listing'
 
     template_name = 'buy/send_request.html'
@@ -405,6 +404,11 @@ class CreateListingRequest(SingleObjectMixin, FormView):
             # You can't buy your own book
             return render(request, 'buy/send_request.html', {
                 'error_message': "You can't buy your own book!",
+            })
+
+        if not self.object.is_available():
+            return render(request, 'buy/send_request.html', {
+                'error_message': "This listing isn't available anymore.",
             })
 
         return super(CreateListingRequest, self).dispatch(request, *args, **kwargs)
