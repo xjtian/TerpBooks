@@ -48,3 +48,5 @@ def custom_show_toolbar(request):
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': 'terpbooks.settings.local.custom_show_toolbar',
 }
+
+from ..signals import *

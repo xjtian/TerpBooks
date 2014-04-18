@@ -18,3 +18,5 @@ if USE_CAS:
     MIDDLEWARE_CLASSES += (
         'cas.middleware.CASMiddleware',
     )
+
+from ..signals import *
