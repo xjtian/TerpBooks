@@ -30,6 +30,11 @@ class SemesterForm(BootstrapForm):
                               ])
 
     def is_valid(self):
+        """
+        Extra condition on base is_valid that rejects if only one field
+        out of semester and year is filled out. Valid if both fields
+        are filled out or blank.
+        """
         valid = super(SemesterForm, self).is_valid()
         if not valid:
             return False
@@ -45,6 +50,11 @@ class SemesterForm(BootstrapForm):
         return True
 
     def save(self, commit=True):
+        """
+        Returns the Semester instance this form is bound to. If the fields
+        are blank, returns None. commit=True saves instance, False
+        returns the instance without saving.
+        """
         semester = self.cleaned_data['semester']
         year = self.cleaned_data['year']
 
