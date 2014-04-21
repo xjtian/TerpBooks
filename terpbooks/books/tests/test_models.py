@@ -21,11 +21,8 @@ class SemesterTests(TestCase):
         with self.assertRaises(ValidationError):
             Semester(year=date.today().year + 2, semester=Semester.FALL).save()
 
-        try:
-            Semester(year=date.today().year + 1, semester=Semester.FALL).save()
-            Semester(year=2005, semester=Semester.FALL).save()
-        except ValidationError:
-            self.fail('Semester model validator rejected valid fields.')
+        Semester(year=date.today().year + 1, semester=Semester.FALL).save()
+        Semester(year=2005, semester=Semester.FALL).save()
 
 
 class ProfessorTests(TestCase):
@@ -39,11 +36,8 @@ class ProfessorTests(TestCase):
         with self.assertRaises(ValidationError):
             Professor(first_name='Bob', last_name='Bobby').save()
 
-        try:
-            Professor(first_name='Bob', last_name='Notbobby').save()
-            Professor(first_name='Notbob', last_name='Bobby').save()
-        except ValidationError:
-            self.fail('Professor model unique_together rejected valid combination.')
+        Professor(first_name='Bob', last_name='Notbobby').save()
+        Professor(first_name='Notbob', last_name='Bobby').save()
 
 
 class TextbookTests(TestCase):
@@ -60,12 +54,9 @@ class TextbookTests(TestCase):
         with self.assertRaises(ValidationError):
             Textbook(title='title', isbn='1234 -a').save()
 
-        try:
-            Textbook(title='title', isbn='123').save()
-            Textbook(title='title', isbn=' - - -').save()
-            Textbook(title='title', isbn='       1').save()
-        except ValidationError:
-            self.fail('Textbook model isbn validator rejected valid field.')
+        Textbook(title='title', isbn='123').save()
+        Textbook(title='title', isbn=' - - -').save()
+        Textbook(title='title', isbn='       1').save()
 
     def test_course_code_validator(self):
         with self.assertRaises(ValidationError):
@@ -77,10 +68,7 @@ class TextbookTests(TestCase):
         with self.assertRaises(ValidationError):
             Textbook(title='title', course_code='ABC123').save()
 
-        try:
-            Textbook(title='title', course_code='ABCD123').save()
-        except ValidationError:
-            self.fail('Textbook model course code validator rejected valid field.')
+        Textbook(title='title', course_code='ABCD123').save()
 
     def test_authors_string(self):
         book, _ = Textbook.objects.get_or_create(title='title')
@@ -113,7 +101,4 @@ class AuthorTests(TestCase):
 
         book2, _ = Textbook.objects.get_or_create(title='title2')
 
-        try:
-            Author.objects.get_or_create(first_name='Dead', last_name='Beef', book=book2)
-        except ValidationError:
-            self.fail('Author model unique_together rejected valid combination.')
+        Author.objects.get_or_create(first_name='Dead', last_name='Beef', book=book2)

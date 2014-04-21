@@ -61,8 +61,9 @@ class SemesterForm(BootstrapForm):
         if len(semester) == 0 and year is None:
             return None
 
-        if Semester.objects.filter(semester=semester, year=year).exists():
-            return Semester.objects.get(semester=semester, year=year)
+        existing = Semester.objects.filter(semester=semester, year=year)
+        if existing.exists():
+            return existing[0]
 
         s = Semester(semester=semester, year=year)
         if commit:
@@ -124,8 +125,6 @@ class AuthorForm(NameSplitBootstrapForm):
         if len(fn) == 0 or len(ln) == 0:
             return None
 
-        to_delete = self.cleaned_data.get('DELETE', False)
-
         if book is None:
             raise Exception('Cannot save author form with empty book.')
 
@@ -134,23 +133,15 @@ class AuthorForm(NameSplitBootstrapForm):
         if existing.exists():
             return existing[0]
 
-        if not to_delete:
-            author = Author(first_name=fn, last_name=ln, book=book)
+        author = Author(first_name=fn, last_name=ln, book=book)
 
-            if commit:
-                author.save()
+        if commit:
+            author.save()
 
-            return author
-        else:
-            if existing.exists():
-                # Delete the first instance if there are multiple authors with the same name
-                existing[0].delete()
-
-            return None
+        return author
 
 
 AuthorFormSet = formset_factory(AuthorForm)
-AuthorDeleteFormSet = formset_factory(AuthorForm, can_delete=True)
 
 
 class ProfessorForm(NameSplitBootstrapForm):

@@ -91,6 +91,13 @@ class SemesterFormTests(TestCase):
         # Verify saved to DB
         self.assertTrue(Semester.objects.filter(semester=Semester.FALL, year=2010).exists())
 
+        # Existing semester object - assert respects unique_together
+        s = SemesterForm(data=data)
+        self.assertTrue(s.is_valid())
+        self.assertEqual(obj, s.save())
+        self.assertEqual(obj, s.save(commit=False))
+        self.assertEqual(1, len(Semester.objects.filter(semester=Semester.FALL, year=2010)))
+
 
 class NameSplitBootstrapFormTests(TestCase):
     def test_constructor(self):
@@ -197,6 +204,12 @@ class AuthorFormTests(TestCase):
 
         data = {'author': 'dead beef'}
         book, _ = Textbook.objects.get_or_create(title='title')
+
+        # No book throws exception
+        f = AuthorForm(data={'author': 'dead beef'})
+        self.assertTrue(f.is_valid())
+        with self.assertRaises(Exception):
+            f.save(None)
 
         # Standard case
         f = AuthorForm(data=data)
