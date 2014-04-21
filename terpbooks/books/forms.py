@@ -89,11 +89,11 @@ class NameSplitBootstrapForm(forms.Form):
                                                             )])
         self.fields[self.name_field_name].widget.attrs.update({'class': 'form-control'})
 
-    def save_helper(self):
+    def split_name_field(self):
         """
         Returns the split first and last names from field input.
         """
-        if self.name_field_name not in self.cleaned_data or len(self.cleaned_data[self.name_field_name]) == 0:
+        if not hasattr(self, 'cleaned_data') or self.name_field_name not in self.cleaned_data or len(self.cleaned_data[self.name_field_name]) == 0:
             return '', ''
 
         split = self.cleaned_data[self.name_field_name].split()
@@ -111,7 +111,7 @@ class AuthorForm(NameSplitBootstrapForm):
         super(AuthorForm, self).__init__(*args, **kwargs)
 
     def save(self, book, commit=True):
-        fn, ln = super(AuthorForm, self).save_helper()
+        fn, ln = super(AuthorForm, self).split_name_field()
         if len(fn) == 0 or len(ln) == 0:
             return None
 
@@ -150,7 +150,7 @@ class ProfessorForm(NameSplitBootstrapForm):
         super(ProfessorForm, self).__init__(*args, **kwargs)
 
     def save(self, commit=True):
-        fn, ln = super(ProfessorForm, self).save_helper()
+        fn, ln = super(ProfessorForm, self).split_name_field()
 
         if len(fn) == 0 or len(ln) == 0:
             return None

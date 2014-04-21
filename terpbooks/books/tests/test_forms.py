@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from datetime import date
 
+from django import forms
 from django.test import TestCase
 
 from ..models import Semester, Author, Professor
@@ -89,3 +90,87 @@ class SemesterFormTests(TestCase):
         self.assertEqual(2010, obj.year)
         # Verify saved to DB
         self.assertTrue(Semester.objects.filter(semester=Semester.FALL, year=2010).exists())
+
+
+class NameSplitBootstrapFormTests(TestCase):
+    def test_constructor(self):
+        # Don't pass field names in constructor kwargs
+        f = NameSplitBootstrapForm()
+
+        self.assertEqual('first_name', f.first_name_field)
+        self.assertEqual('last_name', f.last_name_field)
+        self.assertEqual('name', f.name_field_name)
+
+        # Did the field get instantiated? Is it a bootstrap control?
+        self.assertEqual(forms.CharField, f.fields['name'].__class__)
+        self.assertEqual('form-control', f.fields['name'].widget.attrs['class'])
+
+        # Pass all field names
+        f = NameSplitBootstrapForm(first_name_field='a', last_name_field='b', name_field_name='c')
+        self.assertEqual('a', f.first_name_field)
+        self.assertEqual('b', f.last_name_field)
+        self.assertEqual('c', f.name_field_name)
+
+        # Did the field get instantiated? Is it a bootstrap control?
+        self.assertEqual(forms.CharField, f.fields['c'].__class__)
+        self.assertEqual('form-control', f.fields['c'].widget.attrs['class'])
+
+    def test_validators(self):
+        # Empty valid
+        data = {'name': ''}
+        f = NameSplitBootstrapForm(data=data)
+        self.assertTrue(f.is_valid())
+
+        # Two words valid
+        data = {'name': 'dead beef'}
+        f = NameSplitBootstrapForm(data=data)
+        self.assertTrue(f.is_valid())
+
+        # More than two words valid
+        data = {'name': 'dead beef pork chicken'}
+        f = NameSplitBootstrapForm(data=data)
+        self.assertTrue(f.is_valid())
+
+        # Weird stuff valid
+        data = {'name': '12.8x8d &#^$%$()v'}
+        f = NameSplitBootstrapForm(data=data)
+        self.assertTrue(f.is_valid())
+
+        # One word not valid
+        data = {'name': 'dead'}
+        f = NameSplitBootstrapForm(data=data)
+        self.assertFalse(f.is_valid())
+
+        # One word with spaces after not valid
+        data = {'name': 'dead   '}
+        f = NameSplitBootstrapForm(data=data)
+        self.assertFalse(f.is_valid())
+
+    def test_save_helper(self):
+        # No cleaned_data attribute (don't call is_valid)
+        f = NameSplitBootstrapForm(data={})
+        self.assertEqual(('', ''), f.split_name_field())
+
+        # Invalid form
+        data = {'name': 'dead'}
+        f = NameSplitBootstrapForm(data=data)
+        self.assertFalse(f.is_valid())
+        self.assertEqual(('', ''), f.split_name_field())
+
+        # Empty field
+        data = {'name': ''}
+        f = NameSplitBootstrapForm(data=data)
+        self.assertTrue(f.is_valid())
+        self.assertEqual(('', ''), f.split_name_field())
+
+        # Two words
+        data = {'name': 'dead beef'}
+        f = NameSplitBootstrapForm(data=data)
+        self.assertTrue(f.is_valid())
+        self.assertEqual(('dead', 'beef'), f.split_name_field())
+
+        # More than two words - first name first word, last name everything else
+        data = {'name': 'dead beef pork chicken'}
+        f = NameSplitBootstrapForm(data=data)
+        self.assertTrue(f.is_valid())
+        self.assertEqual(('dead', 'beef pork chicken'), f.split_name_field())
