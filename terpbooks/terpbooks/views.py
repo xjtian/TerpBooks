@@ -1,19 +1,27 @@
 from django.views import generic
-from django.shortcuts import render
 
 
-class BuyPage(generic.View):
+class BuyPage(generic.TemplateView):
     """
     Buy page view.
     """
-    def get(self, request):
-        return render(request, 'buy/index.html', {
-            'active': 'buy',
-        })
+    template_name = 'buy/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(BuyPage, self).get_context_data(**kwargs)
+        context.update({'active': 'buy'})
+
+        return context
 
 
-class ProfilePage(generic.View):
-    def get(self, request):
-        return render(request, 'profile/index.html', {
-            'active': 'profile',
-        })
+class ProfilePage(generic.TemplateView):
+    """
+    Profile page view.
+    """
+    template_name = 'profile/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfilePage, self).get_context_data(**kwargs)
+        context.update({'active': 'profile'})
+
+        return context
