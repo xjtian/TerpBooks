@@ -24,6 +24,10 @@ class SemesterTests(TestCase):
         Semester(year=date.today().year + 1, semester=Semester.FALL).save()
         Semester(year=2005, semester=Semester.FALL).save()
 
+    def test_unicode(self):
+        s, _ = Semester.objects.get_or_create(year=2010, semester=Semester.FALL)
+        self.assertEqual(u'Fall 2010', unicode(s))
+
 
 class ProfessorTests(TestCase):
     def setUp(self):
@@ -38,6 +42,13 @@ class ProfessorTests(TestCase):
 
         Professor(first_name='Bob', last_name='Notbobby').save()
         Professor(first_name='Notbob', last_name='Bobby').save()
+
+    def test_unicode(self):
+        p, _ = Professor.objects.get_or_create(first_name='Dead', last_name='Beef')
+        self.assertEqual(u'Dead Beef', unicode(p))
+
+        p, _ = Professor.objects.get_or_create(first_name='Dead', last_name='Beef Pork Chicken')
+        self.assertEqual(u'Dead Beef Pork Chicken', unicode(p))
 
 
 class TextbookTests(TestCase):
@@ -84,6 +95,10 @@ class TextbookTests(TestCase):
         Author.objects.get_or_create(first_name='FN', last_name='AAA', book=book)
         self.assertEqual(u'FN AAA, Dead Beef, Beef Dead', book.authors_string())
 
+    def test_unicode(self):
+        book, _ = Textbook.objects.get_or_create(title='title', isbn='123', course_code='ABCD123')
+        self.assertEqual(u'title', unicode(book))
+
 
 class AuthorTests(TestCase):
     def setUp(self):
@@ -102,3 +117,10 @@ class AuthorTests(TestCase):
         book2, _ = Textbook.objects.get_or_create(title='title2')
 
         Author.objects.get_or_create(first_name='Dead', last_name='Beef', book=book2)
+
+    def test_unicode(self):
+        a, _ = Author.objects.get_or_create(first_name='Dead', last_name='Beef', book=self.book)
+        self.assertEqual(u'Dead Beef', unicode(a))
+
+        a, _ = Author.objects.get_or_create(first_name='Dead', last_name='Beef Pork Chicken', book=self.book)
+        self.assertEqual(u'Dead Beef Pork Chicken', unicode(a))
