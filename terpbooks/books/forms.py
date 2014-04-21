@@ -111,6 +111,15 @@ class AuthorForm(NameSplitBootstrapForm):
         super(AuthorForm, self).__init__(*args, **kwargs)
 
     def save(self, book, commit=True):
+        """
+        Returns the Author instance associated with the provided Textbook.
+        Returns None if the form was blank. If commit=True, the instance
+        is saved to the DB, otherwise it's returned without being saved.
+
+        If the instance already exists in the database, this will return
+        the existing instance no matter what the value of commit is, to
+        respect the unique_together constraint of the Author model.
+        """
         fn, ln = super(AuthorForm, self).split_name_field()
         if len(fn) == 0 or len(ln) == 0:
             return None
@@ -123,7 +132,7 @@ class AuthorForm(NameSplitBootstrapForm):
         # Respect unique_together
         existing = Author.objects.filter(first_name=fn, last_name=ln, book=book)
         if existing.exists():
-            return Author.objects.get(first_name=fn, last_name=ln, book=book)
+            return existing[0]
 
         if not to_delete:
             author = Author(first_name=fn, last_name=ln, book=book)

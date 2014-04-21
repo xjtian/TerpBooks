@@ -5,7 +5,7 @@ from datetime import date
 from django import forms
 from django.test import TestCase
 
-from ..models import Semester, Author, Professor
+from ..models import Semester, Author, Professor, Textbook
 from ..forms import SemesterForm, NameSplitBootstrapForm, AuthorForm, ProfessorForm
 
 
@@ -174,3 +174,51 @@ class NameSplitBootstrapFormTests(TestCase):
         f = NameSplitBootstrapForm(data=data)
         self.assertTrue(f.is_valid())
         self.assertEqual(('dead', 'beef pork chicken'), f.split_name_field())
+
+
+class AuthorFormTests(TestCase):
+    def test_constructor(self):
+        f = AuthorForm()
+
+        self.assertEqual('first_name', f.first_name_field)
+        self.assertEqual('last_name', f.last_name_field)
+        self.assertEqual('author', f.name_field_name)
+
+        # Did the field get instantiated? Is it a bootstrap control?
+        self.assertEqual(forms.CharField, f.fields['author'].__class__)
+        self.assertEqual('form-control', f.fields['author'].widget.attrs['class'])
+
+    def test_save(self):
+        # Empty form returns None
+        f = AuthorForm(data={'author': ''})
+        self.assertIsNone(f.save(None))
+        self.assertTrue(f.is_valid())
+        self.assertIsNone(f.save(None))
+
+        data = {'author': 'dead beef'}
+        book, _ = Textbook.objects.get_or_create(title='title')
+
+        # Standard case
+        f = AuthorForm(data=data)
+        self.assertTrue(f.is_valid())
+
+        obj = f.save(book, commit=False)
+        self.assertEqual(Author(first_name='dead', last_name='beef', book=book), obj)
+        # Assert not saved to DB
+        self.assertFalse(Author.objects.all().exists())
+
+        obj = f.save(book)
+        self.assertEqual('dead', obj.first_name)
+        self.assertEqual('beef', obj.last_name)
+        self.assertEqual(book, obj.book)
+        # Assert saved to DB
+        self.assertTrue(Author.objects.filter(first_name='dead', last_name='beef', book=book).exists())
+
+        # Existing author object - test respect unique_together
+        f = AuthorForm(data=data)
+        self.assertTrue(f.is_valid())
+        self.assertEqual(obj, f.save(book))
+
+        f = AuthorForm(data=data)
+        self.assertTrue(f.is_valid())
+        self.assertEqual(obj, f.save(book, commit=False))
