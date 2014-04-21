@@ -1,14 +1,17 @@
 from __future__ import absolute_import
 
 from django.views import generic
-from django.forms.formsets import formset_factory
 from django.shortcuts import render
 
-from .forms import AuthorForm, AuthorFormSet
+from .forms import AuthorFormSet
 
 
 class DynamicAuthorForms(generic.View):
     def post(self, request):
+        """
+        Binds posted data to an AuthorFormSet, then returns a new formset
+        with the posted data and an extra blank form at the end.
+        """
         posted_formset = AuthorFormSet(request.POST)
 
         initial = []
