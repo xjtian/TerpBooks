@@ -222,3 +222,49 @@ class AuthorFormTests(TestCase):
         f = AuthorForm(data=data)
         self.assertTrue(f.is_valid())
         self.assertEqual(obj, f.save(book, commit=False))
+
+
+class ProfessorFormTests(TestCase):
+    def test_constructor(self):
+        f = ProfessorForm()
+
+        self.assertEqual('first_name', f.first_name_field)
+        self.assertEqual('last_name', f.last_name_field)
+        self.assertEqual('professor', f.name_field_name)
+
+        # Did the field get instantiated? Is it a bootstrap control?
+        self.assertEqual(forms.CharField, f.fields['professor'].__class__)
+        self.assertEqual('form-control', f.fields['professor'].widget.attrs['class'])
+
+    def test_save(self):
+        # Empty form returns None
+        f = ProfessorForm(data={'professor': ''})
+        self.assertIsNone(f.save())
+        self.assertTrue(f.is_valid())
+        self.assertIsNone(f.save())
+
+        data = {'professor': 'dead beef'}
+
+        # Standard case
+        f = ProfessorForm(data=data)
+        self.assertTrue(f.is_valid())
+
+        obj = f.save(commit=False)
+        self.assertEqual(Professor(first_name='dead', last_name='beef'), obj)
+        # Assert not saved to DB
+        self.assertFalse(Professor.objects.all().exists())
+
+        obj = f.save()
+        self.assertEqual('dead', obj.first_name)
+        self.assertEqual('beef', obj.last_name)
+        # Assert saved to DB
+        self.assertTrue(Professor.objects.filter(first_name='dead', last_name='beef').exists())
+
+        # Existing professor object - test respect unique_together
+        f = ProfessorForm(data=data)
+        self.assertTrue(f.is_valid())
+        self.assertEqual(obj, f.save())
+
+        f = ProfessorForm(data=data)
+        self.assertTrue(f.is_valid())
+        self.assertEqual(obj, f.save(commit=False))

@@ -165,8 +165,9 @@ class ProfessorForm(NameSplitBootstrapForm):
             return None
 
         # Respect unique_together constraint
-        if Professor.objects.filter(first_name=fn, last_name=ln).exists():
-            return Professor.objects.get(first_name=fn, last_name=ln)
+        existing = Professor.objects.filter(first_name=fn, last_name=ln)
+        if existing.exists():
+            return existing[0]
 
         p = Professor(first_name=fn, last_name=ln)
         if commit:
