@@ -250,3 +250,18 @@ class TransactionRequestThreadTests(TestCase):
         self.thread.mark_seen_by(user)
         for r in self.thread.messages.all():
             self.assertFalse(r.read)
+
+
+class TransactionRequestTests(TestCase):
+    def setUp(self):
+        self.book, _ = Textbook.objects.get_or_create(title='title')
+        self.seller = User.objects.create_user(username='user1', password='password')
+        self.buyer = User.objects.create_user(username='user2', password='password')
+        self.listing, _ = Listing.objects.get_or_create(book=self.book, owner=self.seller, asking_price=0)
+        self.thread, _ = TransactionRequestThread.objects.get_or_create(listing=self.listing, sender=self.buyer)
+
+    def test_price_validators(self):
+        TransactionRequest(thread=self.thread, created_by=self.buyer, price=0).save()
+
+        with self.assertRaises(ValidationError):
+            TransactionRequest(thread=self.thread, created_by=self.buyer, price=-1).save()
