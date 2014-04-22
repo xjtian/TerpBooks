@@ -80,19 +80,32 @@ class TransactionRequestThread(models.Model):
         """
         How many unread messages in this thread the buyer has.
         """
-        return self.messages.exclude(created_by=self.sender, read=False).count()
+        return self.messages.exclude(created_by=self.sender).filter(read=False).count()
 
     def last_buyer_offer_price(self):
         """
         Value of the last offer sent by the buyer.
         """
-        return self.messages.filter(created_by=self.sender).order_by('-date_created')[0].price
+        qs = self.messages.filter(created_by=self.sender).order_by('-date_created')
+        price = 0.00
+
+        if qs.exists():
+            price = qs[0].price
+
+        return price
 
     def last_buyer_offer_time(self):
         """
         Returns the time that the last buyer offer was made.
         """
-        return self.messages.filter(created_by=self.sender).order_by('-date_created')[0].date_created
+        qs = self.messages.filter(created_by=self.sender).order_by('-date_created')
+        time = None
+
+        if qs.exists():
+            time = qs[0].date_created
+
+        return time
+
 
     def last_seller_offer_time(self):
         """
@@ -123,7 +136,13 @@ class TransactionRequestThread(models.Model):
         """
         Time of the most recent message by either the seller or buyer.
         """
-        return self.messages.order_by('-date_created')[0].date_created
+        qs = self.messages.order_by('-date_created')
+        time = None
+
+        if qs.exists():
+            time = qs[0].date_created
+
+        return time
 
     def chron_messages(self):
         """
@@ -135,6 +154,15 @@ class TransactionRequestThread(models.Model):
         """
         Mark all messages in thread not sent by provided user as read.
         """
+        qs = self.messages.exclude(created_by=self.sender)
+        seller = None
+        if qs.exists():
+            seller = qs[0].created_by
+
+        if user != self.sender:
+            if seller is not None and user != seller:
+                return
+
         qs = self.messages.exclude(created_by=user).filter(read=False)
         for message in qs:
             message.read = True
