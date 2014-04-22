@@ -119,6 +119,9 @@ class TransactionRequestThreadTests(TestCase):
         for r in TransactionRequest.objects.all():
             r.delete()
 
+    def test_unicode(self):
+        self.assertEqual(u'title', unicode(self.thread))
+
     def test_unread_messages_seller(self):
         self.assertEqual(0, self.thread.unread_messages_seller())
         for i in xrange(0, 5):
@@ -171,7 +174,7 @@ class TransactionRequestThreadTests(TestCase):
 
             self.assertEqual(i, self.thread.last_seller_offer_price())
 
-    def last_seller_offer_time(self):
+    def test_last_seller_offer_time(self):
         self.assertEqual(None, self.thread.last_seller_offer_time())
         for i in xrange(0, 5):
             t = TransactionRequest.objects.create(thread=self.thread, created_by=self.seller, price=i)
