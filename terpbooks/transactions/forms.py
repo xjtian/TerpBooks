@@ -35,6 +35,18 @@ class TransactionRequestForm(BootstrapModelForm):
         super(TransactionRequestForm, self).__init__(*args, **kwargs)
         self.fields['text'].widget.attrs.update({'rows': 5})
 
+    def is_valid(self, thread=None, user=None):
+        valid = super(TransactionRequestForm, self).is_valid()
+        if not valid:
+            return False
+
+        if thread is not None and user is not None:
+            # You're not allowed to create a request for your own listing
+            if user == thread.listing.owner:
+                return False
+
+        return True
+
     def save(self, commit=True, thread=None, user=None):
         request = super(TransactionRequestForm, self).save(commit=False)
 
