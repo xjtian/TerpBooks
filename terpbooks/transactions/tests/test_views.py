@@ -152,3 +152,32 @@ class ListingListTests(TestCase):
         v.request = request
         expected = [self.listing1, self.listing3]
         self.assertEqual(expected, list(v.get_queryset()))
+
+
+class ListingDetailTests(TestCase):
+    def setUp(self):
+        self.book1, _ = Textbook.objects.get_or_create(title='ABC', isbn='12', course_code='ABCD101')
+        self.book2, _ = Textbook.objects.get_or_create(title='DEF', isbn='34', course_code='EFGH201')
+        self.book3, _ = Textbook.objects.get_or_create(title='ABCDEF', isbn='1234', course_code='IJKL301')
+
+        self.book4, _ = Textbook.objects.get_or_create(title='GHI', isbn='56', course_code='MNOP401')
+        self.book5, _ = Textbook.objects.get_or_create(title='JKL', isbn='78', course_code='QRST501')
+        self.book6, _ = Textbook.objects.get_or_create(title='GHIJKL', isbn='5678', course_code='UVWX601')
+
+        self.seller = User.objects.create_user(username='user1', password='password')
+        self.buyer = User.objects.create_user(username='user2', password='password')
+
+        self.listing1, _ = Listing.objects.get_or_create(owner=self.seller, book=self.book1, asking_price=1, date_created=date.today() - timedelta(1), status=Listing.PENDING)
+        self.listing2, _ = Listing.objects.get_or_create(owner=self.seller, book=self.book2, asking_price=2, date_created=date.today() - timedelta(2), status=Listing.SOLD)
+        self.listing3, _ = Listing.objects.get_or_create(owner=self.seller, book=self.book3, asking_price=3, date_created=date.today() - timedelta(3))
+        self.listing4, _ = Listing.objects.get_or_create(owner=self.seller, book=self.book4, asking_price=4, date_created=date.today() - timedelta(4))
+        self.listing5, _ = Listing.objects.get_or_create(owner=self.seller, book=self.book5, asking_price=5, date_created=date.today() - timedelta(5))
+        self.listing6, _ = Listing.objects.get_or_create(owner=self.seller, book=self.book6, asking_price=6, date_created=date.today() - timedelta(6))
+
+    def test_properties(self):
+        v = ListingDetail()
+
+        self.assertEqual(Listing, v.model)
+        self.assertEqual([self.listing3, self.listing4, self.listing5, self.listing6], list(v.queryset))
+        self.assertEqual('listing', v.context_object_name)
+        self.assertEqual('buy/listing-detail.html', v.template_name)
