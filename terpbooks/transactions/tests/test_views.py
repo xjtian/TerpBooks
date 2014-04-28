@@ -448,3 +448,39 @@ class CreateEditListingTests(TestCase):
         response = self.client.post(reverse('listing-form-bound', kwargs={'pk': self.listing_pending.pk}), new_data)
         self.assertEqual("You've marked this listing as pending, so it is uneditable.", response.context['error_message'])
         verify_data()
+
+
+class ProfileListingsTests(TestCase):
+    def test_properties(self):
+        v = ProfileListings()
+
+        self.assertEqual(Listing, v.model)
+        self.assertEqual('listings_list', v.context_object_name)
+        self.assertEqual('profile/your-listings.html', v.template_name)
+
+    def test_get_queryset(self):
+        v = ProfileListings()
+
+        user = User.objects.create_user(username='user', password='password')
+        user2 = User.objects.create_user(username='user2', password='password')
+
+        book1, _ = Textbook.objects.get_or_create(title='title1')
+        book2, _ = Textbook.objects.get_or_create(title='title2')
+        book3, _ = Textbook.objects.get_or_create(title='title3')
+
+        yesterday = date.today() - timedelta(1)
+
+        listing1, _ = Listing.objects.get_or_create(owner=user, book=book1, asking_price=1)
+        listing2, _ = Listing.objects.get_or_create(owner=user, book=book2, asking_price=1, date_created=yesterday)
+        listing3, _ = Listing.objects.get_or_create(owner=user2, book=book3, asking_price=1)
+
+        factory = RequestFactory()
+        request = factory.get('')
+
+        request.user = user
+        v.request = request
+        self.assertEqual([listing1, listing2], list(v.get_queryset()))
+
+        request.user = user2
+        v.request = request
+        self.assertEqual([listing3], list(v.get_queryset()))
