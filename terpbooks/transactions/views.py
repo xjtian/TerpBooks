@@ -89,94 +89,108 @@ class CreateEditListing(View):
 
         return render(self.request, self.template_name, context)
 
-    def get(self, request, *args, **kwargs):
+    def get_forms(self, request, data, **kwargs):
         """
-        Form is bound if pk is in kwargs, otherwise return a blank form.
+        From request and request POST data, return the properly bound forms.
+
+        :rtype: dict[str, Form]
         """
-        if 'pk' not in kwargs:
-            book_form = TextbookForm()
-            listing_form = ListingForm()
-            author_formset = AuthorFormSet()
-            professor_form = ProfessorForm()
-            semester_form = SemesterForm()
+        # Unbound GET default
+        book_form = TextbookForm()
+        listing_form = ListingForm()
+        author_formset = AuthorFormSet()
+        professor_form = ProfessorForm()
+        semester_form = SemesterForm()
+
+        pk = None
+
+        if 'pk' not in kwargs and data is not None:
+            # Create listing POST
+            professor_form = ProfessorForm(request.POST)
+            semester_form = SemesterForm(request.POST)
+            author_formset = AuthorFormSet(request.POST)
+            book_form = TextbookForm(request.POST)
+            listing_form = ListingForm(request.POST)
 
             pk = None
-        else:
+        elif 'pk' in kwargs:
             pk = int(kwargs['pk'])
-
             listing = Listing.objects.select_related().get(pk=pk)
+
             if listing.owner != request.user:
-                return HttpResponseForbidden()
+                return {'error_message': "You can't edit a listing you don't own!"}
 
             if not listing.is_available():
                 if listing.is_pending():
-                    return self.render_to_template(pk, {'error_message': "You've marked this listing as pending, so it is uneditable."})
+                    return {
+                        'error_message': "You've marked this listing as pending, so it is uneditable.",
+                        'pk': pk
+                    }
                 elif listing.is_sold():
-                    return self.render_to_template(pk, {'error_message': "You've marked this listing as sold, so it is uneditable."})
-                raise Exception()
+                    return {
+                        'error_message': "You've marked this listing as sold, so it is uneditable.",
+                        'pk': pk
+                    }
+                raise Exception()   # Unexpected status, uh-oh!
 
-            book_form = TextbookForm(instance=listing.book)
-            listing_form = ListingForm(instance=listing)
+            if data is None:
+                # Bound GET
+                book_form = TextbookForm(instance=listing.book)
+                listing_form = ListingForm(instance=listing)
 
-            initial = []
-            for author in listing.book.authors.all():
-                initial.append({'author': unicode(author)})
-            author_formset = AuthorFormSet(initial=initial)
+                initial = []
+                for author in listing.book.authors.all():
+                    initial.append({'author': unicode(author)})
+                author_formset = AuthorFormSet(initial=initial)
 
-            if listing.book.professor is not None:
-                professor_form = ProfessorForm(initial={'professor': unicode(listing.book.professor)})
-            else:
-                professor_form = ProfessorForm()
+                if listing.book.professor is not None:
+                    professor_form = ProfessorForm(initial={'professor': unicode(listing.book.professor)})
+                else:
+                    professor_form = ProfessorForm()
 
-            if listing.book.semester is not None:
-                semester_form = SemesterForm(initial={
-                    'semester': listing.book.semester.semester,
-                    'year': listing.book.semester.year
-                })
-            else:
-                semester_form = SemesterForm()
+                if listing.book.semester is not None:
+                    semester_form = SemesterForm(initial={
+                        'semester': listing.book.semester.semester,
+                        'year': listing.book.semester.year
+                    })
+                else:
+                    semester_form = SemesterForm()
+            elif data is not None:
+                # Bound POST - edit listing
+                book_form = TextbookForm(request.POST, instance=listing.book)
+                listing_form = ListingForm(request.POST, instance=listing)
+                professor_form = ProfessorForm(request.POST)
+                semester_form = SemesterForm(request.POST)
+                author_formset = AuthorFormSet(request.POST)
 
-        return self.render_to_template(pk, {
+        return {
             'book_form': book_form,
             'listing_form': listing_form,
-            'author_formset': author_formset,
             'professor_form': professor_form,
             'semester_form': semester_form,
+            'author_formset': author_formset,
             'pk': pk,
-        })
+        }
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_forms(request, None, **kwargs)
+
+        return self.render_to_template(context['pk'], context)
 
     def post(self, request, *args, **kwargs):
         """
-        Form has associated instances if pk in kwargs, otherwise create a new listing.
+        Create new listing or edit existing listing.
         """
-        prof_form = ProfessorForm(request.POST)
-        sem_form = SemesterForm(request.POST)
-        author_formset = AuthorFormSet(request.POST)
+        context = self.get_forms(request, request.POST, **kwargs)
+        if 'error_message' in context:
+            return self.render_to_template(context['pk'], context)
 
-        if 'pk' not in kwargs:
-            book_form = TextbookForm(request.POST)
-            listing_form = ListingForm(request.POST)
-            pk = None
-            current_book_authors = []
-        else:
-            pk = int(kwargs['pk'])
-
-            listing = Listing.objects.select_related().get(pk=pk)
-
-            if listing.owner != request.user:
-                return HttpResponseForbidden()
-
-            if not listing.is_available():
-                if listing.is_pending():
-                    return self.render_to_template(pk, {'error_message': "You've marked this listing as pending, so it is uneditable."})
-                elif listing.is_sold():
-                    return self.render_to_template(pk, {'error_message': "You've marked this listing as sold, so it is uneditable."})
-                raise Exception()
-
-            book_form = TextbookForm(request.POST, instance=listing.book)
-            listing_form = ListingForm(request.POST, instance=listing)
-
-            current_book_authors = list(listing.book.authors.all())
+        book_form = context['book_form']
+        listing_form = context['listing_form']
+        author_formset = context['author_formset']
+        prof_form = context['professor_form']
+        sem_form = context['semester_form']
+        pk = context['pk']
 
         biv = book_form.is_valid()
         liv = listing_form.is_valid()
@@ -198,6 +212,17 @@ class CreateEditListing(View):
             book.professor = prof
 
             book.save()
+
+            if pk is not None:
+                listing = listing_form.instance
+            else:
+                listing = None
+
+            # Get list of all current authors of the book
+            if listing is not None:
+                current_book_authors = list(listing.book.authors.all())
+            else:
+                current_book_authors = []
 
             # On update, delete all authors that aren't kept in the form, save new authors
             for form in author_formset.forms:

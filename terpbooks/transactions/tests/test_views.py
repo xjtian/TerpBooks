@@ -2,13 +2,18 @@ from __future__ import absolute_import
 
 from datetime import date, timedelta
 
+from django.core.urlresolvers import reverse
+
 from django.test import TestCase
 from django.test.client import Client, RequestFactory
 
 from django.contrib.auth.models import User
 
-from books.models import Textbook
+from books.models import Textbook, Author, Semester, Professor
+from books.forms import TextbookForm, AuthorFormSet, SemesterForm, ProfessorForm
+
 from ..models import Listing
+from ..forms import ListingForm
 
 from ..views import ListingList, ListingDetail, CreateEditListing, ProfileListings, BoxBase, Inbox, Outbox
 from ..views import RequestThreadDisplay, RequestThreadSubmit, RequestThreadDetail, CreateListingRequest
@@ -181,3 +186,53 @@ class ListingDetailTests(TestCase):
         self.assertEqual([self.listing3, self.listing4, self.listing5, self.listing6], list(v.queryset))
         self.assertEqual('listing', v.context_object_name)
         self.assertEqual('buy/listing-detail.html', v.template_name)
+
+
+class CreateEditListingTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.client = Client()
+
+        self.prof, _ = Professor.objects.get_or_create(first_name='John', last_name='Doe')
+        self.sem, _ = Semester.objects.get_or_create(semester=Semester.FALL, year=2010)
+        self.book, _ = Textbook.objects.get_or_create(title='ABC',
+                                                      isbn='12',
+                                                      course_code='ABCD101',
+                                                      professor=self.prof,
+                                                      semester=self.sem)
+
+        self.author1, _ = Author.objects.get_or_create(first_name='Dead', last_name='Beef', book=self.book)
+        self.author1, _ = Author.objects.get_or_create(first_name='Beef', last_name='Dead', book=self.book)
+
+        self.seller = User.objects.create_user(username='user', password='password')
+        self.listing, _ = Listing.objects.get_or_create(owner=self.seller, book=self.book, asking_price=1)
+
+    def test_properties(self):
+        v = CreateEditListing()
+
+        self.assertEqual('sell/index.html', v.template_name)
+        self.assertEqual('sell', v.post_url)
+
+    def test_unbound_get(self):
+        self.client.login(username='user', password='password')
+        response = self.client.get(reverse('listing-form'))
+
+        form = response.context['book_form']
+        self.assertEqual(TextbookForm, form.__class__)
+        self.assertEqual({}, form.data)
+
+        form = response.context['professor_form']
+        self.assertEqual(ProfessorForm, form.__class__)
+        self.assertEqual({}, form.data)
+
+        form = response.context['semester_form']
+        self.assertEqual(SemesterForm, form.__class__)
+        self.assertEqual({}, form.data)
+
+        form = response.context['author_formset']
+        self.assertEqual(AuthorFormSet, form.__class__)
+        self.assertEqual(1, form.total_form_count())
+        self.assertEqual({}, form.data)
+
+        self.assertEqual('sell', response.context['active'])
+        self.assertEqual(reverse('listing-form'), response.context['action'])
