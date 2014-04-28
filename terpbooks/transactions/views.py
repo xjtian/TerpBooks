@@ -93,7 +93,7 @@ class CreateEditListing(View):
         """
         From request and request POST data, return the properly bound forms.
 
-        :rtype: dict[str, Form]
+        :rtype: dict[str, django.forms.Form]
         """
         # Unbound GET default
         book_form = TextbookForm()
@@ -118,7 +118,10 @@ class CreateEditListing(View):
             listing = Listing.objects.select_related().get(pk=pk)
 
             if listing.owner != request.user:
-                return {'error_message': "You can't edit a listing you don't own!"}
+                return {
+                    'error_message': "You can't edit a listing you don't own!",
+                    'pk': pk,
+                }
 
             if not listing.is_available():
                 if listing.is_pending():
@@ -126,12 +129,11 @@ class CreateEditListing(View):
                         'error_message': "You've marked this listing as pending, so it is uneditable.",
                         'pk': pk
                     }
-                elif listing.is_sold():
+                else:
                     return {
                         'error_message': "You've marked this listing as sold, so it is uneditable.",
                         'pk': pk
                     }
-                raise Exception()   # Unexpected status, uh-oh!
 
             if data is None:
                 # Bound GET

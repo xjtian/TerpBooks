@@ -13,14 +13,22 @@ urlpatterns = patterns('',
 
     url(r'^listings/profile$', login_required(ProfileListings.as_view()), name='profile-listings'),
 
-    url(r'^sell-form$',
-        login_required(CreateEditListing.as_view(template_name='sell/sell_form.html',
-                                post_url='listing-form')),
-        name='listing-form'),
-    url(r'^sell-form/(?P<pk>\d+)$',
-        login_required(CreateEditListing.as_view(template_name='sell/sell_form.html',
-                                post_url='listing-form-bound')),
-        name='listing-form-bound'),
+    url(
+        r'^sell-form$',
+        login_required(CreateEditListing.as_view(
+            template_name='sell/sell_form.html',
+            post_url='listing-form'
+        )),
+        name='listing-form'
+    ),
+    url(
+        r'^sell-form/(?P<pk>\d+)$',
+        login_required(CreateEditListing.as_view(
+            template_name='sell/sell_form.html',
+            post_url='listing-form-bound'
+        )),
+        name='listing-form-bound'
+    ),
 
     url(r'^inbox$', login_required(Inbox.as_view()), name='inbox'),
     url(r'^outbox$', login_required(Outbox.as_view()), name='outbox'),
