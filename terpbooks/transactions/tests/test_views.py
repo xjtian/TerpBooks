@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from books.models import Textbook, Author, Semester, Professor
 from books.forms import TextbookForm, AuthorFormSet, SemesterForm, ProfessorForm
 
-from ..models import Listing
+from ..models import Listing, TransactionRequest, TransactionRequestThread
 from ..forms import ListingForm
 
 from ..views import ListingList, ListingDetail, CreateEditListing, ProfileListings, BoxBase, Inbox, Outbox
@@ -484,3 +484,96 @@ class ProfileListingsTests(TestCase):
         request.user = user2
         v.request = request
         self.assertEqual([listing3], list(v.get_queryset()))
+
+
+class BoxBaseTests(TestCase):
+    def test_properties(self):
+        v = BoxBase()
+
+        self.assertEqual(TransactionRequestThread, v.model)
+        self.assertEqual('request_list', v.context_object_name)
+        self.assertEqual('profile/inbox.html', v.template_name)
+        self.assertIsNone(v.box)
+
+
+class InboxTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.factory = RequestFactory()
+
+        self.user1 = User.objects.create_user(username='user1', password='password')
+        self.user2 = User.objects.create_user(username='user2', password='password')
+
+        self.book1, _ = Textbook.objects.get_or_create(title='title1')
+        self.book2, _ = Textbook.objects.get_or_create(title='title2')
+
+        self.listing1, _ = Listing.objects.get_or_create(owner=self.user1, book=self.book1, asking_price=1)
+        self.listing2, _ = Listing.objects.get_or_create(owner=self.user2, book=self.book2, asking_price=1)
+
+        self.thread1, _ = TransactionRequestThread.objects.get_or_create(sender=self.user2, listing=self.listing1)
+        self.thread2, _ = TransactionRequestThread.objects.get_or_create(sender=self.user1, listing=self.listing2)
+
+    def test_properties(self):
+        v = Inbox()
+
+        self.assertEqual('inbox', v.box)
+
+    def test_get_context_data(self):
+        self.client.login(username='user1', password='password')
+        response = self.client.get(reverse('inbox'))
+
+        self.assertEqual('inbox', response.context['box'])
+
+    def test_get_queryset(self):
+        v = Inbox()
+
+        request = self.factory.get('')
+        request.user = self.user1
+        v.request = request
+
+        self.assertEqual([self.thread1], list(v.get_queryset()))
+
+        request.user = self.user2
+        self.assertEqual([self.thread2], list(v.get_queryset()))
+
+
+class OutboxTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.factory = RequestFactory()
+
+        self.user1 = User.objects.create_user(username='user1', password='password')
+        self.user2 = User.objects.create_user(username='user2', password='password')
+
+        self.book1, _ = Textbook.objects.get_or_create(title='title1')
+        self.book2, _ = Textbook.objects.get_or_create(title='title2')
+
+        self.listing1, _ = Listing.objects.get_or_create(owner=self.user1, book=self.book1, asking_price=1)
+        self.listing2, _ = Listing.objects.get_or_create(owner=self.user2, book=self.book2, asking_price=1)
+
+        self.thread1, _ = TransactionRequestThread.objects.get_or_create(sender=self.user2, listing=self.listing1)
+        self.thread2, _ = TransactionRequestThread.objects.get_or_create(sender=self.user1, listing=self.listing2)
+
+    def test_properties(self):
+        v = Outbox()
+
+        self.assertEqual('outbox', v.box)
+
+    def test_get_context_data(self):
+        self.client.login(username='user1', password='password')
+        response = self.client.get(reverse('outbox'))
+
+        self.assertEqual('outbox', response.context['box'])
+
+    def test_get_queryset(self):
+        v = Outbox()
+
+        request = self.factory.get('')
+        request.user = self.user1
+        v.request = request
+
+        self.assertEqual([self.thread2], list(v.get_queryset()))
+
+        request.user = self.user2
+        self.assertEqual([self.thread1], list(v.get_queryset()))
+
