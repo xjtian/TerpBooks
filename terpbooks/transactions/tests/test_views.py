@@ -13,7 +13,7 @@ from books.models import Textbook, Author, Semester, Professor
 from books.forms import TextbookForm, AuthorFormSet, SemesterForm, ProfessorForm
 
 from ..models import Listing, TransactionRequest, TransactionRequestThread
-from ..forms import ListingForm
+from ..forms import ListingForm, TransactionRequestForm
 
 from ..views import ListingList, ListingDetail, CreateEditListing, ProfileListings, BoxBase, Inbox, Outbox
 from ..views import RequestThreadDisplay, RequestThreadSubmit, RequestThreadDetail, CreateListingRequest
@@ -577,3 +577,57 @@ class OutboxTests(TestCase):
         request.user = self.user2
         self.assertEqual([self.thread1], list(v.get_queryset()))
 
+
+class RequestThreadDisplayTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.factory = RequestFactory()
+
+        self.user1 = User.objects.create_user(username='user1', password='password')
+        self.user2 = User.objects.create_user(username='user2', password='password')
+
+        self.book1, _ = Textbook.objects.get_or_create(title='title1')
+        self.book2, _ = Textbook.objects.get_or_create(title='title2')
+
+        self.listing1, _ = Listing.objects.get_or_create(owner=self.user1, book=self.book1, asking_price=1)
+        self.listing2, _ = Listing.objects.get_or_create(owner=self.user2, book=self.book2, asking_price=1)
+
+        self.thread1, _ = TransactionRequestThread.objects.get_or_create(sender=self.user2, listing=self.listing1)
+        self.thread2, _ = TransactionRequestThread.objects.get_or_create(sender=self.user1, listing=self.listing2)
+
+    def test_properties(self):
+        v = RequestThreadDisplay()
+
+        self.assertEqual(TransactionRequestThread, v.model)
+        self.assertEqual('thread', v.context_object_name)
+        self.assertEqual('profile/thread.html', v.template_name)
+
+    def test_get_context_data(self):
+        v = RequestThreadDisplay()
+
+        request = self.factory.get('')
+        request.user = self.user1
+        v.request = request
+
+        v.object = self.listing1
+        context = v.get_context_data(pk=self.listing1.pk)
+
+        form = context['form']
+        self.assertEqual(TransactionRequestForm, form.__class__)
+
+    def test_get_queryset(self):
+        v = RequestThreadDisplay()
+
+        request = self.factory.get('')
+
+        request.user = self.user1
+        v.request = request
+        self.assertEqual([self.thread1, self.thread2], list(v.get_queryset()))
+
+        request.user = self.user2
+        v.request = request
+        self.assertEqual([self.thread1, self.thread2], list(v.get_queryset()))
+
+        request.user = User.objects.create_user(username='user3', password='password')
+        v.request = request
+        self.assertFalse(v.get_queryset().exists())
