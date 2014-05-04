@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from datetime import date, timedelta
 
 from django.core.urlresolvers import reverse
+from django.http import Http404
 
 from django.test import TestCase
 from django.test.client import Client, RequestFactory
@@ -580,7 +581,6 @@ class OutboxTests(TestCase):
 
 class RequestThreadDisplayTests(TestCase):
     def setUp(self):
-        self.client = Client()
         self.factory = RequestFactory()
 
         self.user1 = User.objects.create_user(username='user1', password='password')
@@ -631,3 +631,96 @@ class RequestThreadDisplayTests(TestCase):
         request.user = User.objects.create_user(username='user3', password='password')
         v.request = request
         self.assertFalse(v.get_queryset().exists())
+
+
+class RequestThreadSubmitTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+        self.user1 = User.objects.create_user(username='user1', password='password')
+        self.user2 = User.objects.create_user(username='user2', password='password')
+
+        self.book1, _ = Textbook.objects.get_or_create(title='title1')
+        self.book2, _ = Textbook.objects.get_or_create(title='title2')
+
+        self.listing1, _ = Listing.objects.get_or_create(owner=self.user1, book=self.book1, asking_price=1)
+        self.listing2, _ = Listing.objects.get_or_create(owner=self.user2, book=self.book2, asking_price=1)
+
+        self.thread1, _ = TransactionRequestThread.objects.get_or_create(sender=self.user2, listing=self.listing1)
+        self.thread2, _ = TransactionRequestThread.objects.get_or_create(sender=self.user1, listing=self.listing2)
+
+        self.user3 = User.objects.create_user(username='user3', password='password')
+        self.unrelated_thread, _ = TransactionRequestThread.objects.get_or_create(sender=self.user3, listing=self.listing2)
+
+    def test_properties(self):
+        v = RequestThreadSubmit()
+
+        self.assertEqual(TransactionRequestForm, v.form_class)
+        self.assertEqual(TransactionRequestThread, v.model)
+        self.assertEqual('thread', v.context_object_name)
+        self.assertEqual('profile/thread.html', v.template_name)
+
+    def test_get_success_url(self):
+        v = RequestThreadSubmit()
+
+        v.object = self.thread1
+        self.assertEqual(reverse('thread', kwargs={'pk': self.thread1.pk}), v.get_success_url())
+
+    def test_get_queryset(self):
+        v = RequestThreadSubmit()
+        request = self.factory.get('')
+        request.user = self.user1
+
+        v.request = request
+        self.assertEqual([self.thread1, self.thread2], list(v.get_queryset()))
+
+        request.user = self.user3
+        self.assertEqual([self.unrelated_thread], list(v.get_queryset()))
+
+    def test_form_valid(self):
+        v = RequestThreadSubmit()
+        request = self.factory.post('')
+        request.user = self.user1
+        v.request = request
+
+        v.object = self.thread1
+
+        form = TransactionRequestForm(data={'text': 'dead beef', 'price': 1})
+        response = v.form_valid(form)
+
+        self.assertEqual(302, response.status_code)
+        self.assertEqual(reverse('thread', kwargs={'pk': self.thread1.pk}), response.url)
+        # Assert message saved
+        self.assertEqual(1, self.thread1.messages.count())
+
+    def test_post(self):
+        v = RequestThreadSubmit()
+        request = self.factory.post('', {'text': 'dead beef', 'price': 1})
+        request.user = self.user1
+
+        v.request = request
+        v.kwargs = {'pk': self.thread1.pk}
+
+        response = v.post(request, **v.kwargs)
+        self.assertEqual(302, response.status_code)
+        # Assert message saved
+        self.assertEqual(1, self.thread1.messages.count())
+        self.assertEqual('dead beef', self.thread1.messages.all()[0].text)
+        self.assertEqual(1, self.thread1.messages.all()[0].price)
+
+        v.kwargs = {'pk': self.unrelated_thread.pk}
+        # 404 - requested thread not in queryset (not allowed to access)
+        with self.assertRaises(Http404):
+            v.post(request, **v.kwargs)
+
+        # 403 - listing not available (can't alter message history anymore)
+        self.thread2.listing.status = Listing.PENDING
+        self.thread2.listing.save()
+        v.kwargs = {'pk': self.thread2.pk}
+        response = v.post(request, **v.kwargs)
+        self.assertEqual(403, response.status_code)
+
+        self.thread2.listing.status = Listing.SOLD
+        self.thread2.listing.save()
+        response = v.post(request, **v.kwargs)
+        self.assertEqual(403, response.status_code)

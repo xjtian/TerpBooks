@@ -358,7 +358,7 @@ class RequestThreadSubmit(SingleObjectMixin, FormView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
 
-        if not self.object.is_available():
+        if not self.object.listing.is_available():
             return HttpResponseForbidden()
 
         return super(RequestThreadSubmit, self).post(request, *args, **kwargs)
@@ -378,7 +378,7 @@ class RequestThreadSubmit(SingleObjectMixin, FormView):
         return super(RequestThreadSubmit, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse('thread', kwargs={'pk': self.get_object().pk})
+        return reverse('thread', kwargs={'pk': self.object.pk})
 
 
 class RequestThreadDetail(View):
