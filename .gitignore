@@ -4,3 +4,4 @@
 static/
 .coverage
 htmlcov/
+terpbooks/terpbooks/settings/deploy.py
