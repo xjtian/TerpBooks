@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row filter-container">
+    <div class="row filter-container hidden-xs">
         <div class="col-xs-12 col-lg-6">
             <p>Search For:</p>
 
@@ -25,6 +25,8 @@
                         <option value="isbn">ISBN</option>
                         <option value="class">Class Code</option>
                     </select>
+
+                    <input type="text" class="form-control filter-input" disabled/>
                 </div>
             </div>
 
@@ -44,6 +46,12 @@
         </div>
     </div>
 
+    <div class="row filter-container2 visible-xs">
+        <div class="col-xs-12">
+            <h3>Available Listings</h3>
+            <button class="btn btn-success xs-filter-btn">Filter and Sort</button>
+        </div>
+    </div>
     <!-- Start code for listings -->
     <div class="row">
         <div class="col-sm-12 col-md-4 listing-list-container">
@@ -66,6 +74,49 @@
                 </div>
 
                 <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="filter-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Filter Results</h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>Search For:</p>
+
+                    <div class="listing-filter-wrapper">
+                        <div class="listing-filter-group">
+                            <select class="form-control listing-filter">
+                                <option value="all">All Books</option>
+                                <option value="title">Title</option>
+                                <option value="isbn">ISBN</option>
+                                <option value="class">Class Code</option>
+                            </select>
+
+                            <input type="text" class="form-control filter-input" disabled/>
+                        </div>
+                    </div>
+
+                    <img class="add-filter-field" src="{% static "img/plus_icon.png" %}" />
+
+                    <p>Sorted By:</p>
+                    <select class="form-control listing-sort">
+                        <option value="-date">Date Posted</option>
+                        <option value="asking_price">Price Low to High</option>
+                        <option value="-asking_price">Price High to Low</option>
+                        <option value="book__title">Alphabetically</option>
+                    </select>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-success" data-dismiss="modal">Get Results</button>
                     <button class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>

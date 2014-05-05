@@ -49,16 +49,12 @@ function filter_changed() {
     switch(val) {
         case 'all':
             filter_wrapper.find('input').remove();
-            filter_wrapper.css('width', '');
+            filter_wrapper.append('<input type="text" class="form-control filter-input" disabled/>');
             break;
         case 'title':
         case 'isbn':
         case 'class':
-            if (filter_wrapper.find('input').length != 0) {
-                break;
-            }
-
-            filter_wrapper.width(300);
+            filter_wrapper.find('input').remove();
             filter_wrapper.append('<input type="text" class="form-control filter-input" />');
             break;
     }
@@ -86,15 +82,21 @@ function listing_selected() {
  * Event handler for click on add filter field button.
  */
 function add_filter_field() {
-    $('.listing-filter-wrapper').append(
+    var sel;
+    if (is_detail_separate()) {
+        sel = '.filter-container .listing-filter-wrapper';
+    } else {
+        sel = '#filter-modal .listing-filter-wrapper';
+    }
+    $(sel).append(
         '<div class="listing-filter-group">' +
             '<select class="form-control listing-filter">' +
-            '<option value="all">All Books</option>' +
-            '<option value="title">Title</option>' +
-            '<option value="isbn">ISBN</option>' +
-            '<option value="class">Class Code</option>' +
+                '<option value="all">All Books</option>' +
+                '<option value="title">Title</option>' +
+                '<option value="isbn">ISBN</option>' +
+                '<option value="class">Class Code</option>' +
             '</select>' +
-            '</div>'
+        '</div>'
     );
 
     var lf = $('.listing-filter');
@@ -135,6 +137,11 @@ function create_form_submitted() {
 }
 
 
+function xs_filter_click() {
+    $('#filter-modal').modal();
+}
+
+
 /*************************
  *
  * End Event Handlers
@@ -160,9 +167,18 @@ function set_container_heights() {
  * Populate listings list via ajax call.
  */
 function load_listings() {
+    var filter_group_selector, sort_select_selector;
+    if (is_detail_separate()) {
+        filter_group_selector = '.filter-container .listing-filter-group';
+        sort_select_selector = '.filter-container .listing-sort';
+    } else {
+        filter_group_selector = '#filter-modal .listing-filter-group';
+        sort_select_selector = '#filter-modal .listing-sort';
+    }
+
     // Implemented this way because there can be multiple filter fields on same key
     var stack = [];
-    $('.listing-filter-group').each(function() {
+    $(filter_group_selector).each(function() {
         var sel = $(this).find('select').find('option').filter(':selected');
         var key = sel.val();
 
@@ -179,7 +195,7 @@ function load_listings() {
 
     stack.push(
         $.param({
-            order_by: $('select.listing-sort').find('option').filter(':selected').val()
+            order_by: $(sort_select_selector).find('option').filter(':selected').val()
         })
     );
 
@@ -283,7 +299,10 @@ $(document).ready(function() {
     $('.add-filter-field').on('click', add_filter_field);
     $('.listing-filter').on('change', filter_changed);
     $(window).on('resize', on_window_resize);
+
     $('.filter-container button.btn-success').on('click', load_listings);
+    $('#filter-modal').find('button.btn-success').on('click', load_listings);
+    $('.xs-filter-btn').on('click', xs_filter_click);
 
     load_listings();
 });

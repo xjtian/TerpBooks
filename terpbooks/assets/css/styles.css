@@ -96,7 +96,8 @@
 
 /* Styles for filter/sort stuff buy.html */
 
-.filter-container {
+.filter-container,
+.filter-container2 {
     padding: 10px 0;
     background-color: #eaeaea;
     text-align: center;
@@ -107,6 +108,10 @@
     .filter-container > .col-lg-6:nth-child(2) {
         margin-top: 15px;
     }
+}
+
+button.xs-filter-btn {
+    margin-bottom: 20px;
 }
 
 .filter-container p {
@@ -123,7 +128,7 @@
 }
 
 .listing-filter-group {
-    width: 130px;
+    width: 100%;
     display: block;
     text-align: left;
     margin-top: 5px;
@@ -134,7 +139,7 @@
 }
 
 .listing-filter-group > .listing-filter {
-    max-width: 125px;
+    width: 40%;
     display: inline-block;
 }
 
@@ -150,14 +155,15 @@
     cursor: pointer;
 }
 
-.filter-input, .semester-select {
-    width: 150px;
+.filter-input,
+.semester-select {
+    width: 40%;
     display: inline-block;
     margin-left: 15px;
 }
 
 .listing-sort {
-    max-width: 165px;
+    max-width: 30%;
     display: inline-block;
     margin-left: 20px;
     vertical-align: top;
