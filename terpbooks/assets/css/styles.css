@@ -104,6 +104,10 @@
     margin: 0 auto;
 }
 
+.filter-container2 h3 {
+    margin: 0 0 10px 0;
+}
+
 @media(max-width: 1199px) {
     .filter-container > .col-lg-6:nth-child(2) {
         margin-top: 15px;
@@ -111,7 +115,7 @@
 }
 
 button.xs-filter-btn {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .filter-container p {
