@@ -106,7 +106,6 @@ class TransactionRequestThread(models.Model):
 
         return time
 
-
     def last_seller_offer_time(self):
         """
         Returns the time that the last seller counteroffer was made,

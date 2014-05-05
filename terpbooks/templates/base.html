@@ -37,7 +37,7 @@
                         <li {% if active == "profile" %}class="active"{% endif %}>
                             <a href="{% if user.is_authenticated %}{% url "profile" %}{% else %}{% url "login" %}{% endif %}">
                                 {% if user.is_authenticated %}
-                                Profile
+                                Profile {% if unread > 0 %}({{ unread }}){% endif %}
                                 {% else %}
                                 Log In
                                 {% endif %}

@@ -12,6 +12,7 @@ from django.core.urlresolvers import reverse
 from .forms import ListingForm, TransactionRequestForm
 from .models import Listing, TransactionRequestThread
 from books.forms import TextbookForm, AuthorFormSet, ProfessorForm, SemesterForm
+from terpbooks.views import unread_messages
 
 
 class ListingList(ListView):
@@ -83,6 +84,7 @@ class CreateEditListing(View):
         context = {
             'active': 'sell',
             'action': action,
+            'unread': unread_messages(self.request.user),
         }
 
         context.update(extra_context)
