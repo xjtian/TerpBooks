@@ -10,12 +10,17 @@ function connect_outbox_click_handler() {
 
     messages.off('click');
     messages.on('click', message_selected('.outbox-list-container', 'outbox'));
+
+    messages = $('.tab-content > #outbox .profile-item');
+
+    messages.off('click');
+    messages.on('click', message_selected('.tab-content > #outbox', 'outbox'));
 }
 
 
 function load_outbox() {
     $.get(OUTBOX_URL, function(data) {
-        var outbox_container = $('.outbox-list-container');
+        var outbox_container = $('.outbox-list-container, .tab-content > #outbox');
         outbox_container.find('ul').remove();
         outbox_container.append(data);
 

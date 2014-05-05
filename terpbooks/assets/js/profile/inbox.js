@@ -10,6 +10,11 @@ function connect_inbox_click_handler() {
 
     messages.off('click');
     messages.on('click', message_selected('.inbox-list-container', 'inbox'));
+
+    messages = $('.tab-content > #inbox .profile-item');
+
+    messages.off('click');
+    messages.on('click', message_selected('.tab-content > #inbox', 'inbox'));
 }
 
 
@@ -18,10 +23,11 @@ function connect_inbox_click_handler() {
  */
 function load_inbox() {
     $.get(INBOX_URL, function(data) {
-        var inbox_container = $('.inbox-list-container');
-        inbox_container.find('ul').remove();
-        inbox_container.find('.thread-container').remove();
-        inbox_container.append(data);
+        var inbox_containers = $('.inbox-list-container, .tab-content > #inbox');
+
+        inbox_containers.find('ul').remove();
+        inbox_containers.find('.thread-container').remove();
+        inbox_containers.append(data);
         connect_inbox_click_handler();
     });
 }
@@ -38,7 +44,7 @@ function mark_listing(message, confirm) {
         modal_body.html('<p class="strong">' + message + '</p>');
         modal_body.append(
             '<button class="btn btn-danger confirm-delete-btn">' + confirm + '</button>' +
-            '<button class="btn btn-default" data-dismiss="modal">No, take me away from here!</button>'
+            '<button class="btn btn-default" data-dismiss="modal">No</button>'
         );
 
         modal_body.find('button.confirm-delete-btn').on('click', function() {

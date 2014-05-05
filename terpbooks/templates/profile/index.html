@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
+    <div class="row hidden-sm hidden-xs">
         <div class="col-sm-12 col-md-4 listing-list-container">
             <h3 class="profile-heading">Your Listings</h3>
         </div>
@@ -28,6 +28,24 @@
 
         <div class="col-sm-12 col-md-4 outbox-list-container">
             <h3 class="profile-heading">Sent Requests</h3>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs visible-xs visible-sm profile-tabs">
+        <li class="active"><a href="#listings" data-toggle="tab">Your Listings</a></li>
+        <li><a href="#inbox" data-toggle="tab">Received Requests</a></li>
+        <li><a href="#outbox" data-toggle="tab">Sent Requests</a></li>
+    </ul>
+
+    <div class="tab-content visible-xs visible-sm">
+        <div class="tab-pane active" id="listings">
+
+        </div>
+        <div class="tab-pane" id="inbox">
+
+        </div>
+        <div class="tab-pane" id="outbox">
+
         </div>
     </div>
 

@@ -23,7 +23,7 @@ function edit_form_submitted() {
  * Connect the click handler to all listings under 'Your Listings'
  */
 function connect_listing_click_handler() {
-    var listings = $('.listing-list-container .profile-item');
+    var listings = $('.listing-list-container .profile-item, .tab-content > #listings .profile-item');
 
     listings.off('click');
     listings.on('click', listing_selected);
@@ -77,7 +77,7 @@ function delete_listing_first(url) {
  */
 function load_listings() {
     $.get(YOUR_LISTINGS_URL, function(data) {
-        var listings_container = $('.listing-list-container');
+        var listings_container = $('.listing-list-container, .tab-content > #listings');
         listings_container.find('ul').remove();
         listings_container.append(data);
         connect_listing_click_handler();

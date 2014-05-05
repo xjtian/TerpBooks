@@ -439,3 +439,7 @@ button.mark-avail-btn {
     float: right;
     margin-bottom: 25px;
 }
+
+ul.profile-tabs {
+    margin-top: 20px;
+}
