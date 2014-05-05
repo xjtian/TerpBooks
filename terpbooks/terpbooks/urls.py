@@ -8,7 +8,7 @@ from django.views.generic import RedirectView
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 
-from .views import BuyPage, ProfilePage
+from .views import BuyPage, ProfilePage, SplashPage
 from transactions.views import CreateEditListing
 
 admin.autodiscover()
@@ -33,6 +33,7 @@ else:
     )
 
 urlpatterns += patterns('',
+    url(r'^$', SplashPage.as_view(), name='splash'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^books/', include('books.urls')),
     url(r'^transactions/', include('transactions.urls')),

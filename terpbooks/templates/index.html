@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}TerpBooks{% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static "css/splash.css" %}"/>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>TerpBooks</h1>
+
+            <h2>An online textbook marketplace designed specifically for UMD students.</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <h3 class="section-header">Why TerpBooks?</h3>
+
+        <div class="col-xs-12 col-sm-4 why-container">
+            <img src="{% static "img/search.png" %}" />
+            <h4>Meaningful Organization</h4>
+
+            <p>Search and sort textbook listings by title, ISBN, price, and/or a UMD class code.</p>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 why-container">
+            <img src="{% static "img/cart.png" %}" />
+            <h4>Flexibility</h4>
+
+            <p>We leave the details of an exchange up to you - you can trade, barter, sell, or loan and we won't ever take a cut of the selling price.</p>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 why-container">
+            <img src="{% static "img/shield.png" %}" />
+            <h4>Trust</h4>
+
+            <p>Registration and authentication are done through the UMD Central Authentication System, so you can be sure that you're interacting with UMD students.</p>
+        </div>
+
+        <p id="action-call">Registration is as easy as logging in for the first time with your UMD directory ID.</p>
+        <a class="btn btn-success" id="action-btn" href="{% url "login" %}">Get Started Now!</a>
+    </div>
+{% endblock %}

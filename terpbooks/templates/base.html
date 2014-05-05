@@ -26,11 +26,9 @@
                         <span class="icon-bar"></span>
                     </button>
 
-                    <a class="navbar-brand" href="">
+                    <a class="navbar-brand hidden-xs" href="{% url "splash" %}">
                         <img src="{% static "img/logo.png" %}" class="nav-logo"/>
                     </a>
-
-                    <h1 class="navbar-brand visible-xs xs-title">TerpBooks</h1>
                 </div>
                 <div class="collapse navbar-collapse" id="top-nav-collapse">
                     <ul class="nav navbar-nav">
@@ -53,13 +51,15 @@
             </div>
         </nav>
 
-        <div class="banner row">
-            <img class="col-xs-12" src="{% static "img/banner.jpg" %}" />
-            <div class="header-holder">
-                <h1 class="hidden-xs">TerpBooks</h1>
-                <h2 class="hidden-xs">Buy, sell, and trade textbooks for UMD classes.</h2>
+        {% if not banner %}
+            <div class="banner row">
+                <img class="col-xs-12" src="{% static "img/banner.jpg" %}" />
+                <div class="header-holder">
+                    <h1 class="hidden-xs">TerpBooks</h1>
+                    <h2 class="hidden-xs">Buy, sell, and trade textbooks for UMD classes.</h2>
+                </div>
             </div>
-        </div>
+        {% endif %}
 
         {% block content %}{% endblock %}
     </div>

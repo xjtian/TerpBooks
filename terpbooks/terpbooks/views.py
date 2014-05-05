@@ -25,3 +25,16 @@ class ProfilePage(generic.TemplateView):
         context.update({'active': 'profile'})
 
         return context
+
+
+class SplashPage(generic.TemplateView):
+    """
+    Splash page view
+    """
+    template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SplashPage, self).get_context_data(**kwargs)
+        context.update({'banner': True})
+
+        return context
