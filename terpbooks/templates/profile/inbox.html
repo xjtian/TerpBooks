@@ -16,7 +16,11 @@
                     <span class="time">at {{ request.last_seller_offer_time|date:"n/j/y g:i A" }}</span>
                 {% endif %}
             </h4>
-            <h4>Buyer: {{ request.sender }}</h4>
+            {% if box == 'inbox' %}
+                <h4>Buyer: {{ request.sender }}</h4>
+            {% elif box == 'outbox' %}
+                <h4>Seller: {{ request.listing.owner }}</h4>
+            {% endif %}
 
         </li>
     {% endfor %}
