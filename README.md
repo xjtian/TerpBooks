@@ -6,7 +6,7 @@ TerpBooks is a textbook exchange website developed for UMD students as a capston
 Contributing (Installation)
 ---------------------------
 
-Install [https://www.virtualbox.org](VirtualBox) and [http://www.vagrantup.com](Vagrant), and in a terminal prompt at the repository root,
+Install [VirtualBox](https://www.virtualbox.org) and [Vagrant](http://www.vagrantup.com), and in a terminal prompt at the repository root,
 
 ```sh
 $ vagrant up
