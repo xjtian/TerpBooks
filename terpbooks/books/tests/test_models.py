@@ -80,6 +80,7 @@ class TextbookTests(TestCase):
             Textbook(title='title', course_code='ABC123').save()
 
         Textbook(title='title', course_code='ABCD123').save()
+        Textbook(title='title', course_code='ABCD123E').save()
 
     def test_authors_string(self):
         book, _ = Textbook.objects.get_or_create(title='title')
