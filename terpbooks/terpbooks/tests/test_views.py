@@ -25,3 +25,18 @@ class ProfilePageTests(TestCase):
 
         response = c.get(reverse('profile'))
         self.assertEqual('profile', response.context['active'])
+
+
+class SplashPageTests(TestCase):
+    def setUp(self):
+        User.objects.create_user(username='user', password='password')
+
+    def test_redirect(self):
+        c = Client()
+
+        response = c.get(reverse('splash'))
+        self.assertEqual(200, response.status_code)
+
+        c.login(username='user', password='password')
+        response = c.get(reverse('splash'))
+        self.assertEqual('http://testserver' + reverse('profile'), response.url)
