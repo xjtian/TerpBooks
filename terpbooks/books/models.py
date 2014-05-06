@@ -69,8 +69,8 @@ class Textbook(models.Model):
     course_code = models.CharField(max_length=20,
                                    blank=True,
                                    validators=[RegexValidator(
-                                       regex=r'^[A-Z]{4}[0-9]{3}$',
-                                       message="Course codes must be formatted like 'ABCD123'"
+                                       regex=r'^[A-Z]{4}[0-9]{3}[A-Z]?$',
+                                       message="Course codes must be formatted like 'ABCD123' or 'ABCD123E'"
                                    )])
     semester = models.ForeignKey(Semester, null=True, blank=True)
     professor = models.ForeignKey(Professor, null=True, blank=True)
