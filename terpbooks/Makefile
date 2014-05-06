@@ -4,7 +4,7 @@ runserver:
 	python manage.py runserver 0.0.0.0:8000 --settings=terpbooks.settings.local
 
 test:
-	coverage run manage.py test --settings=terpbooks.settings.test
+	coverage run --source=books,terpbooks,transactions --omit=terpbooks/settings/*,*/admin.py,*/tests/*,terpbooks/wsgi.py manage.py test --settings=terpbooks.settings.test
 
 report:
-	coverage html --omit=/home/vagrant/venvs/books/*,*/tests/*,*/migrations/*,*/admin.py
+	coverage html
