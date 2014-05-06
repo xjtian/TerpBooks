@@ -6,6 +6,9 @@ from transactions.models import TransactionRequestThread
 
 
 def unread_messages(user):
+    if user is None or not user.is_authenticated():
+        return 0
+
     invovled_threads = TransactionRequestThread.objects.filter(Q(listing__owner=user) | Q(sender=user))
     count = 0
 
