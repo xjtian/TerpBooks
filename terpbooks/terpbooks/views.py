@@ -1,4 +1,6 @@
 from django.db.models import Q
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 from django.views import generic
 
@@ -9,10 +11,10 @@ def unread_messages(user):
     if user is None or not user.is_authenticated():
         return 0
 
-    invovled_threads = TransactionRequestThread.objects.filter(Q(listing__owner=user) | Q(sender=user))
+    involved_threads = TransactionRequestThread.objects.filter(Q(listing__owner=user) | Q(sender=user))
     count = 0
 
-    for thread in invovled_threads:
+    for thread in involved_threads:
         count += thread.messages.exclude(created_by=user).filter(read=False).count()
 
     return count
@@ -46,9 +48,15 @@ class ProfilePage(generic.TemplateView):
 
 class SplashPage(generic.TemplateView):
     """
-    Splash page view
+    Splash page view - redirects to profile page if session user is authenticated.
     """
     template_name = 'index.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user is not None and request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('profile'))
+
+        return super(SplashPage, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(SplashPage, self).get_context_data(**kwargs)
