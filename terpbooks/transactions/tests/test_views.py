@@ -724,3 +724,171 @@ class RequestThreadSubmitTests(TestCase):
         self.thread2.listing.save()
         response = v.post(request, **v.kwargs)
         self.assertEqual(403, response.status_code)
+
+
+class RequestThreadDetailTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+        self.user1 = User.objects.create_user(username='user1', password='password')
+        self.user2 = User.objects.create_user(username='user2', password='password')
+
+        self.book1, _ = Textbook.objects.get_or_create(title='title1')
+        self.listing1, _ = Listing.objects.get_or_create(owner=self.user1, book=self.book1, asking_price=1)
+        self.thread1, _ = TransactionRequestThread.objects.get_or_create(sender=self.user2, listing=self.listing1)
+        self.message1, _ = TransactionRequest.objects.get_or_create(created_by=self.user2, price=1, thread=self.thread1)
+
+        self.user3 = User.objects.create_user(username='user3', password='password')
+        self.book2, _ = Textbook.objects.get_or_create(title='title2')
+        self.listing2, _ = Listing.objects.get_or_create(owner=self.user2, book=self.book2, asking_price=1)
+        self.unrelated_thread, _ = TransactionRequestThread.objects.get_or_create(sender=self.user3, listing=self.listing2)
+        self.umessage, _ = TransactionRequest.objects.get_or_create(created_by=self.user3, price=1, thread=self.unrelated_thread)
+
+    def test_dispatch(self):
+        v = RequestThreadDetail()
+
+        request = self.factory.get('')
+        request.user = self.user1
+        v.kwargs = {'pk': self.thread1.pk}
+
+        # 200 response, and messages marked as read
+        response = v.dispatch(request, **v.kwargs)
+        self.assertEqual(200, response.status_code)
+        self.assertTrue(TransactionRequest.objects.get(pk=self.message1.pk).read)
+
+        # If the user is unassociated with the requested thread, should return 403, no read marking
+        v.kwargs = {'pk': self.unrelated_thread.pk}
+        response = v.dispatch(request, **v.kwargs)
+        self.assertEqual(403, response.status_code)
+        self.assertFalse(TransactionRequest.objects.get(pk=self.umessage.pk).read)
+
+    def test_get(self):
+        v = RequestThreadDetail()
+        exp_v = RequestThreadDisplay.as_view()
+
+        request = self.factory.get('')
+        request.user = self.user1
+        v.kwargs = {'pk': self.thread1.pk}
+
+        response = v.get(request, **v.kwargs)
+        exp = exp_v(request, **v.kwargs)
+        response.render()
+        exp.render()
+        self.assertEqual(str(exp), str(response))
+
+    def test_post(self):
+        v = RequestThreadDetail()
+
+        data = {'text': 'hello world', 'price': 1}
+        request = self.factory.post('', data)
+        request.user = self.user1
+        v.kwargs = {'pk': self.thread1.pk}
+
+        response = v.post(request, **v.kwargs)
+        self.assertEqual(302, response.status_code)
+        self.assertEqual(reverse('thread', kwargs=v.kwargs), response.url)
+        # Assert object created
+        self.assertTrue(TransactionRequest.objects.filter(thread=self.thread1, **data).exists())
+
+
+class CreateListingRequestTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.client = Client()
+
+        self.user1 = User.objects.create_user(username='user1', password='password')
+        self.user2 = User.objects.create_user(username='user2', password='password')
+
+        self.book1, _ = Textbook.objects.get_or_create(title='title1')
+        self.listing1, _ = Listing.objects.get_or_create(owner=self.user1, book=self.book1, asking_price=1)
+
+        self.book2, _ = Textbook.objects.get_or_create(title='title2')
+        self.listing2, _ = Listing.objects.get_or_create(owner=self.user2, book=self.book2, asking_price=1)
+
+    def test_properties(self):
+        v = CreateListingRequest()
+
+        self.assertEqual(TransactionRequestForm, v.form_class)
+        self.assertEqual(Listing, v.model)
+        self.assertEqual([self.listing1, self.listing2], list(v.queryset))
+        self.assertEqual('listing', v.context_object_name)
+        self.assertEqual('buy/send_request.html', v.template_name)
+
+    def test_get_success_url(self):
+        v = CreateListingRequest()
+
+        v.object = self.listing1
+        v.kwargs = {'pk': self.listing1.pk}
+        self.assertEqual(reverse('create-thread', kwargs=v.kwargs), v.get_success_url())
+
+    def test_dispatch(self):
+        v = CreateListingRequest()
+
+        request = self.factory.get('')
+        request.user = self.user1
+        v.request = request
+        v.kwargs = {'pk': self.listing2.pk}
+
+        response = v.dispatch(request, **v.kwargs)
+        self.assertEqual(200, response.status_code)
+
+        # Trying to buy your own book
+        self.client.login(username='user1', password='password')
+        response = self.client.get(reverse('create-thread', kwargs={'pk': self.listing1.pk}))
+        self.assertNotIn('form', response.context)
+        self.assertEqual("You can't buy your own book!", response.context['error_message'])
+
+        # Sending request for unavailable listing
+        self.listing2.status = Listing.PENDING
+        self.listing2.save()
+        response = self.client.get(reverse('create-thread', kwargs={'pk': self.listing2.pk}))
+        self.assertNotIn('form', response.context)
+        self.assertEqual("This listing isn't available anymore.", response.context['error_message'])
+
+        self.listing2.status = Listing.SOLD
+        self.listing2.save()
+        response = self.client.get(reverse('create-thread', kwargs={'pk': self.listing2.pk}))
+        self.assertNotIn('form', response.context)
+        self.assertEqual("This listing isn't available anymore.", response.context['error_message'])
+
+    def test_form_valid(self):
+        v = CreateListingRequest()
+
+        data = {'text': 'hello world', 'price': 1}
+        form = TransactionRequestForm(data=data)
+
+        request = self.factory.get('')
+        request.user = self.user1
+        v.request = request
+        v.kwargs = {'pk': self.listing2.pk}
+        v.object = self.listing2
+
+        # Create a new request thread
+        response = v.form_valid(form, **v.kwargs)
+        self.assertEqual(200, response.status_code)
+
+        self.assertEqual(1, TransactionRequestThread.objects.filter(listing=self.listing2).count())
+        thread = TransactionRequestThread.objects.filter(listing=self.listing2)[0]
+        self.assertTrue(thread.messages.filter(**data).exists())
+
+        # Add to an existing thread
+        data = {'text': 'dead beef', 'price': 1}
+        form = TransactionRequestForm(data=data)
+
+        response = v.form_valid(form, **v.kwargs)
+        self.assertEqual(200, response.status_code)
+
+        self.assertEqual(1, TransactionRequestThread.objects.filter(listing=self.listing2).count())
+        thread = TransactionRequestThread.objects.filter(listing=self.listing2)[0]
+        self.assertTrue(thread.messages.filter(**data).exists())
+        self.assertEqual(2, thread.messages.count())
+
+    def test_form_invalid(self):
+        self.client.login(username='user1', password='password')
+
+        data = {'text': 'hello world'}
+        response = self.client.post(reverse('create-thread', kwargs={'pk': self.listing2.pk}), data)
+
+        self.assertEqual('There was an error with your submission.', response.context['error_message'])
+        for k, v in dict(response.context['form'].data).iteritems():
+            self.assertEqual([u'%s' % data[k]], v)
