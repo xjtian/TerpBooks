@@ -544,8 +544,7 @@ class MarkListingPending(ListingModificationBase):
     """
     Mark a listing as transaction pending.
     """
-    success_message = "Listing successfully marked as pending"
-    error_message = "You're not allowed to modify a listing you don't own!"
+    success_message = "Listing successfully marked as pending."
 
     def take_action(self, listing):
         listing.status = Listing.PENDING
@@ -553,7 +552,7 @@ class MarkListingPending(ListingModificationBase):
 
     def extra_validation(self, listing):
         if listing.status != Listing.AVAILABLE:
-            return False, "Only available listings can be marked as available."
+            return False, "Only available listings can be marked as pending."
 
         return True, ''
 
@@ -562,6 +561,8 @@ class MarkListingSold(ListingModificationBase):
     """
     Mark a listing as sold.
     """
+    success_message = "Listing successfully marked as sold."
+
     def take_action(self, listing):
         listing.status = Listing.SOLD
         listing.save()
@@ -577,6 +578,8 @@ class MarkListingAvailable(ListingModificationBase):
     """
     Mark a listing as available.
     """
+    success_message = "Listing successfully marked as available."
+
     def take_action(self, listing):
         listing.status = Listing.AVAILABLE
         listing.save()

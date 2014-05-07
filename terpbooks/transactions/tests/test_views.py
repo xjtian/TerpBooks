@@ -151,8 +151,8 @@ class ListingListTests(TestCase):
 
         # Combined parameters
         request = self.factory.get('', {
-            u'title': [u'ABC', u'JKL'], # 1, 3, 5, 6
-            u'isbn': u'12', # 1, 3
+            u'title': [u'ABC', u'JKL'],  # 1, 3, 5, 6
+            u'isbn': u'12',  # 1, 3
             u'course_code': [u'IJKL', u'101']   # 1, 3
         })
         v.request = request
@@ -892,3 +892,137 @@ class CreateListingRequestTests(TestCase):
         self.assertEqual('There was an error with your submission.', response.context['error_message'])
         for k, v in dict(response.context['form'].data).iteritems():
             self.assertEqual([u'%s' % data[k]], v)
+
+
+class ListingModificationBaseTests(TestCase):
+    # TODO: mock and assert calls to take_action and extra_validation
+    def setUp(self):
+        self.factory = RequestFactory()
+
+        self.user1 = User.objects.create_user(username='user1', password='password')
+        self.user2 = User.objects.create_user(username='user2', password='password')
+
+        self.book1, _ = Textbook.objects.get_or_create(title='title1')
+        self.listing1, _ = Listing.objects.get_or_create(owner=self.user1, book=self.book1, asking_price=1)
+
+        self.book2, _ = Textbook.objects.get_or_create(title='title2')
+        self.listing2, _ = Listing.objects.get_or_create(owner=self.user2, book=self.book2, asking_price=1)
+
+    def test_properties(self):
+        v = ListingModificationBase()
+
+        self.assertEqual('Listing successfully modified/deleted.', v.success_message)
+        self.assertEqual(Listing, v.model)
+
+    def test_get_queryset(self):
+        v = ListingModificationBase()
+
+        request = self.factory.post('')
+        request.user = self.user1
+        v.request = request
+        self.assertEqual([self.listing1], list(v.get_queryset()))
+
+    def test_post(self):
+        v = ListingModificationBase()
+        request = self.factory.post('')
+        request.user = self.user1
+        v.kwargs = {'pk': self.listing1.pk}
+        v.request = request
+        v.object = self.listing1
+
+        response = v.post(**v.kwargs)
+        self.assertEqual(200, response.status_code)
+
+
+class DeleteListingTests(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(username='user1', password='password')
+        self.book1, _ = Textbook.objects.get_or_create(title='title1')
+        self.listing1, _ = Listing.objects.get_or_create(owner=self.user1, book=self.book1, asking_price=1)
+
+    def test_properties(self):
+        v = DeleteListing()
+        self.assertEqual('Listing successfully deleted.', v.success_message)
+
+    def test_take_action(self):
+        v = DeleteListing()
+
+        v.take_action(self.listing1)
+        self.assertFalse(Listing.objects.filter(pk=self.listing1.pk).exists())
+
+
+class MarkListingPendingTests(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(username='user1', password='password')
+        self.book1, _ = Textbook.objects.get_or_create(title='title1')
+        self.listing1, _ = Listing.objects.get_or_create(owner=self.user1, book=self.book1, asking_price=1)
+
+    def test_properties(self):
+        v = MarkListingPending()
+        self.assertEqual("Listing successfully marked as pending.", v.success_message)
+
+    def test_take_action(self):
+        v = MarkListingPending()
+
+        v.take_action(self.listing1)
+        self.assertEqual(Listing.PENDING, Listing.objects.get(pk=self.listing1.pk).status)
+
+    def test_extra_validation(self):
+        v = MarkListingPending()
+
+        self.assertEqual((True, ''), v.extra_validation(self.listing1))
+
+        self.listing1.status = Listing.PENDING
+        self.listing1.save()
+        self.assertEqual((False, "Only available listings can be marked as pending."), v.extra_validation(self.listing1))
+
+        self.listing1.status = Listing.SOLD
+        self.listing1.save()
+        self.assertEqual((False, "Only available listings can be marked as pending."), v.extra_validation(self.listing1))
+
+
+class MarkListingSoldTests(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(username='user1', password='password')
+        self.book1, _ = Textbook.objects.get_or_create(title='title1')
+        self.listing1, _ = Listing.objects.get_or_create(owner=self.user1, book=self.book1, asking_price=1, status=Listing.PENDING)
+
+    def test_properties(self):
+        v = MarkListingSold()
+        self.assertEqual("Listing successfully marked as sold.", v.success_message)
+
+    def test_take_action(self):
+        v = MarkListingSold()
+
+        v.take_action(self.listing1)
+        self.assertEqual(Listing.SOLD, Listing.objects.get(pk=self.listing1.pk).status)
+
+    def test_extra_validation(self):
+        v = MarkListingSold()
+
+        self.assertEqual((True, ''), v.extra_validation(self.listing1))
+
+        self.listing1.status = Listing.AVAILABLE
+        self.listing1.save()
+        self.assertEqual((False, "Only pending listings can be marked as sold."), v.extra_validation(self.listing1))
+
+        self.listing1.status = Listing.SOLD
+        self.listing1.save()
+        self.assertEqual((False, "Only pending listings can be marked as sold."), v.extra_validation(self.listing1))
+
+
+class MarkListingAvailableTests(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(username='user1', password='password')
+        self.book1, _ = Textbook.objects.get_or_create(title='title1')
+        self.listing1, _ = Listing.objects.get_or_create(owner=self.user1, book=self.book1, asking_price=1, status=Listing.SOLD)
+
+    def test_properties(self):
+        v = MarkListingAvailable()
+        self.assertEqual("Listing successfully marked as available.", v.success_message)
+
+    def test_take_action(self):
+        v = MarkListingAvailable()
+
+        v.take_action(self.listing1)
+        self.assertEqual(Listing.AVAILABLE, Listing.objects.get(pk=self.listing1.pk).status)
