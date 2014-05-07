@@ -11,10 +11,10 @@ def unread_messages(user):
     if user is None or not user.is_authenticated():
         return 0
 
-    invovled_threads = TransactionRequestThread.objects.filter(Q(listing__owner=user) | Q(sender=user))
+    involved_threads = TransactionRequestThread.objects.filter(Q(listing__owner=user) | Q(sender=user))
     count = 0
 
-    for thread in invovled_threads:
+    for thread in involved_threads:
         count += thread.messages.exclude(created_by=user).filter(read=False).count()
 
     return count

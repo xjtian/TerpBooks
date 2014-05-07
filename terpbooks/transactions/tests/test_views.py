@@ -893,6 +893,21 @@ class CreateListingRequestTests(TestCase):
         for k, v in dict(response.context['form'].data).iteritems():
             self.assertEqual([u'%s' % data[k]], v)
 
+    def test_post(self):
+        self.client.login(username='user1', password='password')
+
+        data = {}
+        response = self.client.post(reverse('create-thread', kwargs={'pk': self.listing2.pk}), data)
+        self.assertEqual('There was an error with your submission.', response.context['error_message'])
+
+        data = {'text': 'hello world', 'price': 1}
+        self.client.post(reverse('create-thread', kwargs={'pk': self.listing2.pk}), data)
+
+        self.assertTrue(TransactionRequestThread.objects.filter(listing=self.listing2).exists())
+        thread = TransactionRequestThread.objects.get(listing=self.listing2)
+        self.assertEqual(1, thread.messages.count())
+        self.assertTrue(TransactionRequest.objects.filter(thread=thread, **data).exists())
+
 
 class ListingModificationBaseTests(TestCase):
     # TODO: mock and assert calls to take_action and extra_validation
